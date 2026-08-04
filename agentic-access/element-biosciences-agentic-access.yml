@@ -1,0 +1,174 @@
+generated: '2026-08-04'
+method: generated
+source: openapi/element-biosciences-cloud-api-openapi-original.yml
+description: Recommended x-agentic-access execution contracts, classified heuristically from
+  the OpenAPI. A governance starting point for exposing this API to AI agents — review and bind
+  audience per deployment. See research/curity/agentic-governance/.
+summary:
+  operations: 16
+  by_action_class:
+    connected: 16
+  by_consequence:
+    read: 16
+  human_in_the_loop_required: 0
+operations:
+- path: /v1/auth
+  method: get
+  operationId: AuthService_GetAuth
+  x-agentic-access:
+    action-class: connected
+    consequence: read
+    subject: optional
+    token:
+      max-ttl: 3600
+    audit: none
+- path: /v1/executions
+  method: get
+  operationId: ExecutionService_ListExecutions
+  x-agentic-access:
+    action-class: connected
+    consequence: read
+    subject: optional
+    token:
+      max-ttl: 3600
+    audit: none
+- path: /v1/executions/{execution_id}/credentials
+  method: get
+  operationId: ExecutionService_GetExecutionDownloadCredentials
+  x-agentic-access:
+    action-class: connected
+    consequence: read
+    subject: optional
+    token:
+      max-ttl: 3600
+    audit: none
+- path: /v1/executions/{execution_id}/files
+  method: get
+  operationId: ExecutionService_ListExecutionFiles
+  x-agentic-access:
+    action-class: connected
+    consequence: read
+    subject: optional
+    token:
+      max-ttl: 3600
+    audit: none
+- path: /v1/executions/{execution_id}/logs
+  method: get
+  operationId: ExecutionService_GetExecutionLogs
+  x-agentic-access:
+    action-class: connected
+    consequence: read
+    subject: optional
+    token:
+      max-ttl: 3600
+    audit: none
+- path: /v1/executions/{id}
+  method: get
+  operationId: ExecutionService_GetExecution
+  x-agentic-access:
+    action-class: connected
+    consequence: read
+    subject: optional
+    token:
+      max-ttl: 3600
+    audit: none
+- path: /v1/instruments
+  method: get
+  operationId: InstrumentService_ListInstruments
+  x-agentic-access:
+    action-class: connected
+    consequence: read
+    subject: optional
+    token:
+      max-ttl: 3600
+    audit: none
+- path: /v1/instruments/{serial_number}
+  method: get
+  operationId: InstrumentService_GetInstrument
+  x-agentic-access:
+    action-class: connected
+    consequence: read
+    subject: optional
+    token:
+      max-ttl: 3600
+    audit: none
+- path: /v1/runs
+  method: get
+  operationId: RunService_ListRuns
+  x-agentic-access:
+    action-class: connected
+    consequence: read
+    subject: optional
+    token:
+      max-ttl: 3600
+    audit: none
+- path: /v1/runs/{id}
+  method: get
+  operationId: RunService_GetRun
+  x-agentic-access:
+    action-class: connected
+    consequence: read
+    subject: optional
+    token:
+      max-ttl: 3600
+    audit: none
+- path: /v1/runs/{run_id}/credentials
+  method: get
+  operationId: RunService_GetRunDownloadCredentials
+  x-agentic-access:
+    action-class: connected
+    consequence: read
+    subject: optional
+    token:
+      max-ttl: 3600
+    audit: none
+- path: /v1/runs/{run_id}/files
+  method: get
+  operationId: RunService_ListRunFiles
+  x-agentic-access:
+    action-class: connected
+    consequence: read
+    subject: optional
+    token:
+      max-ttl: 3600
+    audit: none
+- path: /v1/storage-connections
+  method: get
+  operationId: StorageConnectionService_ListStorageConnections
+  x-agentic-access:
+    action-class: connected
+    consequence: read
+    subject: optional
+    token:
+      max-ttl: 3600
+    audit: none
+- path: /v1/storage-connections/{id}
+  method: get
+  operationId: StorageConnectionService_GetStorageConnection
+  x-agentic-access:
+    action-class: connected
+    consequence: read
+    subject: optional
+    token:
+      max-ttl: 3600
+    audit: none
+- path: /v1/storage-connections/{storage_connection_id}/credentials
+  method: get
+  operationId: StorageConnectionService_GetDownloadCredentials
+  x-agentic-access:
+    action-class: connected
+    consequence: read
+    subject: optional
+    token:
+      max-ttl: 3600
+    audit: none
+- path: /v1/storage-connections/{storage_connection_id}/files
+  method: get
+  operationId: StorageConnectionService_ListFiles
+  x-agentic-access:
+    action-class: connected
+    consequence: read
+    subject: optional
+    token:
+      max-ttl: 3600
+    audit: none

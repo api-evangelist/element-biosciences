@@ -1,0 +1,42 @@
+generated: '2026-08-04'
+method: searched
+source: https://docs.elembio.io/developers/api/api-changelog/
+docs: https://docs.elembio.io/developers/api/api-changelog/
+related:
+- {name: CLI changelog, url: 'https://docs.elembio.io/developers/command-line/changelog/'}
+- {name: ElemBio Cloud release notes, url: 'https://docs.elembio.io/docs/elembio-cloud/ebc-release-notes/'}
+- {name: Bases2Fastq release notes, url: 'https://docs.elembio.io/docs/bases2fastq/b2f-release-notes/'}
+- {name: Cells2Stats release notes, url: 'https://docs.elembio.io/docs/cells2stats/c2s-release-notes/'}
+- {name: CytoCanvas release notes, url: 'https://docs.elembio.io/docs/cytocanvas/cytocanvas-release-notes/'}
+scheme: semver
+version_in: uri-path
+current_version: v1
+current_release: 1.0.0
+notes: |
+  The Cloud API is new — it launched 2026-07-21 and has exactly one published
+  changelog entry as of this pass. There have been no breaking changes because
+  there has been no second version.
+entries:
+- version: 1.0.0
+  date: '2026-07-21'
+  title: ElemBio Cloud API general availability
+  breaking: []
+  additions:
+  - List and filter runs with keyword expressions, comparison operators and relative date offsets
+  - Retrieve a specific run by ID, list its files, and download them
+  - Access workflow execution data (for example Bases2Fastq) filtered by status or source run
+  - Look up the instruments registered to an organization
+  - Browse and download files from storage connections, with prefix filtering
+  - Interactive API reference documentation for testing endpoints
+  fixes: []
+- version: 1.0.0
+  date: '2026-07-21'
+  component: cli
+  title: ElemBio CLI initial release
+  breaking: []
+  additions:
+  - List and download run files
+  - Work with workflow executions
+  - Mount runs as local folders for streaming access (macOS and Linux)
+  - Reference resources by ID or by name
+  fixes: []

@@ -1,23 +1,131 @@
 aid: element-biosciences
 name: Element Biosciences
-description: 'Element Biosciences is a company surfaced via the API Evangelist harvest backlog (source:
-  secondary-market) and added to the network as a stub for full-pipeline profiling.'
+description: 'Element Biosciences is a San Diego based life-sciences instrumentation company that builds
+  benchtop DNA sequencing and multiomics systems — the AVITI, AVITI LT, AVITI24 and VITARI platforms —
+  around its proprietary Avidite Base Chemistry (ABC), which decouples signal generation from nucleotide
+  incorporation to deliver high-accuracy base calling at lower cost than conventional sequencing-by-synthesis.
+  Instrument output is managed through ElemBio Cloud, the company''s analysis and data-management platform,
+  which runs bioinformatics workflows such as Bases2Fastq and Cells2Stats and streams run data into
+  customer-owned cloud storage connections. ElemBio Cloud exposes a public, versioned REST API — the
+  Element Biosciences Cloud API — plus a first-party cross-platform CLI, giving labs programmatic access
+  to sequencing and multiomics runs, workflow executions, registered instruments, storage connections and
+  the files those resources produce, for dashboards, fleet monitoring, LIMS read-back and custom automation.'
+image: https://www.elementbiosciences.com/hubfs/Element%20Biosciences%202025/Image/Hero_Home_Logo.svg
 url: https://raw.githubusercontent.com/api-evangelist/element-biosciences/refs/heads/main/apis.yml
 x-type: company
 x-source: harvest:secondary-market
-x-tier: stub
-x-tier-reason: harvest
 specificationVersion: '0.20'
 created: '2026-08-04'
 modified: '2026-08-04'
+x-enrichment:
+  date: '2026-08-04'
+  status: enriched
+  artifacts_added: 23
+  pass: local-v1
 tags:
 - Company
-apis: []
+- Genomics
+- DNA Sequencing
+- Life Sciences
+- Bioinformatics
+- Multiomics
+- Laboratory
+- Scientific Instruments
+- Cloud Storage
+- Biotechnology
+apis:
+- aid: element-biosciences:cloud-api
+  name: Element Biosciences Cloud API
+  description: 'The Element Biosciences Cloud API provides programmatic, read-oriented access to data in
+    the ElemBio Cloud platform: instrument runs (sequencing and multiomics), workflow executions,
+    registered instruments, storage connections, and the files those resources produce. All paths are
+    versioned under /v1. Requests authenticate with an API key in the x-api-key header, scoped per
+    resource and action. List endpoints are cursor-paginated and support a keyword-expression filter
+    language with comparison operators and relative date offsets.'
+  humanURL: https://docs.elembio.io/developers/api/
+  baseURL: https://cloud-api.usw2.elembio.io
+  tags:
+  - Genomics
+  - DNA Sequencing
+  - Multiomics
+  - Bioinformatics
+  - Laboratory
+  properties:
+  - type: OpenAPI
+    url: openapi/element-biosciences-cloud-api-openapi-original.yml
+  - type: Documentation
+    url: https://docs.elembio.io/developers/api/getting-started/
+  - type: APIReference
+    url: https://docs.elembio.io/developers/api/
+  - type: Overlay
+    url: overlays/element-biosciences-cloud-api-overlay.yaml
 maintainers:
 - FN: Kin Lane
   email: kin@apievangelist.com
 - FN: APIs.json
   email: info@apis.io
 common:
+- type: AgenticAccess
+  url: agentic-access/element-biosciences-agentic-access.yml
 - type: Website
+  url: https://www.elementbiosciences.com/
+- type: DeveloperPortal
+  url: https://docs.elembio.io/developers/
+- type: Documentation
+  url: https://docs.elembio.io/developers/
+- type: APIReference
+  url: https://docs.elembio.io/developers/api/
+- type: GettingStarted
+  url: https://docs.elembio.io/developers/api/getting-started/
+- type: Support
+  url: https://www.elementbiosciences.com/contact
+- type: HelpCenter
+  url: https://www.elementbiosciences.com/knowledge-base
+- type: Blog
+  url: https://www.elementbiosciences.com/blog
+- type: GitHubOrganization
+  url: https://github.com/Elembio
+- type: SignUp
+  url: https://cloud.elembio.io/
+- type: TermsOfService
+  url: https://www.elementbiosciences.com/legal/terms
+- type: PrivacyPolicy
+  url: https://www.elementbiosciences.com/legal/privacy
+- type: ChangeLog
+  url: https://docs.elembio.io/developers/api/api-changelog/
+- type: ChangeLog
+  url: changelog/element-biosciences-changelog.yml
+- type: Authentication
+  url: authentication/element-biosciences-authentication.yml
+- type: OAuthScopes
+  url: scopes/element-biosciences-scopes.yml
+- type: Conventions
+  url: conventions/element-biosciences-conventions.yml
+- type: ErrorCatalog
+  url: errors/element-biosciences-problem-types.yml
+- type: Lifecycle
+  url: lifecycle/element-biosciences-lifecycle.yml
+- type: Conformance
+  url: conformance/element-biosciences-conformance.yml
+- type: DataModel
+  url: data-model/element-biosciences-data-model.yml
+- type: Packages
+  url: packages/element-biosciences-packages.yml
+- type: SDKs
+  url: packages/element-biosciences-packages.yml
+- type: CLI
+  url: cli/element-biosciences-cli.yml
+- type: WellKnown
+  url: well-known/element-biosciences-well-known.yml
+- type: LLMsTxt
+  url: llms/element-biosciences-llms.txt
+- type: MCPServer
+  url: mcp/element-biosciences-mcp.yml
+- type: ToolCrosswalk
+  url: mcp/element-biosciences-tool-crosswalk.yml
+- type: AgentSkill
+  url: skills/_index.yml
+- type: DomainSecurity
+  url: security/element-biosciences-domain-security.yml
+- type: Forge
   url: https://forgeglobal.com/element-biosciences_stock/

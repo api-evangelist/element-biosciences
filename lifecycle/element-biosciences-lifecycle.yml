@@ -1,0 +1,49 @@
+generated: '2026-08-04'
+method: searched
+source: https://docs.elembio.io/developers/api/api-changelog/
+versioning:
+  scheme: uri-path
+  current: v1
+  release: 1.0.0
+  released: '2026-07-21'
+  docs: https://docs.elembio.io/developers/api/getting-started/
+  note: All paths are versioned under /v1.
+deprecation:
+  policy_url: null
+  policy_published: false
+  sunset_header: false
+  deprecation_header: false
+  note: |
+    No deprecation policy, sunset window, or RFC 8594 Sunset/Deprecation header support
+    is published. The API reached general availability on 2026-07-21 and has had one
+    release, so nothing has been deprecated yet — but the absence of a stated policy is
+    a real gap for a contract that instruments and LIMS integrations will depend on.
+sla:
+  url: null
+  uptime_target: null
+  published: false
+status_page:
+  url: null
+  published: false
+  note: |
+    No status page was found. status.elembio.io returns HTTP 200, but *.elembio.io is a
+    wildcard DNS record pointing at the ElemBio Cloud single-page app — an arbitrary
+    subdomain (randomxyz123.elembio.io) returns the identical page with the identical
+    Next.js deployment id. It is a catch-all, not a status page. No StatusPage pointer
+    is emitted in apis.yml.
+support:
+  contact: https://www.elementbiosciences.com/contact
+  knowledge_base: https://www.elementbiosciences.com/knowledge-base
+  request_id_header: X-Request-ID
+deprecated_operations: []
+release_notes:
+  api: https://docs.elembio.io/developers/api/api-changelog/
+  cli: https://docs.elembio.io/developers/command-line/changelog/
+  elembio_cloud: https://docs.elembio.io/docs/elembio-cloud/ebc-release-notes/
+  bases2fastq: https://docs.elembio.io/docs/bases2fastq/b2f-release-notes/
+  cells2stats: https://docs.elembio.io/docs/cells2stats/c2s-release-notes/
+  cytocanvas: https://docs.elembio.io/docs/cytocanvas/cytocanvas-release-notes/
+credential_lifecycle:
+  api_key_expiry_days: {min: 1, max: 365, default: 30}
+  revocation: immediate on delete, irreversible
+  download_credentials: short-lived scoped S3 session credentials with an explicit expiration timestamp

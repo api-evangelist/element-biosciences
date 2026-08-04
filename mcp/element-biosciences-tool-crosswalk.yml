@@ -1,0 +1,50 @@
+generated: '2026-08-04'
+method: derived
+source: mcp/element-biosciences-mcp.yml + openapi/element-biosciences-cloud-api-openapi-original.yml
+status: candidate
+note: |
+  Element Biosciences publishes no MCP server and no GraphQL endpoint, so this crosswalk
+  binds the DERIVED candidate tool set (mcp/element-biosciences-mcp.yml) to the real
+  OpenAPI operations it was derived from. Confidence is high on every row for the
+  mechanical reason that the tools were generated one-per-operation — this is a
+  complete 1:1 projection, not a reconciliation of two independently-authored surfaces.
+  There are no mcp_only or rest_only divergences to record. If Element Biosciences ships
+  a real MCP server, this file must be re-derived against its live tools/list output.
+surfaces:
+  openapi:
+    file: openapi/element-biosciences-cloud-api-openapi-original.yml
+    url: https://cloud-api.usw2.elembio.io/openapi.yaml
+    gated: false
+    operations: 16
+  graphql:
+    endpoint: null
+    present: false
+  mcp:
+    url: null
+    present: false
+    gated: n/a
+crosswalk:
+- {tool: get_auth, category: auth, rest: [AuthService_GetAuth], binding: rest, confidence: high}
+- {tool: list_runs, category: runs, rest: [RunService_ListRuns], binding: rest, confidence: high}
+- {tool: get_run, category: runs, rest: [RunService_GetRun], binding: rest, confidence: high}
+- {tool: list_run_files, category: runs, rest: [RunService_ListRunFiles], binding: rest, confidence: high}
+- {tool: get_run_download_credentials, category: runs, rest: [RunService_GetRunDownloadCredentials], binding: rest, confidence: high}
+- {tool: list_executions, category: executions, rest: [ExecutionService_ListExecutions], binding: rest, confidence: high}
+- {tool: get_execution, category: executions, rest: [ExecutionService_GetExecution], binding: rest, confidence: high}
+- {tool: list_execution_files, category: executions, rest: [ExecutionService_ListExecutionFiles], binding: rest, confidence: high}
+- {tool: get_execution_download_credentials, category: executions, rest: [ExecutionService_GetExecutionDownloadCredentials], binding: rest, confidence: high}
+- {tool: get_execution_logs, category: executions, rest: [ExecutionService_GetExecutionLogs], binding: rest, confidence: high}
+- {tool: list_instruments, category: instruments, rest: [InstrumentService_ListInstruments], binding: rest, confidence: high}
+- {tool: get_instrument, category: instruments, rest: [InstrumentService_GetInstrument], binding: rest, confidence: high}
+- {tool: list_storage_connections, category: storage, rest: [StorageConnectionService_ListStorageConnections], binding: rest, confidence: high}
+- {tool: get_storage_connection, category: storage, rest: [StorageConnectionService_GetStorageConnection], binding: rest, confidence: high}
+- {tool: list_storage_files, category: storage, rest: [StorageConnectionService_ListFiles], binding: rest, confidence: high}
+- {tool: get_storage_download_credentials, category: storage, rest: [StorageConnectionService_GetDownloadCredentials], binding: rest, confidence: high}
+mcp_only: []
+rest_only: []
+coverage:
+  tools_named: 16
+  tools_bound: 16
+  mcp_only: 0
+  rest_ops_total: 16
+  rest_ops_with_tool: 16

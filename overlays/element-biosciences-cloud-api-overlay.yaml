@@ -1,0 +1,83 @@
+overlay: 1.0.0
+info:
+  title: API Evangelist enhancements for the Element Biosciences Cloud API
+  version: 1.0.0
+x-generated: '2026-08-04'
+x-method: generated
+x-source: openapi/element-biosciences-cloud-api-openapi-original.yml
+extends: openapi/element-biosciences-cloud-api-openapi-original.yml
+actions:
+- target: $.info
+  update:
+    x-apievangelist-provider: element-biosciences
+    x-apievangelist-profile: https://apis.io/provider/element-biosciences/
+    x-apievangelist-harvested: '2026-08-04'
+    x-apievangelist-spec-source: https://cloud-api.usw2.elembio.io/openapi.yaml
+    x-apievangelist-note: >-
+      Harvested verbatim from the API host root. The documentation host
+      (docs.elembio.io) returns an HTML shell for /openapi.json and /openapi.yaml;
+      the machine-readable contract is served by the API host itself and mirrored
+      at https://docs.elembio.io/scalar/openapi.yaml.
+    x-api-surface: read-only
+    x-write-operations: 0
+- target: $.info
+  update:
+    x-apievangelist-artifacts:
+      authentication: authentication/element-biosciences-authentication.yml
+      scopes: scopes/element-biosciences-scopes.yml
+      conventions: conventions/element-biosciences-conventions.yml
+      errors: errors/element-biosciences-problem-types.yml
+      lifecycle: lifecycle/element-biosciences-lifecycle.yml
+      conformance: conformance/element-biosciences-conformance.yml
+      data_model: data-model/element-biosciences-data-model.yml
+      agentic_access: agentic-access/element-biosciences-agentic-access.yml
+      skills: skills/_index.yml
+      cli: cli/element-biosciences-cli.yml
+      packages: packages/element-biosciences-packages.yml
+- target: $.servers
+  update:
+    x-apievangelist-region: us-west-2
+    x-apievangelist-note: Single published region; the host name encodes usw2. No EU or APAC endpoint is documented.
+- target: $.components.securitySchemes.apiKey
+  update:
+    x-apievangelist-key-expiry-days-default: 30
+    x-apievangelist-key-expiry-days-max: 365
+    x-apievangelist-scope-grammar: 'resource:action[:resource_id]'
+    x-apievangelist-scope-reference: https://docs.elembio.io/docs/elembio-cloud/api-keys/
+- target: $.tags
+  update:
+    x-apievangelist-note: Tags mirror the underlying protobuf service names rather than customer-facing resource nouns (AuthService, RunService, ...). A resource-noun tagging scheme would read better in generated documentation and SDKs.
+- target: $.paths['/v1/runs'].get
+  update:
+    x-agentic-access:
+      action-class: connected
+      consequence: read
+      token:
+        max-ttl: 3600
+    x-apievangelist-pagination:
+      style: cursor
+      request: [pageSize, pageToken, includeTotalCount]
+      response: nextPageToken
+- target: $.paths['/v1/runs/{run_id}/credentials'].get
+  update:
+    x-apievangelist-note: >-
+      Vends short-lived scoped AWS S3 session credentials. Although the HTTP method is
+      GET and the operation is read-only against the Cloud API, the response is a
+      bearer of downstream data-plane access; treat the response body as a secret,
+      never log it, and honour the expiration timestamp.
+    x-apievangelist-response-sensitivity: credential-bearing
+- target: $.paths['/v1/executions/{execution_id}/credentials'].get
+  update:
+    x-apievangelist-response-sensitivity: credential-bearing
+- target: $.paths['/v1/storage-connections/{storage_connection_id}/credentials'].get
+  update:
+    x-apievangelist-response-sensitivity: credential-bearing
+- target: $.components.schemas['elembio.cloud.v1.S3Credentials']
+  update:
+    x-apievangelist-sensitivity: secret
+    x-apievangelist-note: Contains accessKeyId, secretAccessKey and sessionToken. Redact in logs and traces.
+- target: $.components.schemas.Error
+  update:
+    x-apievangelist-error-format: google-rpc
+    x-apievangelist-rfc9457: false
+    x-apievangelist-note: Not application/problem+json. The machine-readable signal is details[].reason.

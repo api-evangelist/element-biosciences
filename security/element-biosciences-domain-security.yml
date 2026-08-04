@@ -1,0 +1,32 @@
+generated: '2026-08-04'
+method: probed
+source: live DNS/TLS/HTTP probes of apis.yml + OpenAPI hosts
+hosts:
+- host: www.elementbiosciences.com
+  https: true
+  tls_version: TLSv1.3
+  cert_expires: Oct 13 14:06:05 2026 GMT
+  hsts: null
+- host: docs.elembio.io
+  https: true
+  tls_version: TLSv1.3
+  cert_expires: Nov  8 23:59:59 2026 GMT
+  hsts: null
+- host: cloud-api.usw2.elembio.io
+  https: true
+  tls_version: TLSv1.3
+  cert_expires: Oct  1 23:59:59 2026 GMT
+  hsts: null
+domains:
+- domain: elementbiosciences.com
+  dnssec: false
+  caa: []
+  spf: true
+  dmarc: true
+  dmarc_policy: reject
+- domain: elembio.io
+  dnssec: false
+  caa: []
+  spf: true
+  dmarc: true
+  dmarc_policy: reject

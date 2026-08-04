@@ -1,0 +1,71 @@
+generated: '2026-08-04'
+method: derived
+source: openapi/element-biosciences-cloud-api-openapi-original.yml
+docs: https://docs.elembio.io/developers/api/getting-started/
+format: google-rpc
+rfc9457: false
+content_type: application/json
+notes: |
+  Derived from the uniform error responses attached to all 16 operations in the Cloud
+  API, plus the Error / ErrorDetail component schemas and the info.description error
+  section. The envelope is google.rpc-shaped (a gRPC-gateway lineage), NOT RFC 9457
+  application/problem+json: there is no `type` URI and no `title`/`detail` split.
+  The machine-readable signal is details[].reason.
+envelope:
+  fields:
+  - {name: code, type: integer, required: true, description: Numeric status code corresponding to the HTTP response status}
+  - {name: message, type: string, required: true, description: Human-readable error message}
+  - {name: details, type: array, required: false, description: Structured error details with machine-readable reason codes}
+  detail_fields:
+  - {name: '@type', type: string, description: Type identifier for this error detail}
+  - {name: reason, type: string, required: true, description: Machine-readable error code identifying the specific failure}
+  - {name: domain, type: string, required: true, const: cloud-api.elembio.io, description: Identifies the system that generated the error}
+  - {name: metadata.request_id, type: string, description: Request ID matching the X-Request-ID response header}
+statuses:
+- {status: 400, description: Invalid argument, applies_to: all operations}
+- {status: 401, description: Missing or invalid API key, applies_to: all operations}
+- {status: 403, description: Authenticated but the key lacks the required scope, applies_to: all operations}
+- {status: 404, description: Resource not found, applies_to: all operations}
+- {status: 500, description: Internal error, applies_to: all operations}
+problems:
+- status: 401
+  reason: MISSING_API_KEY
+  title: Missing x-api-key header
+  domain: cloud-api.elembio.io
+  remediation: Send the API key in the x-api-key request header. Create one in the ElemBio Cloud console under Organization > API Keys.
+  evidence: observed live on GET /v1/auth without a key (HTTP 401, "Missing x-api-key header.")
+- status: 401
+  reason: INVALID_API_KEY
+  title: Invalid API key
+  domain: cloud-api.elembio.io
+  remediation: The key is malformed, revoked, or expired. Keys expire after 1-365 days; regenerate in the console.
+  evidence: components.schemas.Error.examples[1]
+- status: 403
+  reason: INSUFFICIENT_SCOPE
+  title: Key lacks the required permission
+  domain: cloud-api.elembio.io
+  remediation: Re-issue the key with the permission the operation requires (see scopes/element-biosciences-scopes.yml).
+  evidence: info.description "Scopes" section; ErrorDetail.reason examples
+- status: 404
+  reason: RUN_NOT_FOUND
+  title: Run not found
+  domain: cloud-api.elembio.io
+  remediation: Verify the run id, and that the key's tenant has access to it. List endpoints only return resources a key is scoped to, so an out-of-scope run is indistinguishable from a missing one.
+  evidence: components.schemas.Error.examples[0]
+  source_operation: openapi/element-biosciences-cloud-api-openapi-original.yml#RunService_GetRun
+- status: 500
+  reason: INTERNAL_ERROR
+  title: Internal error
+  domain: cloud-api.elembio.io
+  remediation: Retry with backoff. If it persists, report the X-Request-ID value to Element Biosciences support.
+  evidence: ErrorDetail.reason examples
+reason_codes_documented:
+- MISSING_API_KEY
+- INVALID_API_KEY
+- INSUFFICIENT_SCOPE
+- RUN_NOT_FOUND
+- INTERNAL_ERROR
+gaps:
+- The published reason-code list is illustrative ("for example"), not an exhaustive registry. Analogous per-resource codes (EXECUTION_NOT_FOUND, INSTRUMENT_NOT_FOUND, STORAGE_CONNECTION_NOT_FOUND) are implied by the resource model but are NOT documented, so they are deliberately not listed above.
+- No documented rate-limit / 429 response.
+- Error responses are not application/problem+json (RFC 9457).

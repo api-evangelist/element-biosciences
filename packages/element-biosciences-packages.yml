@@ -1,0 +1,70 @@
+generated: '2026-08-04'
+method: searched
+source: https://docs.elembio.io/developers/command-line/getting-started/
+notes: |
+  Element Biosciences does not publish per-language client SDKs for the Cloud API.
+  What it does ship first-party is the `elembio` CLI (a single dependency-free binary,
+  distributed via a Homebrew tap, direct S3 release downloads, and an npm wrapper
+  published by the `elembio` npm org) and the open-source `cytoprofiling` Python and R
+  libraries for AVITI24 cytoprofiling data. PyPI, CRAN, Maven Central, NuGet, pkg.go.dev,
+  RubyGems, Packagist and crates.io were all searched and carry no first-party
+  Element Biosciences package.
+packages:
+- language: javascript
+  registry: npm
+  name: elembio-cli
+  url: https://www.npmjs.com/package/elembio-cli
+  install: npm install -g elembio-cli
+  version: 0.2.0
+  official: true
+  official_evidence: published by the `elembio` npm maintainer account; homepage https://cloud.elembio.io
+  kind: cli-wrapper
+  platforms: [linux-x64]
+  note: npm wrapper that vendors the `elembio` binary; currently linux/x64 only.
+- language: go
+  registry: homebrew
+  name: elembio
+  url: https://github.com/Elembio/homebrew-tap
+  install: brew tap elembio/tap && brew install elembio
+  official: true
+  official_evidence: tap lives in the Elembio GitHub organization (Formula/elembio.rb)
+  kind: cli
+  platforms: [darwin-arm64, darwin-amd64, linux-amd64, linux-arm64]
+- language: go
+  registry: direct-download
+  name: elembio
+  url: https://elembio-cloud-downloads.s3.us-west-2.amazonaws.com/elembio-cli/releases/latest/
+  install: curl -sSfL https://elembio-cloud-downloads.s3.us-west-2.amazonaws.com/elembio-cli/releases/latest/elembio-darwin-arm64 -o elembio && chmod +x elembio
+  official: true
+  official_evidence: download host published on the official CLI getting-started page
+  kind: cli
+  platforms: [darwin-arm64, darwin-amd64, linux-amd64, linux-arm64, windows-amd64]
+- language: python
+  registry: github
+  name: cytoprofiling
+  url: https://github.com/Elembio/cytoprofiling
+  install: pip install git+https://github.com/Elembio/cytoprofiling.git
+  official: true
+  official_evidence: repository owned by the Elembio GitHub organization
+  license: BSD-3-Clause
+  kind: data-analysis-library
+  note: source-distributed only; not published to PyPI. Processes AVITI24 cytoprofiling datasets, not a Cloud API client.
+- language: r
+  registry: github
+  name: cytoprofiling
+  url: https://github.com/Elembio/cytoprofiling
+  install: devtools::install("src/R/cytoprofiling")
+  official: true
+  official_evidence: repository owned by the Elembio GitHub organization
+  license: BSD-3-Clause
+  kind: data-analysis-library
+  note: source-distributed only; not published to CRAN.
+registries_searched:
+- {registry: npm, result: elembio-cli}
+- {registry: pypi, result: none, probed: [elembio, cytoprofiling, bases2fastq, elembio-cloud, element-biosciences]}
+- {registry: crates.io, result: none}
+- {registry: maven-central, result: none}
+- {registry: nuget, result: none}
+- {registry: pkg.go.dev, result: none}
+- {registry: rubygems, result: none}
+- {registry: packagist, result: none}

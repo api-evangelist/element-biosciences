@@ -1,0 +1,79 @@
+generated: '2026-08-04'
+method: derived
+source: openapi/element-biosciences-cloud-api-openapi-original.yml
+searched:
+- https://docs.elembio.io/developers/
+- https://www.elementbiosciences.com/legal/privacy
+- https://www.elementbiosciences.com/legal/terms
+notes: |
+  Derived from the OpenAPI and confirmed against the published documentation. Element
+  Biosciences publishes no security certifications or compliance attestations (no SOC 2,
+  ISO 27001, HIPAA, GDPR, or FedRAMP claim was found on the site, in the developer docs,
+  or in the ElemBio Cloud data-protection literature), so no Compliance pointer is
+  emitted in apis.yml. That is a recorded negative, not an unchecked box.
+standards:
+- id: openapi-3.1
+  conforms: true
+  evidence: openapi/element-biosciences-cloud-api-openapi-original.yml declares openapi 3.1.0 and parses cleanly
+- id: rest
+  conforms: true
+  evidence: resource-oriented paths under /v1, GET semantics, JSON representations
+- id: json
+  conforms: true
+  evidence: all responses application/json
+- id: api-key-auth
+  conforms: true
+  evidence: components.securitySchemes.apiKey type apiKey, in header, name x-api-key
+- id: oauth2
+  conforms: false
+  evidence: no oauth2 security scheme in the spec and no authorization server discovered
+- id: oidc
+  conforms: false
+  evidence: /.well-known/openid-configuration returned 404 on every host
+- id: rfc9457-problem-details
+  conforms: false
+  evidence: errors are application/json with a google.rpc-shaped {code,message,details} envelope, not application/problem+json
+- id: google-aip-error-model
+  conforms: true
+  evidence: ErrorDetail carries @type, reason, domain and metadata.request_id, matching google.rpc.ErrorInfo
+- id: google-aip-158-pagination
+  conforms: true
+  evidence: cursor pagination via pageSize / pageToken / nextPageToken, the AIP-158 List pattern
+- id: grpc-gateway
+  conforms: true
+  evidence: operationIds follow Service_Method, schemas are fully-qualified elembio.cloud.v1.* protobuf messages, google.protobuf.Timestamp is referenced
+- id: rfc3339-timestamps
+  conforms: true
+  evidence: timestamp fields typed as google.protobuf.Timestamp
+- id: rfc8594-sunset-header
+  conforms: false
+  evidence: no Sunset or Deprecation header support documented
+- id: rfc9116-security-txt
+  conforms: false
+  evidence: /.well-known/security.txt returned 404 on every host
+- id: rfc8615-well-known
+  conforms: false
+  evidence: no /.well-known/ documents published on any host
+- id: idempotency-key
+  conforms: false
+  evidence: no idempotency header documented; the API is entirely GET so no write idempotency contract exists
+- id: rate-limit-headers
+  conforms: false
+  evidence: no RateLimit or X-RateLimit headers documented or present in the spec
+- id: asyncapi
+  conforms: false
+  evidence: no event, streaming or webhook surface published (not applicable — this provider has no event surface)
+- id: hsts
+  conforms: false
+  evidence: 'security/element-biosciences-domain-security.yml: no Strict-Transport-Security observed on the API, docs or website hosts'
+- id: dnssec
+  conforms: false
+  evidence: 'security/element-biosciences-domain-security.yml: DNSSEC not enabled on elembio.io or elementbiosciences.com'
+- id: spf
+  conforms: true
+  evidence: SPF present on elembio.io and elementbiosciences.com
+- id: dmarc
+  conforms: true
+  evidence: DMARC present with policy reject on elembio.io and elementbiosciences.com
+certifications_published: []
+compliance_program_published: false

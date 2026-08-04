@@ -1,0 +1,131 @@
+generated: '2026-08-04'
+method: searched
+source: https://docs.elembio.io/developers/core-concepts/
+derived_from: openapi/element-biosciences-cloud-api-openapi-original.yml
+docs:
+- https://docs.elembio.io/developers/core-concepts/
+- https://docs.elembio.io/developers/api/getting-started/
+- https://docs.elembio.io/developers/authentication/
+summary: |
+  A read-only, resource-oriented JSON REST API generated from protobuf service
+  definitions (gRPC-gateway lineage: operationIds are Service_Method, schemas are
+  fully-qualified elembio.cloud.v1.* messages, and the error envelope follows
+  google.rpc.ErrorInfo). Every path is versioned under /v1. Authentication is a
+  static API key with a per-resource permission model. List endpoints are
+  cursor-paginated and share one keyword filter expression language.
+authentication:
+  style: api-key
+  header: x-api-key
+  applied: 'global — root-level security: [{apiKey: []}]'
+  console: https://cloud.elembio.io/
+  introspection: GET /v1/auth
+  see: authentication/element-biosciences-authentication.yml
+authorization:
+  model: per-key permission scopes
+  grammar: 'resource:action[:resource_id]'
+  denial: 403 with reason INSUFFICIENT_SCOPE
+  see: scopes/element-biosciences-scopes.yml
+idempotency:
+  supported: false
+  documented: false
+  header: null
+  note: |
+    No idempotency contract is published, and none is needed at present: every one of
+    the 16 operations in the Cloud API is a GET. There are no write, create or delete
+    operations, so all requests are naturally idempotent by HTTP method semantics.
+    No Idempotency pointer is emitted in apis.yml, because the provider documents no
+    idempotency key mechanism — this is an accurate absence, not an oversight. Should
+    Element Biosciences add write operations, an idempotency-key header would become
+    the relevant gap to raise with them.
+pagination:
+  style: cursor
+  request_params:
+  - {name: pageSize, in: query, default: 100, max: 1000, description: Page length}
+  - {name: pageToken, in: query, description: Cursor returned by the previous response}
+  - {name: includeTotalCount, in: query, type: boolean, description: Request a total count alongside the page}
+  response_fields:
+  - {name: nextPageToken, description: Cursor for the next page; empty string indicates the last page}
+  - {name: totalCount, description: Present when includeTotalCount is set}
+  cli: auto-paginates; --page-size and --max-items control the walk
+  applies_to: [RunService_ListRuns, ExecutionService_ListExecutions, InstrumentService_ListInstruments, StorageConnectionService_ListStorageConnections, RunService_ListRunFiles, ExecutionService_ListExecutionFiles, StorageConnectionService_ListFiles]
+filtering:
+  param: filter
+  style: keyword-expression
+  rules:
+  - Space-separated `keyword:value` terms are ANDed together
+  - Bare text with no keyword searches all string fields
+  - Numeric and date fields replace the colon with a comparison operator (>=, <=, >, <, !=)
+  - Comma-separated alternatives for one keyword are ORed, e.g. status:completed,failed
+  - Dates accept ISO-8601 or relative offsets such as 7d or 1mo
+  examples:
+  - 'type:sequencing status:completed time_completed>=7d'
+  - 'instrument.serial_number:AV223501 metrics.sequencing.q30>=90'
+  note: Filterable keyword sets are enumerated per operation in the OpenAPI parameter descriptions.
+sorting:
+  documented: false
+field_expansion:
+  supported: false
+  note: Responses embed related summaries directly (RunReference, ExecutionReference, UserSummary) rather than offering an expand parameter.
+metadata:
+  user_defined: tags
+  note: Runs carry a free-form `tags` array which is filterable via the `tags` keyword.
+identifiers:
+  style: type-prefixed opaque string
+  example: seq_507f1f77bcf86cd799439011
+  exceptions:
+  - {resource: Instrument, identifier: serialNumber, note: instruments are addressed by serial number, not a prefixed id}
+  cli_convenience: most resources are also addressable by human-readable name in the CLI
+naming:
+  json_case: lowerCamelCase
+  filter_keyword_case: snake_case
+  note: |
+    A real inconsistency worth flagging to the provider — response bodies use
+    lowerCamelCase (timeCreated, nextPageToken, serialNumber) while the filter
+    expression language uses snake_case dotted paths (time_created,
+    instrument.serial_number, metrics.sequencing.q30). Clients must translate between
+    the two when building filters from response fields.
+timestamps:
+  format: RFC 3339 / google.protobuf.Timestamp
+  fields: [timeCreated, timeStarted, timeCompleted, timeUpdated, timeLastConnected, lastModified, expiration]
+enums:
+  style: fully-qualified SCREAMING_SNAKE with an _UNSPECIFIED zero value
+  example: RUN_STATUS_COMPLETED
+  note: protobuf convention; every status enum carries an *_UNSPECIFIED member.
+request_tracing:
+  response_header: X-Request-ID
+  echoed_in: error details metadata.request_id
+  guidance: Include the request id when reporting problems to support.
+versioning:
+  style: uri-path
+  current: v1
+  see: lifecycle/element-biosciences-lifecycle.yml
+error_envelope:
+  shape: google.rpc style
+  fields: [code, message, details]
+  detail_fields: ['@type', reason, domain, metadata.request_id]
+  domain_constant: cloud-api.elembio.io
+  content_type: application/json
+  rfc9457: false
+  see: errors/element-biosciences-problem-types.yml
+rate_limiting:
+  documented: false
+  headers: null
+  note: No rate limit, quota, or throttling headers are documented, and none appear in the OpenAPI. A real gap to raise with the provider.
+file_access:
+  pattern: credential-vending
+  note: |
+    File download does not stream bytes through the API. ListFiles returns metadata and
+    a downloadUrl; the *_credentials operations vend short-lived scoped AWS S3
+    credentials (region, bucket, prefix, accessKeyId, secretAccessKey, sessionToken,
+    expiration) so the client pulls directly from S3. The CLI wraps this as
+    `download` and `mount`.
+  operations: [RunService_GetRunDownloadCredentials, ExecutionService_GetExecutionDownloadCredentials, StorageConnectionService_GetDownloadCredentials]
+write_operations:
+  count: 0
+  note: The v1 Cloud API is entirely read-only — 16 GET operations and no write verbs.
+cross_links:
+  authentication: authentication/element-biosciences-authentication.yml
+  scopes: scopes/element-biosciences-scopes.yml
+  errors: errors/element-biosciences-problem-types.yml
+  lifecycle: lifecycle/element-biosciences-lifecycle.yml
+  data_model: data-model/element-biosciences-data-model.yml

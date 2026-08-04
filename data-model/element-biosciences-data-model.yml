@@ -1,0 +1,188 @@
+generated: '2026-08-04'
+method: derived
+source: openapi/element-biosciences-cloud-api-openapi-original.yml
+docs: https://docs.elembio.io/developers/core-concepts/
+summary: |
+  Four core entities — Run, Execution, Instrument, StorageConnection — plus a File
+  projection that hangs off three of them. An Instrument produces Runs; a Run's output
+  lands in a StorageConnection; an Execution consumes one or more Runs as inputs and
+  produces its own output. Files are not independently addressable: they are always
+  listed relative to a parent run, execution, or storage connection, and are fetched
+  with short-lived vended S3 credentials rather than through the API itself.
+identifiers:
+  style: type-prefixed opaque string
+  example: seq_507f1f77bcf86cd799439011
+  prefixes_documented: partial
+  note: The docs give `seq_` for a sequencing run as the illustrative example. A complete prefix registry is NOT published, so no other prefixes are asserted here.
+entities:
+- name: Run
+  schema: elembio.cloud.v1.Run
+  id_field: id
+  operations: [RunService_ListRuns, RunService_GetRun, RunService_ListRunFiles, RunService_GetRunDownloadCredentials]
+  scopes: ['runs:read', 'runs:download']
+  kinds: [sequencing, multiomics]
+  status_enum: [RUN_STATUS_UNSPECIFIED, RUN_STATUS_CREATED, RUN_STATUS_PRIMING, RUN_STATUS_PRIMED, RUN_STATUS_SEQUENCING, RUN_STATUS_RUNNING, RUN_STATUS_PAUSING, RUN_STATUS_PAUSED, RUN_STATUS_STOPPING, RUN_STATUS_SEQUENCED, RUN_STATUS_COMPLETED, RUN_STATUS_FAILED, RUN_STATUS_STOPPED, RUN_STATUS_DISCARDED]
+  key_fields: [id, name, description, type, status, instrument, output, timeCreated, timeStarted, timeCompleted, timeUpdated, tags, recipe, manifest, design, operator, setup, metrics]
+- name: Execution
+  schema: elembio.cloud.v1.Execution
+  id_field: id
+  operations: [ExecutionService_ListExecutions, ExecutionService_GetExecution, ExecutionService_ListExecutionFiles, ExecutionService_GetExecutionDownloadCredentials, ExecutionService_GetExecutionLogs]
+  scopes: ['executions:read', 'executions:download', 'executions:logs']
+  status_enum: [EXECUTION_STATUS_UNSPECIFIED, EXECUTION_STATUS_INITIALIZED, EXECUTION_STATUS_UNTRIGGERED, EXECUTION_STATUS_PENDING, EXECUTION_STATUS_RUNNING, EXECUTION_STATUS_COMPLETED, EXECUTION_STATUS_FAILED, EXECUTION_STATUS_CANCELED]
+  key_fields: [id, name, status, statusDescription, platform, workflow, flow, inputs, output, startedBy, timeCreated, timeStarted, timeCompleted, errorMessage]
+- name: Instrument
+  schema: elembio.cloud.v1.Instrument
+  id_field: serialNumber
+  operations: [InstrumentService_ListInstruments, InstrumentService_GetInstrument]
+  scopes: ['instruments:read']
+  status_enum: [INSTRUMENT_STATUS_UNSPECIFIED, INSTRUMENT_STATUS_ACTIVE, INSTRUMENT_STATUS_INACTIVE, INSTRUMENT_STATUS_DECOMMISSIONED]
+  key_fields: [serialNumber, name, model, status, timeCreated, timeUpdated, timeLastConnected, softwareVersion]
+- name: StorageConnection
+  schema: elembio.cloud.v1.StorageConnection
+  id_field: id
+  operations: [StorageConnectionService_ListStorageConnections, StorageConnectionService_GetStorageConnection, StorageConnectionService_ListFiles, StorageConnectionService_GetDownloadCredentials]
+  scopes: ['storage:read', 'storage:download']
+  status_enum: [STORAGE_CONNECTION_STATUS_UNSPECIFIED, STORAGE_CONNECTION_STATUS_CONNECTED, STORAGE_CONNECTION_STATUS_WARNING, STORAGE_CONNECTION_STATUS_FAILED]
+  key_fields: [id, name, type, status, uri, timeCreated, timeUpdated]
+  note: Connections that are deleted, disabled, or queued for deletion are not returned.
+- name: File
+  schema: elembio.cloud.v1.File
+  id_field: path
+  addressable: via-parent-only
+  operations: [RunService_ListRunFiles, ExecutionService_ListExecutionFiles, StorageConnectionService_ListFiles]
+  key_fields: [path, name, size, lastModified, uri, downloadUrl, storageClass]
+- name: S3Credentials
+  schema: elembio.cloud.v1.S3Credentials
+  kind: value-object
+  operations: [RunService_GetRunDownloadCredentials, ExecutionService_GetExecutionDownloadCredentials, StorageConnectionService_GetDownloadCredentials]
+  key_fields: [region, bucket, prefix, accessKeyId, secretAccessKey, sessionToken, expiration]
+  note: Short-lived scoped AWS credentials vended for direct S3 access. Not a persisted entity.
+supporting_types:
+- {name: RunReference, schema: elembio.cloud.v1.RunReference, role: denormalized pointer to a Run, fields: [id, name, instrumentName, kitType, runType]}
+- {name: ExecutionReference, schema: elembio.cloud.v1.ExecutionReference, role: denormalized pointer to an Execution, fields: [id, name, workflowName]}
+- {name: RunInstrument, schema: elembio.cloud.v1.RunInstrument, role: denormalized instrument pointer embedded in a Run}
+- {name: Output, schema: elembio.cloud.v1.Output, role: storage location of a Run or Execution result}
+- {name: UserSummary, schema: elembio.cloud.v1.UserSummary, role: actor who started an Execution}
+- {name: Workflow, schema: elembio.cloud.v1.Workflow, role: the analysis workflow an Execution runs}
+- {name: Flow, schema: elembio.cloud.v1.Flow, role: flowcell/flow context for an Execution}
+- {name: RunSetup, schema: elembio.cloud.v1.RunSetup, role: run configuration, splits into SequencingSetup or MultiomicsSetup}
+- {name: RunMetrics, schema: elembio.cloud.v1.RunMetrics, role: run quality metrics, splits into SequencingMetrics or MultiomicsMetrics}
+- {name: SequencingSetup, schema: elembio.cloud.v1.SequencingSetup, fields_include: [kit_name, library_structure, prep_type, polony_density, filter_mask, low_diversity, pmg_shift, panel]}
+- {name: MultiomicsSetup, schema: elembio.cloud.v1.MultiomicsSetup, fields_include: [kit_type, well_layout, panel, cartridge]}
+- {name: SequencingMetrics, schema: elembio.cloud.v1.SequencingMetrics, fields_include: [total_reads, total_yield, estimated_reads, q30, q40, q50, avg_q, error_rate, phix_alignment_rate]}
+- {name: MultiomicsMetrics, schema: elembio.cloud.v1.MultiomicsMetrics, fields_include: [total_cell_count, total_cell_confluency, total_percent_assigned]}
+- {name: Panel, schema: elembio.cloud.v1.Panel}
+- {name: Cartridge, schema: elembio.cloud.v1.Cartridge}
+- {name: Consumable, schema: elembio.cloud.v1.Consumable}
+- {name: Batch, schema: elembio.cloud.v1.Batch}
+- {name: Well, schema: elembio.cloud.v1.Well}
+- {name: ReadConfig, schema: elembio.cloud.v1.ReadConfig}
+- {name: RunRecipe, schema: elembio.cloud.v1.RunRecipe}
+- {name: RunManifest, schema: elembio.cloud.v1.RunManifest}
+- {name: RunDesign, schema: elembio.cloud.v1.RunDesign}
+relationships:
+- from: Instrument
+  to: Run
+  type: has_many
+  via: 'run.instrument.serial_number'
+  evidence: 'Run.instrument -> RunInstrument; ListRuns filter keyword instrument.serial_number'
+- from: Run
+  to: Instrument
+  type: belongs_to
+  via: 'instrument'
+  evidence: 'Run.instrument $ref RunInstrument'
+- from: Run
+  to: StorageConnection
+  type: belongs_to
+  via: 'output'
+  evidence: 'Run.output -> Output; ListRuns filter keyword storage.connection_id'
+- from: Run
+  to: File
+  type: has_many
+  via: 'ListRunFiles'
+  evidence: 'RunService_ListRunFiles path /v1/runs/{run_id}/files'
+- from: Run
+  to: RunSetup
+  type: has_one
+  via: 'setup'
+  evidence: 'Run.setup $ref RunSetup'
+- from: Run
+  to: RunMetrics
+  type: has_one
+  via: 'metrics'
+  evidence: 'Run.metrics $ref RunMetrics'
+- from: Execution
+  to: Run
+  type: has_many
+  via: 'inputs'
+  evidence: 'Execution.inputs array of ExecutionInput carrying RunReference'
+- from: Execution
+  to: Workflow
+  type: has_one
+  via: 'workflow'
+  evidence: 'Execution.workflow $ref Workflow'
+- from: Execution
+  to: Flow
+  type: has_one
+  via: 'flow'
+  evidence: 'Execution.flow $ref Flow'
+- from: Execution
+  to: UserSummary
+  type: has_one
+  via: 'startedBy'
+  evidence: 'Execution.startedBy $ref UserSummary'
+- from: Execution
+  to: StorageConnection
+  type: belongs_to
+  via: 'output'
+  evidence: 'Execution.output -> Output'
+- from: Execution
+  to: File
+  type: has_many
+  via: 'ListExecutionFiles'
+  evidence: 'ExecutionService_ListExecutionFiles path /v1/executions/{execution_id}/files'
+- from: StorageConnection
+  to: File
+  type: has_many
+  via: 'ListFiles'
+  evidence: 'StorageConnectionService_ListFiles path /v1/storage-connections/{storage_connection_id}/files'
+- from: RunSetup
+  to: SequencingSetup
+  type: has_one
+  via: 'sequencing'
+  evidence: 'filter keywords setup.sequencing.*'
+- from: RunSetup
+  to: MultiomicsSetup
+  type: has_one
+  via: 'multiomics'
+  evidence: 'filter keywords setup.multiomics.*'
+- from: RunMetrics
+  to: SequencingMetrics
+  type: has_one
+  via: 'sequencing'
+  evidence: 'filter keywords metrics.sequencing.*'
+- from: RunMetrics
+  to: MultiomicsMetrics
+  type: has_one
+  via: 'multiomics'
+  evidence: 'filter keywords metrics.multiomics.*'
+- from: MultiomicsSetup
+  to: Cartridge
+  type: has_one
+  via: 'cartridge'
+  evidence: 'filter keyword setup.multiomics.cartridge.name'
+- from: MultiomicsSetup
+  to: Panel
+  type: has_one
+  via: 'panel'
+  evidence: 'filter keyword setup.multiomics.panel.name'
+- from: SequencingSetup
+  to: Panel
+  type: has_one
+  via: 'panel'
+  evidence: 'filter keyword setup.sequencing.panel.name'
+counts:
+  entities: 6
+  supporting_types: 20
+  relationships: 20
+  schemas_total: 68

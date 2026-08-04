@@ -1,0 +1,90 @@
+generated: '2026-08-04'
+method: searched
+source: https://docs.elembio.io/docs/elembio-cloud/api-keys/
+docs: https://docs.elembio.io/docs/elembio-cloud/api-keys/
+oauth2: false
+scheme_type: apiKey
+scheme_note: |
+  IMPORTANT — these are NOT OAuth 2.0 scopes. The Element Biosciences Cloud API
+  authenticates with a static API key in the x-api-key header; there is no OAuth
+  authorization server, no token endpoint and no consent flow. Each API key is
+  nonetheless issued with an explicit permission set, and the OpenAPI describes the
+  grammar as `resource:action[:resource_id]`. This artifact captures that real,
+  documented permission model. It is filed under scopes/ because it is the provider's
+  scope surface, and the apis.yml pointer uses the catalog's canonical scope type.
+grammar: 'resource:action[:resource_id]'
+grammar_source: openapi/element-biosciences-cloud-api-openapi-original.yml (info.description)
+enforcement:
+  insufficient_scope_status: 403
+  insufficient_scope_reason: INSUFFICIENT_SCOPE
+  list_behaviour: List endpoints transparently restrict results to the resources a key is scoped to.
+key_policy:
+  expiration_days: {min: 1, max: 365, default: 30}
+  revocation: Deleting a key immediately revokes it; the action cannot be undone.
+  name_max_length: 256
+  description_max_length: 500
+  creation_path: Organization > API Keys > Add API Key
+  guidance: Grant the minimum required permissions (principle of least privilege); never commit keys to source control.
+scopes:
+- scope: Runs
+  api_form: 'runs:*'
+  description: Unrestricted access to all run data, including read, download, edit, and all other actions.
+  group: Runs
+- scope: Runs:Read
+  api_form: 'runs:read'
+  description: List and get run metadata for all runs.
+  group: Runs
+  operations: [RunService_ListRuns, RunService_GetRun]
+- scope: Runs:Download
+  api_form: 'runs:download'
+  description: Browse and download run files for all runs.
+  group: Runs
+  operations: [RunService_ListRunFiles, RunService_GetRunDownloadCredentials]
+- scope: Executions
+  api_form: 'executions:*'
+  description: Unrestricted access to all analysis executions, including read, download, edit, and all other actions.
+  group: Executions
+- scope: Executions:Read
+  api_form: 'executions:read'
+  description: List and get executions metadata for all executions.
+  group: Executions
+  operations: [ExecutionService_ListExecutions, ExecutionService_GetExecution]
+- scope: Executions:Download
+  api_form: 'executions:download'
+  description: Browse and download executions files for all executions.
+  group: Executions
+  operations: [ExecutionService_ListExecutionFiles, ExecutionService_GetExecutionDownloadCredentials]
+- scope: Executions:Logs
+  api_form: 'executions:logs'
+  description: View logs for all executions.
+  group: Executions
+  operations: [ExecutionService_GetExecutionLogs]
+- scope: Instruments
+  api_form: 'instruments:*'
+  description: Unrestricted access to all instrument metadata.
+  group: Instruments
+- scope: Instruments:Read
+  api_form: 'instruments:read'
+  description: List and get instrument metadata for all instruments.
+  group: Instruments
+  operations: [InstrumentService_ListInstruments, InstrumentService_GetInstrument]
+- scope: Storage
+  api_form: 'storage:*'
+  description: Unrestricted access to all storage connections and data.
+  group: Storage
+- scope: Storage:Read
+  api_form: 'storage:read'
+  description: List and get storage metadata for all storage connections.
+  group: Storage
+  operations: [StorageConnectionService_ListStorageConnections, StorageConnectionService_GetStorageConnection]
+- scope: Storage:Download
+  api_form: 'storage:download[:connection_id]'
+  description: Browse and download storage files for all storage connections. Narrowable to a specific connection or path prefix.
+  group: Storage
+  operations: [StorageConnectionService_ListFiles, StorageConnectionService_GetDownloadCredentials]
+  resource_scopable: true
+introspection:
+  operation: AuthService_GetAuth
+  path: GET /v1/auth
+  returns: [tenantId, scopes]
+  note: Call GET /v1/auth to confirm which tenant a key belongs to and which scopes it carries.

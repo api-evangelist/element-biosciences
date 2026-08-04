@@ -1,0 +1,90 @@
+generated: '2026-08-04'
+method: searched
+source: https://docs.elembio.io/developers/command-line/reference/
+name: elembio
+description: |
+  First-party command-line interface for ElemBio Cloud. A single dependency-free binary
+  covering the same surface as the Cloud API, plus a FUSE-style mount capability that
+  exposes run, execution and storage-connection files as a local folder for streaming
+  access without a full download.
+docs: https://docs.elembio.io/developers/command-line/getting-started/
+reference: https://docs.elembio.io/developers/command-line/reference/
+changelog: https://docs.elembio.io/developers/command-line/changelog/
+version: v1.0.0
+released: '2026-07-21'
+install:
+- {method: homebrew, command: 'brew tap elembio/tap && brew install elembio', platforms: [macos, linux]}
+- {method: npm, command: 'npm install -g elembio-cli', platforms: [linux-x64]}
+- {method: direct-download, command: 'curl -sSfL https://elembio-cloud-downloads.s3.us-west-2.amazonaws.com/elembio-cli/releases/latest/elembio-darwin-arm64 -o elembio && chmod +x elembio && sudo mv elembio /usr/local/bin/elembio', platforms: [macos-arm64]}
+- {method: direct-download, command: 'curl -sSfL https://elembio-cloud-downloads.s3.us-west-2.amazonaws.com/elembio-cli/releases/latest/elembio-linux-amd64 -o elembio && chmod +x elembio && sudo mv elembio /usr/local/bin/elembio', platforms: [linux-amd64]}
+- {method: direct-download, command: 'Invoke-WebRequest https://elembio-cloud-downloads.s3.us-west-2.amazonaws.com/elembio-cli/releases/latest/elembio-windows-amd64.exe -OutFile elembio.exe', platforms: [windows-amd64]}
+- {method: self-update, command: 'elembio update'}
+authentication:
+  command: elembio login
+  config_file: ~/.elembio/config.yaml
+  profiles: true
+  environment:
+  - {name: ELEMBIO_API_KEY, note: takes precedence over the config file}
+  - {name: ELEMBIO_API_URL, note: overrides the API endpoint}
+global_flags:
+- {flag: --api-url, type: string, description: Override the API endpoint}
+- {flag: --api-key, type: string, description: Override the API key}
+- {flag: --profile, type: string, default: default, description: Use a specific config profile}
+- {flag: -o, --output, type: string, default: table, values: [table, json, yaml, wide], description: Output format (wide on list commands only)}
+- {flag: --no-headers, type: boolean, default: false, description: Omit table headers}
+- {flag: -q, --quiet, type: boolean, default: false, description: Suppress non-essential output}
+- {flag: --page-size, type: integer, description: Page size for auto-paginated list commands}
+- {flag: --max-items, type: integer, description: Cap total items returned by list commands}
+commands:
+- group: authentication
+  commands:
+  - {command: elembio login, description: Authenticate and store credentials in a profile}
+  - {command: elembio logout, description: Remove stored credentials for the active profile}
+  - {command: elembio whoami, description: Show the active identity and the tenant the key belongs to, api: AuthService_GetAuth}
+  - {command: elembio profile list, description: List configured profiles}
+  - {command: elembio profile current, description: Show the active profile}
+  - {command: elembio profile use <profile>, description: Switch the active profile}
+  - {command: elembio profile delete <profile>, description: Delete a profile}
+- group: runs
+  commands:
+  - {command: elembio runs list, description: List runs, api: RunService_ListRuns}
+  - {command: elembio runs get <run>, description: Get one run by ID or name, api: RunService_GetRun}
+  - {command: elembio runs files <run>, description: List files in a run, api: RunService_ListRunFiles}
+  - {command: elembio runs download <run>, description: Download run files, api: RunService_GetRunDownloadCredentials}
+  - {command: elembio runs download-manifest <run>, description: Download the run planning manifest CSV}
+- group: executions
+  commands:
+  - {command: elembio executions list, description: List executions, api: ExecutionService_ListExecutions}
+  - {command: elembio executions get <execution>, description: Get one execution, api: ExecutionService_GetExecution}
+  - {command: elembio executions files <execution>, description: List execution output files, api: ExecutionService_ListExecutionFiles}
+  - {command: elembio executions download <execution>, description: Download execution files, api: ExecutionService_GetExecutionDownloadCredentials}
+  - {command: elembio executions logs <execution>, description: Print execution logs, api: ExecutionService_GetExecutionLogs}
+- group: instruments
+  commands:
+  - {command: elembio instruments list, description: List instruments, api: InstrumentService_ListInstruments}
+  - {command: elembio instruments get <serial-number>, description: Get one instrument by serial number, api: InstrumentService_GetInstrument}
+- group: storage
+  commands:
+  - {command: elembio storage list, description: List storage connections, api: StorageConnectionService_ListStorageConnections}
+  - {command: elembio storage get <connection>, description: Get one connection by ID or name, api: StorageConnectionService_GetStorageConnection}
+  - {command: elembio storage files <connection>, description: List files in a connection, api: StorageConnectionService_ListFiles}
+  - {command: 'elembio storage download <connection> [file ...]', description: Download files, or print temporary S3 credentials, api: StorageConnectionService_GetDownloadCredentials}
+- group: mount
+  description: Mount cloud file surfaces as local folders (macOS and Linux)
+  commands:
+  - {command: elembio mount run <run> <mountpoint>, description: Mount run files}
+  - {command: elembio mount execution <execution> <mountpoint>, description: Mount execution output files}
+  - {command: elembio mount storage <connection> <mountpoint>, description: Mount storage connection files}
+  - {command: elembio mount list, description: List live and stale ElemBio mounts on the host}
+  - {command: elembio mount unmount <mountpoint>, description: Release a mount}
+- group: maintenance
+  commands:
+  - {command: elembio version, description: Show the installed CLI version}
+  - {command: elembio update, description: Update the CLI to the latest release}
+  - {command: elembio completion <shell>, description: Generate a shell completion script}
+  - {command: elembio help, description: Show help}
+key_flows:
+- {name: Fleet check, steps: [elembio login, elembio instruments list]}
+- {name: Find and pull a completed run, steps: ['elembio runs list --filter "status:completed time_completed>=7d"', elembio runs files <run>, elembio runs download <run>]}
+- {name: Stream run data without downloading, steps: [elembio mount run <run> /mnt/run, elembio mount unmount /mnt/run]}
+- {name: Debug a failed analysis, steps: ['elembio executions list --filter "status:failed"', elembio executions logs <execution>]}

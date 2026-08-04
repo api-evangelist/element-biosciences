@@ -1,0 +1,58 @@
+generated: '2026-08-04'
+method: probed
+source: live GET of /.well-known/* across every apis.yml and OpenAPI servers[] host
+summary: |
+  No /.well-known/ discovery documents are published on any Element Biosciences host.
+  Every probed path returned 404. This is a recorded negative, not a gap in the probe:
+  all five hosts were checked for the full discovery set on 2026-08-04.
+  Note that *.elembio.io resolves via a wildcard DNS record to the ElemBio Cloud
+  single-page app, so unprobed subdomains answer 200 with HTML for any path — every
+  200 on this provider must be body-verified before it is treated as a hit.
+hosts:
+- host: https://cloud-api.usw2.elembio.io
+  role: api
+  documents:
+  - {path: /.well-known/security.txt, status: 404}
+  - {path: /.well-known/openid-configuration, status: 404}
+  - {path: /.well-known/oauth-authorization-server, status: 404}
+  - {path: /.well-known/oauth-protected-resource, status: 404}
+  - {path: /.well-known/api-catalog, status: 404}
+  - {path: /.well-known/ai-plugin.json, status: 404}
+  - {path: /.well-known/agent-card.json, status: 404}
+  - {path: /.well-known/agent.json, status: 404}
+- host: https://docs.elembio.io
+  role: documentation
+  documents:
+  - {path: /.well-known/security.txt, status: 404}
+  - {path: /.well-known/openid-configuration, status: 404}
+  - {path: /.well-known/oauth-authorization-server, status: 404}
+  - {path: /.well-known/api-catalog, status: 404}
+  - {path: /.well-known/ai-plugin.json, status: 404}
+  - {path: /.well-known/agent-card.json, status: 404}
+  - {path: /.well-known/agent.json, status: 404}
+- host: https://www.elementbiosciences.com
+  role: website
+  documents:
+  - {path: /.well-known/security.txt, status: 404}
+  - {path: /.well-known/openid-configuration, status: 404}
+  - {path: /.well-known/oauth-authorization-server, status: 404}
+  - {path: /.well-known/api-catalog, status: 404}
+  - {path: /.well-known/ai-plugin.json, status: 404}
+  - {path: /.well-known/agent-card.json, status: 404}
+  - {path: /.well-known/agent.json, status: 404}
+- host: https://elembio.io
+  role: corporate-alias
+  documents:
+  - {path: /.well-known/security.txt, status: 404}
+  - {path: /.well-known/agent-card.json, status: 404}
+  - {path: /.well-known/agent.json, status: 404}
+security_txt: null
+openid_configuration: null
+oauth_authorization_server: null
+api_catalog: null
+agent_card: null
+x-evidence:
+  fetched: '2026-08-04'
+  hosts_probed: 5
+  paths_probed_per_host: 9
+  hits: 0
