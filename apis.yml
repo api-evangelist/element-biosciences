@@ -34,37 +34,100 @@ tags:
 - Cloud Storage
 - Biotechnology
 apis:
-- aid: element-biosciences:cloud-api
-  name: Element Biosciences Cloud API
-  description: 'The Element Biosciences Cloud API provides programmatic, read-oriented access to data in
-    the ElemBio Cloud platform: instrument runs (sequencing and multiomics), workflow executions,
-    registered instruments, storage connections, and the files those resources produce. All paths are
-    versioned under /v1. Requests authenticate with an API key in the x-api-key header, scoped per
-    resource and action. List endpoints are cursor-paginated and support a keyword-expression filter
-    language with comparison operators and relative date offsets.'
+- aid: element-biosciences:element-biosciences-authservice-api
+  name: Element Biosciences Auth Service API
+  description: AuthService reports information about the API key making the request.
   humanURL: https://docs.elembio.io/developers/api/
   baseURL: https://cloud-api.usw2.elembio.io
   tags:
-  - Genomics
-  - DNA Sequencing
-  - Multiomics
-  - Bioinformatics
-  - Laboratory
+  - AuthService
   properties:
   - type: OpenAPI
-    url: openapi/element-biosciences-cloud-api-openapi-original.yml
+    url: openapi/element-biosciences-authservice-api-openapi.yml
   - type: Documentation
     url: https://docs.elembio.io/developers/api/getting-started/
   - type: APIReference
     url: https://docs.elembio.io/developers/api/
-  - type: Overlay
-    url: overlays/element-biosciences-cloud-api-overlay.yaml
+- aid: element-biosciences:element-biosciences-executionservice-api
+  name: Element Biosciences Execution Service API
+  description: >-
+    ExecutionService provides access to workflow executions — runs of a
+     bioinformatics workflow that process instrument data. Listing and reading
+     execution metadata requires the "executions:read" scope; listing files and
+     obtaining download credentials requires "executions:download"; retrieving
+     logs requires "executions:logs".
+  humanURL: https://docs.elembio.io/developers/api/
+  baseURL: https://cloud-api.usw2.elembio.io
+  tags:
+  - ExecutionService
+  properties:
+  - type: OpenAPI
+    url: openapi/element-biosciences-executionservice-api-openapi.yml
+  - type: Documentation
+    url: https://docs.elembio.io/developers/api/getting-started/
+  - type: APIReference
+    url: https://docs.elembio.io/developers/api/
+- aid: element-biosciences:element-biosciences-instrumentservice-api
+  name: Element Biosciences Instrument Service API
+  description: >-
+    InstrumentService provides access to instruments registered to the
+     authenticated tenant. Requires the "instruments:read" scope.
+  humanURL: https://docs.elembio.io/developers/api/
+  baseURL: https://cloud-api.usw2.elembio.io
+  tags:
+  - InstrumentService
+  properties:
+  - type: OpenAPI
+    url: openapi/element-biosciences-instrumentservice-api-openapi.yml
+  - type: Documentation
+    url: https://docs.elembio.io/developers/api/getting-started/
+  - type: APIReference
+    url: https://docs.elembio.io/developers/api/
+- aid: element-biosciences:element-biosciences-runservice-api
+  name: Element Biosciences Run Service API
+  description: >-
+    RunService provides access to instrument runs, both sequencing and
+     multiomics. Listing and reading run metadata requires the "runs:read"
+     scope; listing run files and obtaining download credentials requires the
+     "runs:download" scope.
+  humanURL: https://docs.elembio.io/developers/api/
+  baseURL: https://cloud-api.usw2.elembio.io
+  tags:
+  - RunService
+  properties:
+  - type: OpenAPI
+    url: openapi/element-biosciences-runservice-api-openapi.yml
+  - type: Documentation
+    url: https://docs.elembio.io/developers/api/getting-started/
+  - type: APIReference
+    url: https://docs.elembio.io/developers/api/
+- aid: element-biosciences:element-biosciences-storageconnectionservice-api
+  name: Element Biosciences Storage Connection Service API
+  description: >-
+    StorageConnectionService provides access to storage connections: their
+     metadata (requires the "storage:read" scope) and the files within them
+     (ListFiles / GetDownloadCredentials, which require the "storage:download"
+     scope, narrowable to a specific connection or path prefix). Connections that
+     are deleted, disabled, or queued for deletion are not returned.
+  humanURL: https://docs.elembio.io/developers/api/
+  baseURL: https://cloud-api.usw2.elembio.io
+  tags:
+  - StorageConnectionService
+  properties:
+  - type: OpenAPI
+    url: openapi/element-biosciences-storageconnectionservice-api-openapi.yml
+  - type: Documentation
+    url: https://docs.elembio.io/developers/api/getting-started/
+  - type: APIReference
+    url: https://docs.elembio.io/developers/api/
 maintainers:
 - FN: Kin Lane
   email: kin@apievangelist.com
 - FN: APIs.json
   email: info@apis.io
 common:
+- type: Overlay
+  url: overlays/element-biosciences-cloud-api-overlay.yaml
 - type: AgenticAccess
   url: agentic-access/element-biosciences-agentic-access.yml
 - type: Website
