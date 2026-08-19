@@ -1,0 +1,160 @@
+{
+  "opencollection": "1.0.0",
+  "info": {
+    "name": "Element Biosciences Cloud Storage Connection Service API",
+    "version": "1.0.0"
+  },
+  "request": {
+    "auth": {
+      "type": "apikey",
+      "key": "x-api-key",
+      "value": "{{x-api-key}}",
+      "placement": "header"
+    }
+  },
+  "items": [
+    {
+      "info": {
+        "name": "StorageConnectionService",
+        "type": "folder"
+      },
+      "items": [
+        {
+          "info": {
+            "name": "ListStorageConnections",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://cloud-api.usw2.elembio.io/v1/storage-connections",
+            "params": [
+              {
+                "name": "pageSize",
+                "value": "",
+                "type": "query",
+                "description": "Maximum number of connections to return. Defaults to 100; values above\n 1000 are capped at 1000."
+              },
+              {
+                "name": "pageToken",
+                "value": "",
+                "type": "query",
+                "description": "Pagination token from a previous response's next_page_token. Omit to\n request the first page."
+              }
+            ]
+          },
+          "docs": "List storage connections accessible to the authenticated tenant."
+        },
+        {
+          "info": {
+            "name": "GetStorageConnection",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://cloud-api.usw2.elembio.io/v1/storage-connections/:id",
+            "params": [
+              {
+                "name": "id",
+                "value": "",
+                "type": "path",
+                "description": "ID of the storage connection to retrieve."
+              }
+            ]
+          },
+          "docs": "Get a single storage connection by its ID."
+        },
+        {
+          "info": {
+            "name": "GetDownloadCredentials",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://cloud-api.usw2.elembio.io/v1/storage-connections/:storage_connection_id/credentials",
+            "params": [
+              {
+                "name": "storage_connection_id",
+                "value": "",
+                "type": "path"
+              },
+              {
+                "name": "prefix",
+                "value": "",
+                "type": "query",
+                "description": "Prefix to scope credentials to a subdirectory, relative to the storage\n connection's configured root. Matches the --prefix semantics of ListFiles:\n optional for an unrestricted key (omitted ⇒ connection root), but required\n and bounded to scope for a key scoped to a path prefix — omitting it or\n naming one outside the scope returns PermissionDenied with the allowed\n prefix(es) (`allowed_prefixes` metadata)."
+              },
+              {
+                "name": "expirationSeconds",
+                "value": "",
+                "type": "query",
+                "description": "Lifetime of the returned credentials, in seconds. Optional; defaults to\n 1 hour (when 0 or unset). Minimum 900s. Capped by AWS: up to 36h (129600s)\n for federation-token connections, or the role's MaxSessionDuration (12h\n typical) for role-backed connections. Values below the minimum or above the\n cap are rejected."
+              }
+            ]
+          },
+          "docs": "Get temporary, read-only S3 credentials scoped to a storage connection.\n Use these for bulk or repeated downloads via the AWS CLI or SDK instead\n of per-object presigned URLs."
+        },
+        {
+          "info": {
+            "name": "ListFiles",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://cloud-api.usw2.elembio.io/v1/storage-connections/:storage_connection_id/files",
+            "params": [
+              {
+                "name": "storage_connection_id",
+                "value": "",
+                "type": "path"
+              },
+              {
+                "name": "prefix",
+                "value": "",
+                "type": "query",
+                "description": "Path prefix relative to the storage connection's configured root,\n directory-shape with implicit trailing \"/\". The connection's saved\n sub-prefix (if any) is not part of this value — it's an\n implementation detail of the connection.\n Example: \"A24-S2/run-001/\". Round-trips with File.path.\n For an unrestricted key, optional: omitting it lists from the connection\n root. For a key scoped to a path prefix, a prefix WITHIN the scope is\n required: omitting it, or supplying one outside the scope, returns\n PermissionDenied with the allowed prefix(es) in the error\n (`allowed_prefixes` metadata)."
+              },
+              {
+                "name": "recursive",
+                "value": "",
+                "type": "query",
+                "description": "If true, list all files recursively under the prefix (default: true)\n If false, list only files and subdirectories at the current level"
+              },
+              {
+                "name": "pageSize",
+                "value": "",
+                "type": "query",
+                "description": "Maximum number of files to return per page (default: 1000, max: 1000)\n Note: This is passed through to the underlying storage system"
+              },
+              {
+                "name": "pageToken",
+                "value": "",
+                "type": "query",
+                "description": "Continuation token from previous response\n This is an opaque token from the underlying storage system"
+              },
+              {
+                "name": "includeDownloadUrl",
+                "value": "",
+                "type": "query",
+                "description": "If true, populate File.download_url (a presigned URL) on each returned\n file. Defaults to false. Set to true only when the caller intends to\n fetch file content from the response: generating presigned URLs has a\n per-object cost and the URLs themselves are credentials with a\n multi-hour lifetime. Use GetDownloadCredentials when long-lived bulk\n access is required."
+              },
+              {
+                "name": "downloadUrlExpirationSeconds",
+                "value": "",
+                "type": "query",
+                "description": "Lifetime of the presigned download_url, in seconds. Optional; defaults to\n 1 hour. Only applies when include_download_url = true. Max 7 days."
+              },
+              {
+                "name": "includeDownloadChecksum",
+                "value": "",
+                "type": "query",
+                "description": "If true, presign each download_url with S3 ChecksumMode=ENABLED so the\n object's stored checksum is returned on the GET (in the\n x-amz-checksum-<algo> response header) and a client can verify download\n integrity in a single streaming pass. Defaults false; has no effect unless\n include_download_url = true. When enabled the presigned URL signs the\n x-amz-checksum-mode request header, so the fetch MUST send\n x-amz-checksum-mode:ENABLED — a plain GET that omits it fails with HTTP\n 403. Best-effort: objects stored without a checksum return none.\n\n Applies only to AWS S3-backed storage connections; other storage backends\n do not presign S3 GETs and silently ignore this field."
+              }
+            ]
+          },
+          "docs": "List files in a storage connection. Supports prefix filtering and, when\n recursive is false, delimiter-based hierarchical listing."
+        }
+      ]
+    }
+  ],
+  "bundled": true
+}

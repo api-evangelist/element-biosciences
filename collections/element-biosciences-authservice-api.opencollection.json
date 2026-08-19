@@ -1,0 +1,37 @@
+{
+  "opencollection": "1.0.0",
+  "info": {
+    "name": "Element Biosciences Cloud Auth Service API",
+    "version": "1.0.0"
+  },
+  "request": {
+    "auth": {
+      "type": "apikey",
+      "key": "x-api-key",
+      "value": "{{x-api-key}}",
+      "placement": "header"
+    }
+  },
+  "items": [
+    {
+      "info": {
+        "name": "AuthService",
+        "type": "folder"
+      },
+      "items": [
+        {
+          "info": {
+            "name": "GetAuth",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://cloud-api.usw2.elembio.io/v1/auth"
+          },
+          "docs": "Return the tenant the current API key belongs to. This endpoint requires a\n valid API key but no additional scope, so it is a convenient way to verify\n that a key is working."
+        }
+      ]
+    }
+  ],
+  "bundled": true
+}

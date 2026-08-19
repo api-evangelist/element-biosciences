@@ -1,0 +1,210 @@
+openapi: 3.2.0
+info:
+  title: Element Biosciences Cloud Auth Service API
+  description: 'The Element Biosciences Cloud API provides programmatic access to data in
+
+    the Element Biosciences Cloud platform: instrument runs (sequencing and
+
+    multiomics), workflow executions, registered instruments, storage
+
+    connections, and the files those resources produce.
+
+
+    All paths are versioned under `/v1`.
+
+
+    ## Authentication
+
+    Every request must include an API key in the `x-api-key` header. Create and
+
+    manage keys in the Element Biosciences Cloud console. Call `GET /v1/auth` to
+
+    confirm which tenant a key belongs to.
+
+
+    ## Scopes
+
+    Each API key carries one or more scopes of the form
+
+    `resource:action[:resource_id]`, for example `runs:read`,
+
+    `executions:download`, or `storage:download:{connection_id}`. A request that
+
+    is authenticated but lacks the required scope fails with HTTP 403 and the
+
+    `INSUFFICIENT_SCOPE` reason. List endpoints transparently restrict results
+
+    to the resources a key is scoped to.
+
+
+    ## Pagination
+
+    List endpoints are cursor-paginated. Set `page_size` to control the page
+
+    length and pass the `next_page_token` from one response as the `page_token`
+
+    of the next; an empty `next_page_token` indicates the last page.
+
+
+    ## Errors
+
+    Errors return a JSON body with an integer `code`, a human-readable
+
+    `message`, and a `details` array. Each detail carries a machine-readable
+
+    `reason` (for example `RUN_NOT_FOUND` or `INVALID_API_KEY`) and the
+
+    `domain` `cloud-api.elembio.io`. The `request_id` in the detail metadata
+
+    matches the `X-Request-ID` response header; include it when reporting
+
+    problems.
+
+    '
+  version: 1.0.0
+  contact:
+    name: Element Biosciences
+    url: https://www.elembio.io
+servers:
+- url: https://cloud-api.usw2.elembio.io
+security:
+- apiKey: []
+tags:
+- name: AuthService
+  description: AuthService reports information about the API key making the request.
+paths:
+  /v1/auth:
+    get:
+      tags:
+      - AuthService
+      summary: GetAuth
+      description: "Return the tenant the current API key belongs to. This endpoint requires a\n valid API key but no additional scope, so it is a convenient way to verify\n that a key is working."
+      operationId: AuthService_GetAuth
+      responses:
+        '200':
+          description: Success
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/elembio.cloud.v1.GetAuthResponse'
+        '400':
+          description: Bad request — the request was malformed or a parameter was invalid.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '401':
+          description: Unauthorized — the API key is missing or invalid.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '403':
+          description: Forbidden — the API key lacks the required scope.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '404':
+          description: Not found — the requested resource does not exist or is not accessible.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '500':
+          description: Internal server error.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+components:
+  schemas:
+    Error:
+      type: object
+      description: Error response returned by all endpoints when a request fails.
+      properties:
+        code:
+          type: integer
+          description: Numeric status code corresponding to the HTTP response status
+        message:
+          type: string
+          description: Human-readable error message
+        details:
+          type: array
+          description: Structured error details with machine-readable reason codes
+          items:
+            $ref: '#/components/schemas/ErrorDetail'
+      required:
+      - code
+      - message
+      examples:
+      - code: 404
+        message: Run not found.
+        details:
+        - reason: RUN_NOT_FOUND
+          domain: cloud-api.elembio.io
+          metadata:
+            request_id: 550e8400-e29b-41d4-a716-446655440000
+      - code: 401
+        message: Invalid API key.
+        details:
+        - reason: INVALID_API_KEY
+          domain: cloud-api.elembio.io
+          metadata:
+            request_id: 550e8400-e29b-41d4-a716-446655440001
+    ErrorDetail:
+      type: object
+      description: Structured error detail with a machine-readable reason code.
+      properties:
+        '@type':
+          type: string
+          description: Type identifier for this error detail
+        reason:
+          type: string
+          description: 'Machine-readable error code identifying the specific failure
+
+            (e.g. RUN_NOT_FOUND, INVALID_API_KEY, INSUFFICIENT_SCOPE).
+
+            '
+          examples:
+          - RUN_NOT_FOUND
+          - INVALID_API_KEY
+          - MISSING_API_KEY
+          - INSUFFICIENT_SCOPE
+          - INTERNAL_ERROR
+        domain:
+          type: string
+          description: Identifies the system that generated the error
+          const: cloud-api.elembio.io
+        metadata:
+          type: object
+          description: Additional context for the error
+          properties:
+            request_id:
+              type: string
+              description: Request ID matching the X-Request-ID response header
+      required:
+      - reason
+      - domain
+    elembio.cloud.v1.GetAuthResponse:
+      type: object
+      properties:
+        tenantId:
+          type: string
+          title: tenant_id
+          description: Identifier of the tenant the API key belongs to.
+        scopes:
+          type: array
+          items:
+            type: string
+          title: scopes
+          description: "Scopes granted to the API key making the request, e.g. \"runs:read\" or\n \"storage:download:stc_abc123/data/\". A resource-scoped key reports its\n resource-qualified scopes; an unrestricted key reports its family-level\n scopes. An empty list means the key has no resource scopes (only the\n auth-level access needed to reach this endpoint)."
+      title: GetAuthResponse
+      additionalProperties: false
+      description: Response describing the authenticated API key.
+  securitySchemes:
+    apiKey:
+      type: apiKey
+      in: header
+      name: x-api-key
+      description: API key obtained from the Element Biosciences Cloud console

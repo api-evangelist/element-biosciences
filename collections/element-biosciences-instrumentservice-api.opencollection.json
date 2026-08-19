@@ -1,0 +1,70 @@
+{
+  "opencollection": "1.0.0",
+  "info": {
+    "name": "Element Biosciences Cloud Instrument Service API",
+    "version": "1.0.0"
+  },
+  "request": {
+    "auth": {
+      "type": "apikey",
+      "key": "x-api-key",
+      "value": "{{x-api-key}}",
+      "placement": "header"
+    }
+  },
+  "items": [
+    {
+      "info": {
+        "name": "InstrumentService",
+        "type": "folder"
+      },
+      "items": [
+        {
+          "info": {
+            "name": "ListInstruments",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://cloud-api.usw2.elembio.io/v1/instruments",
+            "params": [
+              {
+                "name": "pageSize",
+                "value": "",
+                "type": "query",
+                "description": "Maximum number of instruments to return. Defaults to 100; values above\n 1000 are capped at 1000."
+              },
+              {
+                "name": "pageToken",
+                "value": "",
+                "type": "query",
+                "description": "Pagination token from a previous response's next_page_token. Omit to\n request the first page."
+              }
+            ]
+          },
+          "docs": "List instruments registered to the authenticated tenant."
+        },
+        {
+          "info": {
+            "name": "GetInstrument",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://cloud-api.usw2.elembio.io/v1/instruments/:serial_number",
+            "params": [
+              {
+                "name": "serial_number",
+                "value": "",
+                "type": "path",
+                "description": "Serial number of the instrument to retrieve. Example: \"AV223501\"."
+              }
+            ]
+          },
+          "docs": "Get a single instrument by its serial number."
+        }
+      ]
+    }
+  ],
+  "bundled": true
+}

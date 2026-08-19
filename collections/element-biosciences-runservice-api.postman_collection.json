@@ -1,0 +1,1863 @@
+{
+  "item": [
+    {
+      "id": "233c5056-b0f4-49fb-819e-43515e6f5682",
+      "name": "RunService",
+      "description": {
+        "content": "RunService provides access to instrument runs, both sequencing and\n multiomics. Listing and reading run metadata requires the \"runs:read\"\n scope; listing run files and obtaining download credentials requires the\n \"runs:download\" scope.",
+        "type": "text/plain"
+      },
+      "item": [
+        {
+          "id": "f5a6965d-8b88-4bf0-9f4a-be794bf8aa1c",
+          "name": "ListRuns",
+          "request": {
+            "name": "ListRuns",
+            "description": {
+              "content": "List runs accessible to the authenticated tenant, optionally filtered.",
+              "type": "text/plain"
+            },
+            "url": {
+              "path": [
+                "v1",
+                "runs"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [
+                {
+                  "disabled": false,
+                  "key": "filter",
+                  "value": "<string>",
+                  "description": "Search and filter expression. Space-separated `keyword:value` terms are\n ANDed together; bare text with no keyword searches all string fields. For\n numeric and date fields, replace the colon with a comparison operator\n (`>=`, `<=`, `>`, `<`, `!=`). List alternatives for one keyword with\n commas, e.g. `status:completed,failed`. Dates accept ISO-8601 or relative\n offsets such as `7d` or `1mo`.\n\n Filterable keywords:\n\n - **String:** `name`, `id`, `description`, `tags`, `instrument.name`, `instrument.serial_number`, `instrument.model`, `storage.connection_id`, `setup.sequencing.kit_name`, `setup.sequencing.library_structure`, `setup.sequencing.prep_type`, `setup.sequencing.polony_density`, `setup.sequencing.filter_mask`, `setup.sequencing.panel.name`, `setup.multiomics.panel.name`, `setup.multiomics.cartridge.name`\n - **Enum:** `type` (`sequencing`, `multiomics`), `status`, `output.kind` (`sequencing_run`, `multiomics_run`; an alias for `type`), `setup.multiomics.kit_type` (`cytoprofiling`, `direct_in_sample_sequencing`, `antibody_screening`, `tissue`, `protein_screening`), `setup.multiomics.well_layout` (`twelve_well_circle`, `twelve_well_square`, `two_well`, `one_well`, `twelve_well_standard`, `forty_eight_well`)\n - **Date:** `time_created`, `time_started`, `time_completed`, `time_updated`\n - **Numeric:** `metrics.sequencing.total_reads`, `metrics.sequencing.total_yield`, `metrics.sequencing.estimated_reads`, `metrics.sequencing.q30`, `metrics.sequencing.q40`, `metrics.sequencing.q50`, `metrics.sequencing.avg_q`, `metrics.sequencing.error_rate`, `metrics.sequencing.phix_alignment_rate`, `metrics.multiomics.total_cell_count`, `metrics.multiomics.total_cell_confluency`, `metrics.multiomics.total_percent_assigned`, `setup.sequencing.pmg_shift`\n - **Boolean:** `setup.sequencing.low_diversity`\n\n Examples:\n\n - `type:sequencing status:completed time_completed>=7d`\n - `instrument.serial_number:AV223501 metrics.sequencing.q30>=90`"
+                },
+                {
+                  "disabled": false,
+                  "key": "pageSize",
+                  "value": "<integer>",
+                  "description": "Maximum number of runs to return (default: 100, max: 1000)"
+                },
+                {
+                  "disabled": false,
+                  "key": "pageToken",
+                  "value": "<string>",
+                  "description": "Token for pagination"
+                },
+                {
+                  "disabled": false,
+                  "key": "includeTotalCount",
+                  "value": "<boolean>",
+                  "description": "If true, include total_count in the response (adds a count query)"
+                }
+              ],
+              "variable": []
+            },
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "method": "GET",
+            "auth": null
+          },
+          "response": [
+            {
+              "id": "e47c9629-76b5-463c-979f-5c59173efee0",
+              "name": "Success",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "v1",
+                    "runs"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [
+                    {
+                      "key": "filter",
+                      "value": "<string>"
+                    },
+                    {
+                      "key": "pageSize",
+                      "value": "<integer>"
+                    },
+                    {
+                      "key": "pageToken",
+                      "value": "<string>"
+                    },
+                    {
+                      "key": "includeTotalCount",
+                      "value": "<boolean>"
+                    }
+                  ],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: apikey",
+                      "type": "text/plain"
+                    },
+                    "key": "x-api-key",
+                    "value": "<API Key>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "OK",
+              "code": 200,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"runs\": [\n    {\n      \"id\": \"string\",\n      \"name\": \"string\",\n      \"description\": \"string\",\n      \"type\": \"string\",\n      \"status\": \"RUN_STATUS_CREATED\",\n      \"instrument\": {\n        \"id\": \"string\",\n        \"name\": \"string\",\n        \"serialNumber\": \"string\",\n        \"model\": \"string\",\n        \"softwareVersion\": \"string\"\n      },\n      \"output\": {\n        \"storageConnectionId\": \"string\",\n        \"uri\": \"string\",\n        \"kinds\": [\n          \"string\",\n          \"string\"\n        ]\n      },\n      \"timeCreated\": \"1983-05-31T07:10:45.641Z\",\n      \"timeStarted\": \"1959-06-04T09:47:45.604Z\",\n      \"timeCompleted\": \"1964-07-27T06:38:01.495Z\",\n      \"timeUpdated\": \"2022-08-07T21:49:55.880Z\",\n      \"tags\": [\n        \"string\",\n        \"string\"\n      ],\n      \"recipe\": {\n        \"id\": \"string\",\n        \"name\": \"string\"\n      },\n      \"manifest\": {\n        \"filename\": \"string\",\n        \"description\": \"string\",\n        \"timeUploaded\": \"1996-10-22T06:43:15.048Z\",\n        \"downloadUrl\": \"string\"\n      },\n      \"design\": {\n        \"id\": \"string\",\n        \"name\": \"string\",\n        \"kind\": \"string\"\n      },\n      \"operator\": \"string\",\n      \"setup\": {\n        \"sequencing\": {\n          \"kitName\": \"string\",\n          \"kitPartNumber\": \"string\",\n          \"libraryStructure\": \"string\",\n          \"prepType\": \"string\",\n          \"dualLibrary\": true,\n          \"reads\": [\n            {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            },\n            {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            }\n          ],\n          \"chemistryVersion\": \"string\",\n          \"pmgShift\": null,\n          \"filterMask\": \"string\",\n          \"polonyDensity\": null,\n          \"lowDiversity\": false,\n          \"panel\": {\n            \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n          },\n          \"flowcell\": {\n            \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n          },\n          \"buffer\": {\n            \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n          },\n          \"sequencingCartridge\": {\n            \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n          }\n        },\n        \"multiomics\": {\n          \"panel\": {\n            \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n          },\n          \"kitType\": \"string\",\n          \"kitId\": \"string\",\n          \"cartridge\": {\n            \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n          },\n          \"wellLayout\": \"string\",\n          \"wells\": [\n            {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            },\n            {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            }\n          ],\n          \"batches\": [\n            {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            },\n            {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            }\n          ],\n          \"smallCell\": true,\n          \"tallCell\": true,\n          \"flowcell\": {\n            \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n          },\n          \"buffer\": {\n            \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n          },\n          \"panelCartridge\": {\n            \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n          }\n        }\n      },\n      \"metrics\": {\n        \"sequencing\": {\n          \"phixAlignmentRate\": 7568.413045268595,\n          \"totalYield\": 4592,\n          \"totalReads\": \"string\",\n          \"estimatedReads\": null,\n          \"q30\": null,\n          \"q40\": null,\n          \"avgQ\": null,\n          \"errorRate\": null,\n          \"q50\": 3194.5463332510503\n        },\n        \"multiomics\": {\n          \"totalCellCount\": 3602,\n          \"totalCellConfluency\": 9991.005303401795,\n          \"totalPercentAssigned\": null\n        }\n      }\n    },\n    {\n      \"id\": \"string\",\n      \"name\": \"string\",\n      \"description\": \"string\",\n      \"type\": \"string\",\n      \"status\": \"RUN_STATUS_RUNNING\",\n      \"instrument\": {\n        \"id\": \"string\",\n        \"name\": \"string\",\n        \"serialNumber\": \"string\",\n        \"model\": \"string\",\n        \"softwareVersion\": \"string\"\n      },\n      \"output\": {\n        \"storageConnectionId\": \"string\",\n        \"uri\": \"string\",\n        \"kinds\": [\n          \"string\",\n          \"string\"\n        ]\n      },\n      \"timeCreated\": \"2011-06-08T01:21:51.845Z\",\n      \"timeStarted\": \"1961-11-08T11:01:57.412Z\",\n      \"timeCompleted\": \"1997-07-31T23:08:17.078Z\",\n      \"timeUpdated\": \"2007-01-10T23:55:56.373Z\",\n      \"tags\": [\n        \"string\",\n        \"string\"\n      ],\n      \"recipe\": {\n        \"id\": \"string\",\n        \"name\": \"string\"\n      },\n      \"manifest\": {\n        \"filename\": \"string\",\n        \"description\": \"string\",\n        \"timeUploaded\": \"1962-04-18T22:52:07.716Z\",\n        \"downloadUrl\": \"string\"\n      },\n      \"design\": {\n        \"id\": \"string\",\n        \"name\": \"string\",\n        \"kind\": \"string\"\n      },\n      \"operator\": \"string\",\n      \"setup\": {\n        \"sequencing\": {\n          \"kitName\": \"string\",\n          \"kitPartNumber\": \"string\",\n          \"libraryStructure\": \"string\",\n          \"prepType\": \"string\",\n          \"dualLibrary\": true,\n          \"reads\": [\n            {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            },\n            {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            }\n          ],\n          \"chemistryVersion\": \"string\",\n          \"pmgShift\": null,\n          \"filterMask\": null,\n          \"polonyDensity\": \"string\",\n          \"lowDiversity\": true,\n          \"panel\": {\n            \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n          },\n          \"flowcell\": {\n            \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n          },\n          \"buffer\": {\n            \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n          },\n          \"sequencingCartridge\": {\n            \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n          }\n        },\n        \"multiomics\": {\n          \"panel\": {\n            \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n          },\n          \"kitType\": \"string\",\n          \"kitId\": \"string\",\n          \"cartridge\": {\n            \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n          },\n          \"wellLayout\": \"string\",\n          \"wells\": [\n            {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            },\n            {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            }\n          ],\n          \"batches\": [\n            {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            },\n            {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            }\n          ],\n          \"smallCell\": true,\n          \"tallCell\": false,\n          \"flowcell\": {\n            \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n          },\n          \"buffer\": {\n            \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n          },\n          \"panelCartridge\": {\n            \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n          }\n        }\n      },\n      \"metrics\": {\n        \"sequencing\": {\n          \"phixAlignmentRate\": null,\n          \"totalYield\": null,\n          \"totalReads\": 4689,\n          \"estimatedReads\": null,\n          \"q30\": null,\n          \"q40\": null,\n          \"avgQ\": null,\n          \"errorRate\": null,\n          \"q50\": null\n        },\n        \"multiomics\": {\n          \"totalCellCount\": 9702,\n          \"totalCellConfluency\": null,\n          \"totalPercentAssigned\": 7511.143955694617\n        }\n      }\n    }\n  ],\n  \"nextPageToken\": \"string\",\n  \"previousPageToken\": \"string\",\n  \"totalCount\": null\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "71458c1d-c1a5-4104-ad76-1a7bfa23c86a",
+              "name": "Bad request — the request was malformed or a parameter was invalid.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "v1",
+                    "runs"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [
+                    {
+                      "key": "filter",
+                      "value": "<string>"
+                    },
+                    {
+                      "key": "pageSize",
+                      "value": "<integer>"
+                    },
+                    {
+                      "key": "pageToken",
+                      "value": "<string>"
+                    },
+                    {
+                      "key": "includeTotalCount",
+                      "value": "<boolean>"
+                    }
+                  ],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: apikey",
+                      "type": "text/plain"
+                    },
+                    "key": "x-api-key",
+                    "value": "<API Key>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "Bad Request",
+              "code": 400,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"code\": 9821,\n  \"message\": \"string\",\n  \"details\": [\n    {\n      \"reason\": \"string\",\n      \"domain\": \"string\",\n      \"@type\": \"string\",\n      \"metadata\": {\n        \"request_id\": \"string\"\n      }\n    },\n    {\n      \"reason\": \"string\",\n      \"domain\": \"string\",\n      \"@type\": \"string\",\n      \"metadata\": {\n        \"request_id\": \"string\"\n      }\n    }\n  ]\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "a085cbfe-8ca0-4352-ac85-462950da973a",
+              "name": "Unauthorized — the API key is missing or invalid.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "v1",
+                    "runs"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [
+                    {
+                      "key": "filter",
+                      "value": "<string>"
+                    },
+                    {
+                      "key": "pageSize",
+                      "value": "<integer>"
+                    },
+                    {
+                      "key": "pageToken",
+                      "value": "<string>"
+                    },
+                    {
+                      "key": "includeTotalCount",
+                      "value": "<boolean>"
+                    }
+                  ],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: apikey",
+                      "type": "text/plain"
+                    },
+                    "key": "x-api-key",
+                    "value": "<API Key>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "Unauthorized",
+              "code": 401,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"code\": 3942,\n  \"message\": \"string\",\n  \"details\": [\n    {\n      \"reason\": \"string\",\n      \"domain\": \"string\",\n      \"@type\": \"string\",\n      \"metadata\": {\n        \"request_id\": \"string\"\n      }\n    },\n    {\n      \"reason\": \"string\",\n      \"domain\": \"string\",\n      \"@type\": \"string\",\n      \"metadata\": {\n        \"request_id\": \"string\"\n      }\n    }\n  ]\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "b8eff633-eff3-4c10-b43a-5bd06c2af414",
+              "name": "Forbidden — the API key lacks the required scope.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "v1",
+                    "runs"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [
+                    {
+                      "key": "filter",
+                      "value": "<string>"
+                    },
+                    {
+                      "key": "pageSize",
+                      "value": "<integer>"
+                    },
+                    {
+                      "key": "pageToken",
+                      "value": "<string>"
+                    },
+                    {
+                      "key": "includeTotalCount",
+                      "value": "<boolean>"
+                    }
+                  ],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: apikey",
+                      "type": "text/plain"
+                    },
+                    "key": "x-api-key",
+                    "value": "<API Key>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "Forbidden",
+              "code": 403,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"code\": 3942,\n  \"message\": \"string\",\n  \"details\": [\n    {\n      \"reason\": \"string\",\n      \"domain\": \"string\",\n      \"@type\": \"string\",\n      \"metadata\": {\n        \"request_id\": \"string\"\n      }\n    },\n    {\n      \"reason\": \"string\",\n      \"domain\": \"string\",\n      \"@type\": \"string\",\n      \"metadata\": {\n        \"request_id\": \"string\"\n      }\n    }\n  ]\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "e3b6ed37-becf-4cb6-bc39-868e3d955f2f",
+              "name": "Not found — the requested resource does not exist or is not accessible.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "v1",
+                    "runs"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [
+                    {
+                      "key": "filter",
+                      "value": "<string>"
+                    },
+                    {
+                      "key": "pageSize",
+                      "value": "<integer>"
+                    },
+                    {
+                      "key": "pageToken",
+                      "value": "<string>"
+                    },
+                    {
+                      "key": "includeTotalCount",
+                      "value": "<boolean>"
+                    }
+                  ],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: apikey",
+                      "type": "text/plain"
+                    },
+                    "key": "x-api-key",
+                    "value": "<API Key>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "Not Found",
+              "code": 404,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"code\": 3942,\n  \"message\": \"string\",\n  \"details\": [\n    {\n      \"reason\": \"string\",\n      \"domain\": \"string\",\n      \"@type\": \"string\",\n      \"metadata\": {\n        \"request_id\": \"string\"\n      }\n    },\n    {\n      \"reason\": \"string\",\n      \"domain\": \"string\",\n      \"@type\": \"string\",\n      \"metadata\": {\n        \"request_id\": \"string\"\n      }\n    }\n  ]\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "d34e52e4-d0a6-42d0-8fc1-53e13eaf8833",
+              "name": "Internal server error.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "v1",
+                    "runs"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [
+                    {
+                      "key": "filter",
+                      "value": "<string>"
+                    },
+                    {
+                      "key": "pageSize",
+                      "value": "<integer>"
+                    },
+                    {
+                      "key": "pageToken",
+                      "value": "<string>"
+                    },
+                    {
+                      "key": "includeTotalCount",
+                      "value": "<boolean>"
+                    }
+                  ],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: apikey",
+                      "type": "text/plain"
+                    },
+                    "key": "x-api-key",
+                    "value": "<API Key>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "Internal Server Error",
+              "code": 500,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"code\": 3942,\n  \"message\": \"string\",\n  \"details\": [\n    {\n      \"reason\": \"string\",\n      \"domain\": \"string\",\n      \"@type\": \"string\",\n      \"metadata\": {\n        \"request_id\": \"string\"\n      }\n    },\n    {\n      \"reason\": \"string\",\n      \"domain\": \"string\",\n      \"@type\": \"string\",\n      \"metadata\": {\n        \"request_id\": \"string\"\n      }\n    }\n  ]\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        },
+        {
+          "id": "4956056e-db23-43b7-a4b4-5f87f0a0219a",
+          "name": "GetRun",
+          "request": {
+            "name": "GetRun",
+            "description": {
+              "content": "Get a single run by its ID.",
+              "type": "text/plain"
+            },
+            "url": {
+              "path": [
+                "v1",
+                "runs",
+                ":id"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [],
+              "variable": [
+                {
+                  "disabled": false,
+                  "type": "any",
+                  "value": "<string>",
+                  "key": "id",
+                  "description": "(Required) The unique identifier of the run"
+                }
+              ]
+            },
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "method": "GET",
+            "auth": null
+          },
+          "response": [
+            {
+              "id": "db31bd62-2cf0-4cf5-b5f2-493f5884fe91",
+              "name": "Success",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "v1",
+                    "runs",
+                    ":id"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "id",
+                      "description": "(Required) The unique identifier of the run"
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: apikey",
+                      "type": "text/plain"
+                    },
+                    "key": "x-api-key",
+                    "value": "<API Key>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "OK",
+              "code": 200,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"run\": {\n    \"id\": \"string\",\n    \"name\": \"string\",\n    \"description\": \"string\",\n    \"type\": \"string\",\n    \"status\": \"RUN_STATUS_PAUSED\",\n    \"instrument\": {\n      \"id\": \"string\",\n      \"name\": \"string\",\n      \"serialNumber\": \"string\",\n      \"model\": \"string\",\n      \"softwareVersion\": \"string\"\n    },\n    \"output\": {\n      \"storageConnectionId\": \"string\",\n      \"uri\": \"string\",\n      \"kinds\": [\n        \"string\",\n        \"string\"\n      ]\n    },\n    \"timeCreated\": \"2023-08-02T23:08:11.374Z\",\n    \"timeStarted\": \"1949-05-11T01:25:53.589Z\",\n    \"timeCompleted\": \"1973-03-04T04:59:36.016Z\",\n    \"timeUpdated\": \"1989-09-24T09:39:38.398Z\",\n    \"tags\": [\n      \"string\",\n      \"string\"\n    ],\n    \"recipe\": {\n      \"id\": \"string\",\n      \"name\": \"string\"\n    },\n    \"manifest\": {\n      \"filename\": \"string\",\n      \"description\": \"string\",\n      \"timeUploaded\": \"1982-09-06T10:32:04.445Z\",\n      \"downloadUrl\": \"string\"\n    },\n    \"design\": {\n      \"id\": \"string\",\n      \"name\": \"string\",\n      \"kind\": \"string\"\n    },\n    \"operator\": \"string\",\n    \"setup\": {\n      \"sequencing\": {\n        \"kitName\": \"string\",\n        \"kitPartNumber\": \"string\",\n        \"libraryStructure\": \"string\",\n        \"prepType\": \"string\",\n        \"dualLibrary\": false,\n        \"reads\": [\n          {\n            \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n          },\n          {\n            \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n          }\n        ],\n        \"chemistryVersion\": \"string\",\n        \"pmgShift\": null,\n        \"filterMask\": \"string\",\n        \"polonyDensity\": null,\n        \"lowDiversity\": true,\n        \"panel\": {\n          \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n        },\n        \"flowcell\": {\n          \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n        },\n        \"buffer\": {\n          \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n        },\n        \"sequencingCartridge\": {\n          \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n        }\n      },\n      \"multiomics\": {\n        \"panel\": {\n          \"id\": {\n            \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n          },\n          \"name\": {\n            \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n          },\n          \"version\": {\n            \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n          }\n        },\n        \"kitType\": \"string\",\n        \"kitId\": \"string\",\n        \"cartridge\": {\n          \"id\": {\n            \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n          },\n          \"name\": {\n            \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n          },\n          \"partNumber\": {\n            \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n          }\n        },\n        \"wellLayout\": \"string\",\n        \"wells\": [\n          {\n            \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n          },\n          {\n            \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n          }\n        ],\n        \"batches\": [\n          {\n            \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n          },\n          {\n            \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n          }\n        ],\n        \"smallCell\": true,\n        \"tallCell\": false,\n        \"flowcell\": {\n          \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n        },\n        \"buffer\": {\n          \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n        },\n        \"panelCartridge\": {\n          \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n        }\n      }\n    },\n    \"metrics\": {\n      \"sequencing\": {\n        \"phixAlignmentRate\": 4280.131886157773,\n        \"totalYield\": \"string\",\n        \"totalReads\": 6893,\n        \"estimatedReads\": null,\n        \"q30\": 4816.634335231533,\n        \"q40\": 6049.223830481345,\n        \"avgQ\": 4909.756211852839,\n        \"errorRate\": 1193.0703908492358,\n        \"q50\": 6659.336025758982\n      },\n      \"multiomics\": {\n        \"totalCellCount\": 4017,\n        \"totalCellConfluency\": null,\n        \"totalPercentAssigned\": null\n      }\n    }\n  }\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "710b5a76-1e1f-4c46-b93e-236add7938a9",
+              "name": "Bad request — the request was malformed or a parameter was invalid.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "v1",
+                    "runs",
+                    ":id"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "id",
+                      "description": "(Required) The unique identifier of the run"
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: apikey",
+                      "type": "text/plain"
+                    },
+                    "key": "x-api-key",
+                    "value": "<API Key>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "Bad Request",
+              "code": 400,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"code\": 3942,\n  \"message\": \"string\",\n  \"details\": [\n    {\n      \"reason\": \"string\",\n      \"domain\": \"string\",\n      \"@type\": \"string\",\n      \"metadata\": {\n        \"request_id\": \"string\"\n      }\n    },\n    {\n      \"reason\": \"string\",\n      \"domain\": \"string\",\n      \"@type\": \"string\",\n      \"metadata\": {\n        \"request_id\": \"string\"\n      }\n    }\n  ]\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "167b8269-2f47-44c9-af6e-8468b6908c2b",
+              "name": "Unauthorized — the API key is missing or invalid.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "v1",
+                    "runs",
+                    ":id"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "id",
+                      "description": "(Required) The unique identifier of the run"
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: apikey",
+                      "type": "text/plain"
+                    },
+                    "key": "x-api-key",
+                    "value": "<API Key>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "Unauthorized",
+              "code": 401,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"code\": 3942,\n  \"message\": \"string\",\n  \"details\": [\n    {\n      \"reason\": \"string\",\n      \"domain\": \"string\",\n      \"@type\": \"string\",\n      \"metadata\": {\n        \"request_id\": \"string\"\n      }\n    },\n    {\n      \"reason\": \"string\",\n      \"domain\": \"string\",\n      \"@type\": \"string\",\n      \"metadata\": {\n        \"request_id\": \"string\"\n      }\n    }\n  ]\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "2c8bc839-31de-4115-ac97-44390565c01c",
+              "name": "Forbidden — the API key lacks the required scope.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "v1",
+                    "runs",
+                    ":id"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "id",
+                      "description": "(Required) The unique identifier of the run"
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: apikey",
+                      "type": "text/plain"
+                    },
+                    "key": "x-api-key",
+                    "value": "<API Key>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "Forbidden",
+              "code": 403,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"code\": 3942,\n  \"message\": \"string\",\n  \"details\": [\n    {\n      \"reason\": \"string\",\n      \"domain\": \"string\",\n      \"@type\": \"string\",\n      \"metadata\": {\n        \"request_id\": \"string\"\n      }\n    },\n    {\n      \"reason\": \"string\",\n      \"domain\": \"string\",\n      \"@type\": \"string\",\n      \"metadata\": {\n        \"request_id\": \"string\"\n      }\n    }\n  ]\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "e2812058-b349-4b35-bbe5-fa64e54286c4",
+              "name": "Not found — the requested resource does not exist or is not accessible.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "v1",
+                    "runs",
+                    ":id"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "id",
+                      "description": "(Required) The unique identifier of the run"
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: apikey",
+                      "type": "text/plain"
+                    },
+                    "key": "x-api-key",
+                    "value": "<API Key>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "Not Found",
+              "code": 404,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"code\": 3942,\n  \"message\": \"string\",\n  \"details\": [\n    {\n      \"reason\": \"string\",\n      \"domain\": \"string\",\n      \"@type\": \"string\",\n      \"metadata\": {\n        \"request_id\": \"string\"\n      }\n    },\n    {\n      \"reason\": \"string\",\n      \"domain\": \"string\",\n      \"@type\": \"string\",\n      \"metadata\": {\n        \"request_id\": \"string\"\n      }\n    }\n  ]\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "b2e0fe30-a7d2-49d5-8b04-0dd41f450607",
+              "name": "Internal server error.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "v1",
+                    "runs",
+                    ":id"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "id",
+                      "description": "(Required) The unique identifier of the run"
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: apikey",
+                      "type": "text/plain"
+                    },
+                    "key": "x-api-key",
+                    "value": "<API Key>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "Internal Server Error",
+              "code": 500,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"code\": 3942,\n  \"message\": \"string\",\n  \"details\": [\n    {\n      \"reason\": \"string\",\n      \"domain\": \"string\",\n      \"@type\": \"string\",\n      \"metadata\": {\n        \"request_id\": \"string\"\n      }\n    },\n    {\n      \"reason\": \"string\",\n      \"domain\": \"string\",\n      \"@type\": \"string\",\n      \"metadata\": {\n        \"request_id\": \"string\"\n      }\n    }\n  ]\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        },
+        {
+          "id": "981e9b6d-7db4-43a4-be78-9d183a4b3cd3",
+          "name": "GetRunDownloadCredentials",
+          "request": {
+            "name": "GetRunDownloadCredentials",
+            "description": {
+              "content": "Get temporary, read-only S3 credentials scoped to a run's storage\n location. Use these for bulk or repeated downloads via the AWS CLI or\n SDK instead of per-object presigned URLs.",
+              "type": "text/plain"
+            },
+            "url": {
+              "path": [
+                "v1",
+                "runs",
+                ":run_id",
+                "credentials"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [
+                {
+                  "disabled": false,
+                  "key": "prefix",
+                  "value": "<string>",
+                  "description": "Optional path prefix within the run to scope credentials to.\n Run-relative, identical semantics to ListRunFilesRequest.prefix.\n \"..\" segments are rejected. When omitted, credentials are scoped to\n the whole run (the run root)."
+                },
+                {
+                  "disabled": false,
+                  "key": "expirationSeconds",
+                  "value": "<integer>",
+                  "description": "Lifetime of the returned credentials, in seconds. Optional; defaults to\n 1 hour (when 0 or unset). Minimum 900s. Capped by AWS: up to 36h (129600s)\n for federation-token connections, or the role's MaxSessionDuration (12h\n typical) for role-backed connections. Values below the minimum or above the\n cap are rejected."
+                }
+              ],
+              "variable": [
+                {
+                  "disabled": false,
+                  "type": "any",
+                  "value": "<string>",
+                  "key": "run_id",
+                  "description": "(Required) The run ID"
+                }
+              ]
+            },
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "method": "GET",
+            "auth": null
+          },
+          "response": [
+            {
+              "id": "bb15a2d0-433b-446b-948b-75ea5ab73835",
+              "name": "Success",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "v1",
+                    "runs",
+                    ":run_id",
+                    "credentials"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [
+                    {
+                      "key": "prefix",
+                      "value": "<string>"
+                    },
+                    {
+                      "key": "expirationSeconds",
+                      "value": "<integer>"
+                    }
+                  ],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "run_id",
+                      "description": "(Required) The run ID"
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: apikey",
+                      "type": "text/plain"
+                    },
+                    "key": "x-api-key",
+                    "value": "<API Key>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "OK",
+              "code": 200,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"s3\": {\n    \"region\": \"string\",\n    \"bucket\": \"string\",\n    \"prefix\": null,\n    \"accessKeyId\": \"string\",\n    \"secretAccessKey\": \"string\",\n    \"sessionToken\": \"string\",\n    \"expiration\": \"1992-07-18T04:17:06.414Z\"\n  }\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "87fdb230-f7bb-46c2-80a8-2376d90558c9",
+              "name": "Bad request — the request was malformed or a parameter was invalid.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "v1",
+                    "runs",
+                    ":run_id",
+                    "credentials"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [
+                    {
+                      "key": "prefix",
+                      "value": "<string>"
+                    },
+                    {
+                      "key": "expirationSeconds",
+                      "value": "<integer>"
+                    }
+                  ],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "run_id",
+                      "description": "(Required) The run ID"
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: apikey",
+                      "type": "text/plain"
+                    },
+                    "key": "x-api-key",
+                    "value": "<API Key>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "Bad Request",
+              "code": 400,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"code\": 3942,\n  \"message\": \"string\",\n  \"details\": [\n    {\n      \"reason\": \"string\",\n      \"domain\": \"string\",\n      \"@type\": \"string\",\n      \"metadata\": {\n        \"request_id\": \"string\"\n      }\n    },\n    {\n      \"reason\": \"string\",\n      \"domain\": \"string\",\n      \"@type\": \"string\",\n      \"metadata\": {\n        \"request_id\": \"string\"\n      }\n    }\n  ]\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "ebe37adf-81fc-4215-bc22-b6823869fb1b",
+              "name": "Unauthorized — the API key is missing or invalid.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "v1",
+                    "runs",
+                    ":run_id",
+                    "credentials"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [
+                    {
+                      "key": "prefix",
+                      "value": "<string>"
+                    },
+                    {
+                      "key": "expirationSeconds",
+                      "value": "<integer>"
+                    }
+                  ],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "run_id",
+                      "description": "(Required) The run ID"
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: apikey",
+                      "type": "text/plain"
+                    },
+                    "key": "x-api-key",
+                    "value": "<API Key>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "Unauthorized",
+              "code": 401,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"code\": 3942,\n  \"message\": \"string\",\n  \"details\": [\n    {\n      \"reason\": \"string\",\n      \"domain\": \"string\",\n      \"@type\": \"string\",\n      \"metadata\": {\n        \"request_id\": \"string\"\n      }\n    },\n    {\n      \"reason\": \"string\",\n      \"domain\": \"string\",\n      \"@type\": \"string\",\n      \"metadata\": {\n        \"request_id\": \"string\"\n      }\n    }\n  ]\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "749b5098-9f12-47fd-893c-8c7cb1457e72",
+              "name": "Forbidden — the API key lacks the required scope.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "v1",
+                    "runs",
+                    ":run_id",
+                    "credentials"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [
+                    {
+                      "key": "prefix",
+                      "value": "<string>"
+                    },
+                    {
+                      "key": "expirationSeconds",
+                      "value": "<integer>"
+                    }
+                  ],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "run_id",
+                      "description": "(Required) The run ID"
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: apikey",
+                      "type": "text/plain"
+                    },
+                    "key": "x-api-key",
+                    "value": "<API Key>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "Forbidden",
+              "code": 403,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"code\": 3942,\n  \"message\": \"string\",\n  \"details\": [\n    {\n      \"reason\": \"string\",\n      \"domain\": \"string\",\n      \"@type\": \"string\",\n      \"metadata\": {\n        \"request_id\": \"string\"\n      }\n    },\n    {\n      \"reason\": \"string\",\n      \"domain\": \"string\",\n      \"@type\": \"string\",\n      \"metadata\": {\n        \"request_id\": \"string\"\n      }\n    }\n  ]\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "e667acf5-a79a-46d0-ae92-ab0d76ea59d3",
+              "name": "Not found — the requested resource does not exist or is not accessible.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "v1",
+                    "runs",
+                    ":run_id",
+                    "credentials"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [
+                    {
+                      "key": "prefix",
+                      "value": "<string>"
+                    },
+                    {
+                      "key": "expirationSeconds",
+                      "value": "<integer>"
+                    }
+                  ],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "run_id",
+                      "description": "(Required) The run ID"
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: apikey",
+                      "type": "text/plain"
+                    },
+                    "key": "x-api-key",
+                    "value": "<API Key>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "Not Found",
+              "code": 404,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"code\": 3942,\n  \"message\": \"string\",\n  \"details\": [\n    {\n      \"reason\": \"string\",\n      \"domain\": \"string\",\n      \"@type\": \"string\",\n      \"metadata\": {\n        \"request_id\": \"string\"\n      }\n    },\n    {\n      \"reason\": \"string\",\n      \"domain\": \"string\",\n      \"@type\": \"string\",\n      \"metadata\": {\n        \"request_id\": \"string\"\n      }\n    }\n  ]\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "ee6fa381-1b9f-4f77-a146-052a9347cc88",
+              "name": "Internal server error.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "v1",
+                    "runs",
+                    ":run_id",
+                    "credentials"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [
+                    {
+                      "key": "prefix",
+                      "value": "<string>"
+                    },
+                    {
+                      "key": "expirationSeconds",
+                      "value": "<integer>"
+                    }
+                  ],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "run_id",
+                      "description": "(Required) The run ID"
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: apikey",
+                      "type": "text/plain"
+                    },
+                    "key": "x-api-key",
+                    "value": "<API Key>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "Internal Server Error",
+              "code": 500,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"code\": 3942,\n  \"message\": \"string\",\n  \"details\": [\n    {\n      \"reason\": \"string\",\n      \"domain\": \"string\",\n      \"@type\": \"string\",\n      \"metadata\": {\n        \"request_id\": \"string\"\n      }\n    },\n    {\n      \"reason\": \"string\",\n      \"domain\": \"string\",\n      \"@type\": \"string\",\n      \"metadata\": {\n        \"request_id\": \"string\"\n      }\n    }\n  ]\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        },
+        {
+          "id": "6e6147fe-4281-4ecc-a961-afd1dd25570d",
+          "name": "ListRunFiles",
+          "request": {
+            "name": "ListRunFiles",
+            "description": {
+              "content": "List the files produced by a run, drawn from the run's storage location.",
+              "type": "text/plain"
+            },
+            "url": {
+              "path": [
+                "v1",
+                "runs",
+                ":run_id",
+                "files"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [
+                {
+                  "disabled": false,
+                  "key": "prefix",
+                  "value": "<string>",
+                  "description": "Path prefix within the run, e.g. \"visualization/\" or \"Stats/foo\".\n The run is a self-contained namespace: paths do not include any\n bucket-level or workflow-level layout. Round-trips with File.path\n returned by this RPC. \"..\" segments are rejected.\n Optional: when omitted, lists the whole run (the run root)."
+                },
+                {
+                  "disabled": false,
+                  "key": "recursive",
+                  "value": "<boolean>",
+                  "description": "If true, list all files recursively under the prefix (default: true)\n If false, list only files and subdirectories at the current level"
+                },
+                {
+                  "disabled": false,
+                  "key": "pageSize",
+                  "value": "<integer>",
+                  "description": "Maximum number of files to return per page (default: 1000, max: 1000)"
+                },
+                {
+                  "disabled": false,
+                  "key": "pageToken",
+                  "value": "<string>",
+                  "description": "Continuation token from previous response (passthrough from storage)"
+                },
+                {
+                  "disabled": false,
+                  "key": "includeDownloadUrl",
+                  "value": "<boolean>",
+                  "description": "If true, populate File.download_url (a presigned URL) on each returned\n file. Defaults to false. Set to true only when the caller intends to\n fetch file content from the response: generating presigned URLs has a\n per-object cost and the URLs themselves are credentials with a\n multi-hour lifetime. Use GetRunDownloadCredentials when long-lived\n bulk access is required."
+                },
+                {
+                  "disabled": false,
+                  "key": "downloadUrlExpirationSeconds",
+                  "value": "<integer>",
+                  "description": "Lifetime of the presigned download_url, in seconds. Optional; defaults to\n 1 hour. Only applies when include_download_url = true. Max 7 days."
+                },
+                {
+                  "disabled": false,
+                  "key": "includeDownloadChecksum",
+                  "value": "<boolean>",
+                  "description": "If true, presign each download_url with S3 ChecksumMode=ENABLED so the\n object's stored checksum is returned on the GET (in the\n x-amz-checksum-<algo> response header) and a client can verify download\n integrity in a single streaming pass. Defaults false; has no effect unless\n include_download_url = true. When enabled the presigned URL signs the\n x-amz-checksum-mode request header, so the fetch MUST send\n x-amz-checksum-mode:ENABLED — a plain GET that omits it fails with HTTP\n 403. Best-effort: objects stored without a checksum return none.\n\n Applies only to AWS S3-backed storage connections; other storage backends\n do not presign S3 GETs and silently ignore this field."
+                }
+              ],
+              "variable": [
+                {
+                  "disabled": false,
+                  "type": "any",
+                  "value": "<string>",
+                  "key": "run_id",
+                  "description": "(Required) The run ID"
+                }
+              ]
+            },
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "method": "GET",
+            "auth": null
+          },
+          "response": [
+            {
+              "id": "116ed615-c544-4d82-adf5-3b3261766fae",
+              "name": "Success",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "v1",
+                    "runs",
+                    ":run_id",
+                    "files"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [
+                    {
+                      "key": "prefix",
+                      "value": "<string>"
+                    },
+                    {
+                      "key": "recursive",
+                      "value": "<boolean>"
+                    },
+                    {
+                      "key": "pageSize",
+                      "value": "<integer>"
+                    },
+                    {
+                      "key": "pageToken",
+                      "value": "<string>"
+                    },
+                    {
+                      "key": "includeDownloadUrl",
+                      "value": "<boolean>"
+                    },
+                    {
+                      "key": "downloadUrlExpirationSeconds",
+                      "value": "<integer>"
+                    },
+                    {
+                      "key": "includeDownloadChecksum",
+                      "value": "<boolean>"
+                    }
+                  ],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "run_id",
+                      "description": "(Required) The run ID"
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: apikey",
+                      "type": "text/plain"
+                    },
+                    "key": "x-api-key",
+                    "value": "<API Key>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "OK",
+              "code": 200,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"files\": [\n    {\n      \"path\": \"string\",\n      \"name\": \"string\",\n      \"size\": 1385,\n      \"lastModified\": \"1956-02-02T13:30:29.433Z\",\n      \"uri\": \"string\",\n      \"downloadUrl\": \"string\",\n      \"storageClass\": \"string\"\n    },\n    {\n      \"path\": \"string\",\n      \"name\": \"string\",\n      \"size\": 5331,\n      \"lastModified\": \"2003-01-08T12:14:03.099Z\",\n      \"uri\": \"string\",\n      \"downloadUrl\": \"string\",\n      \"storageClass\": \"string\"\n    }\n  ],\n  \"subdirectories\": [\n    \"string\",\n    \"string\"\n  ],\n  \"nextPageToken\": \"string\",\n  \"isTruncated\": false\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "cd71e3dd-fd2e-4380-a925-27c6ae342603",
+              "name": "Bad request — the request was malformed or a parameter was invalid.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "v1",
+                    "runs",
+                    ":run_id",
+                    "files"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [
+                    {
+                      "key": "prefix",
+                      "value": "<string>"
+                    },
+                    {
+                      "key": "recursive",
+                      "value": "<boolean>"
+                    },
+                    {
+                      "key": "pageSize",
+                      "value": "<integer>"
+                    },
+                    {
+                      "key": "pageToken",
+                      "value": "<string>"
+                    },
+                    {
+                      "key": "includeDownloadUrl",
+                      "value": "<boolean>"
+                    },
+                    {
+                      "key": "downloadUrlExpirationSeconds",
+                      "value": "<integer>"
+                    },
+                    {
+                      "key": "includeDownloadChecksum",
+                      "value": "<boolean>"
+                    }
+                  ],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "run_id",
+                      "description": "(Required) The run ID"
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: apikey",
+                      "type": "text/plain"
+                    },
+                    "key": "x-api-key",
+                    "value": "<API Key>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "Bad Request",
+              "code": 400,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"code\": 3942,\n  \"message\": \"string\",\n  \"details\": [\n    {\n      \"reason\": \"string\",\n      \"domain\": \"string\",\n      \"@type\": \"string\",\n      \"metadata\": {\n        \"request_id\": \"string\"\n      }\n    },\n    {\n      \"reason\": \"string\",\n      \"domain\": \"string\",\n      \"@type\": \"string\",\n      \"metadata\": {\n        \"request_id\": \"string\"\n      }\n    }\n  ]\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "78cb476e-93d5-44ad-a0bb-13609ecf8b71",
+              "name": "Unauthorized — the API key is missing or invalid.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "v1",
+                    "runs",
+                    ":run_id",
+                    "files"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [
+                    {
+                      "key": "prefix",
+                      "value": "<string>"
+                    },
+                    {
+                      "key": "recursive",
+                      "value": "<boolean>"
+                    },
+                    {
+                      "key": "pageSize",
+                      "value": "<integer>"
+                    },
+                    {
+                      "key": "pageToken",
+                      "value": "<string>"
+                    },
+                    {
+                      "key": "includeDownloadUrl",
+                      "value": "<boolean>"
+                    },
+                    {
+                      "key": "downloadUrlExpirationSeconds",
+                      "value": "<integer>"
+                    },
+                    {
+                      "key": "includeDownloadChecksum",
+                      "value": "<boolean>"
+                    }
+                  ],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "run_id",
+                      "description": "(Required) The run ID"
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: apikey",
+                      "type": "text/plain"
+                    },
+                    "key": "x-api-key",
+                    "value": "<API Key>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "Unauthorized",
+              "code": 401,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"code\": 3942,\n  \"message\": \"string\",\n  \"details\": [\n    {\n      \"reason\": \"string\",\n      \"domain\": \"string\",\n      \"@type\": \"string\",\n      \"metadata\": {\n        \"request_id\": \"string\"\n      }\n    },\n    {\n      \"reason\": \"string\",\n      \"domain\": \"string\",\n      \"@type\": \"string\",\n      \"metadata\": {\n        \"request_id\": \"string\"\n      }\n    }\n  ]\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "94759d06-ab8f-4736-ba90-a30f782eb19d",
+              "name": "Forbidden — the API key lacks the required scope.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "v1",
+                    "runs",
+                    ":run_id",
+                    "files"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [
+                    {
+                      "key": "prefix",
+                      "value": "<string>"
+                    },
+                    {
+                      "key": "recursive",
+                      "value": "<boolean>"
+                    },
+                    {
+                      "key": "pageSize",
+                      "value": "<integer>"
+                    },
+                    {
+                      "key": "pageToken",
+                      "value": "<string>"
+                    },
+                    {
+                      "key": "includeDownloadUrl",
+                      "value": "<boolean>"
+                    },
+                    {
+                      "key": "downloadUrlExpirationSeconds",
+                      "value": "<integer>"
+                    },
+                    {
+                      "key": "includeDownloadChecksum",
+                      "value": "<boolean>"
+                    }
+                  ],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "run_id",
+                      "description": "(Required) The run ID"
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: apikey",
+                      "type": "text/plain"
+                    },
+                    "key": "x-api-key",
+                    "value": "<API Key>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "Forbidden",
+              "code": 403,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"code\": 3942,\n  \"message\": \"string\",\n  \"details\": [\n    {\n      \"reason\": \"string\",\n      \"domain\": \"string\",\n      \"@type\": \"string\",\n      \"metadata\": {\n        \"request_id\": \"string\"\n      }\n    },\n    {\n      \"reason\": \"string\",\n      \"domain\": \"string\",\n      \"@type\": \"string\",\n      \"metadata\": {\n        \"request_id\": \"string\"\n      }\n    }\n  ]\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "a8deb6a6-ce70-4075-af97-21b66cdca25d",
+              "name": "Not found — the requested resource does not exist or is not accessible.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "v1",
+                    "runs",
+                    ":run_id",
+                    "files"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [
+                    {
+                      "key": "prefix",
+                      "value": "<string>"
+                    },
+                    {
+                      "key": "recursive",
+                      "value": "<boolean>"
+                    },
+                    {
+                      "key": "pageSize",
+                      "value": "<integer>"
+                    },
+                    {
+                      "key": "pageToken",
+                      "value": "<string>"
+                    },
+                    {
+                      "key": "includeDownloadUrl",
+                      "value": "<boolean>"
+                    },
+                    {
+                      "key": "downloadUrlExpirationSeconds",
+                      "value": "<integer>"
+                    },
+                    {
+                      "key": "includeDownloadChecksum",
+                      "value": "<boolean>"
+                    }
+                  ],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "run_id",
+                      "description": "(Required) The run ID"
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: apikey",
+                      "type": "text/plain"
+                    },
+                    "key": "x-api-key",
+                    "value": "<API Key>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "Not Found",
+              "code": 404,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"code\": 3942,\n  \"message\": \"string\",\n  \"details\": [\n    {\n      \"reason\": \"string\",\n      \"domain\": \"string\",\n      \"@type\": \"string\",\n      \"metadata\": {\n        \"request_id\": \"string\"\n      }\n    },\n    {\n      \"reason\": \"string\",\n      \"domain\": \"string\",\n      \"@type\": \"string\",\n      \"metadata\": {\n        \"request_id\": \"string\"\n      }\n    }\n  ]\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "dc04eccb-5566-41c7-9784-1018d0aeab3d",
+              "name": "Internal server error.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "v1",
+                    "runs",
+                    ":run_id",
+                    "files"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [
+                    {
+                      "key": "prefix",
+                      "value": "<string>"
+                    },
+                    {
+                      "key": "recursive",
+                      "value": "<boolean>"
+                    },
+                    {
+                      "key": "pageSize",
+                      "value": "<integer>"
+                    },
+                    {
+                      "key": "pageToken",
+                      "value": "<string>"
+                    },
+                    {
+                      "key": "includeDownloadUrl",
+                      "value": "<boolean>"
+                    },
+                    {
+                      "key": "downloadUrlExpirationSeconds",
+                      "value": "<integer>"
+                    },
+                    {
+                      "key": "includeDownloadChecksum",
+                      "value": "<boolean>"
+                    }
+                  ],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "run_id",
+                      "description": "(Required) The run ID"
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: apikey",
+                      "type": "text/plain"
+                    },
+                    "key": "x-api-key",
+                    "value": "<API Key>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "Internal Server Error",
+              "code": 500,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"code\": 3942,\n  \"message\": \"string\",\n  \"details\": [\n    {\n      \"reason\": \"string\",\n      \"domain\": \"string\",\n      \"@type\": \"string\",\n      \"metadata\": {\n        \"request_id\": \"string\"\n      }\n    },\n    {\n      \"reason\": \"string\",\n      \"domain\": \"string\",\n      \"@type\": \"string\",\n      \"metadata\": {\n        \"request_id\": \"string\"\n      }\n    }\n  ]\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        }
+      ],
+      "event": []
+    }
+  ],
+  "event": [],
+  "variable": [
+    {
+      "type": "string",
+      "value": "https://cloud-api.usw2.elembio.io",
+      "key": "baseUrl"
+    }
+  ],
+  "auth": {
+    "type": "apikey",
+    "apikey": [
+      {
+        "key": "key",
+        "value": "x-api-key"
+      },
+      {
+        "key": "value",
+        "value": "{{apiKey}}"
+      },
+      {
+        "key": "in",
+        "value": "header"
+      }
+    ]
+  },
+  "info": {
+    "_postman_id": "b3e2d17d-8c6f-4065-a473-a584249c7174",
+    "name": "Element Biosciences Cloud Run Service API",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+    "description": {
+      "content": "The Element Biosciences Cloud API provides programmatic access to data in\nthe Element Biosciences Cloud platform: instrument runs (sequencing and\nmultiomics), workflow executions, registered instruments, storage\nconnections, and the files those resources produce.\n\nAll paths are versioned under `/v1`.\n\n## Authentication\nEvery request must include an API key in the `x-api-key` header. Create and\nmanage keys in the Element Biosciences Cloud console. Call `GET /v1/auth` to\nconfirm which tenant a key belongs to.\n\n## Scopes\nEach API key carries one or more scopes of the form\n`resource:action[:resource_id]`, for example `runs:read`,\n`executions:download`, or `storage:download:{connection_id}`. A request that\nis authenticated but lacks the required scope fails with HTTP 403 and the\n`INSUFFICIENT_SCOPE` reason. List endpoints transparently restrict results\nto the resources a key is scoped to.\n\n## Pagination\nList endpoints are cursor-paginated. Set `page_size` to control the page\nlength and pass the `next_page_token` from one response as the `page_token`\nof the next; an empty `next_page_token` indicates the last page.\n\n## Errors\nErrors return a JSON body with an integer `code`, a human-readable\n`message`, and a `details` array. Each detail carries a machine-readable\n`reason` (for example `RUN_NOT_FOUND` or `INVALID_API_KEY`) and the\n`domain` `cloud-api.elembio.io`. The `request_id` in the detail metadata\nmatches the `X-Request-ID` response header; include it when reporting\nproblems.\n\n\nContact Support:\n Name: Element Biosciences",
+      "type": "text/plain"
+    }
+  }
+}

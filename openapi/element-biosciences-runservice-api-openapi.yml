@@ -1,0 +1,1157 @@
+openapi: 3.2.0
+info:
+  title: Element Biosciences Cloud Run Service API
+  description: 'The Element Biosciences Cloud API provides programmatic access to data in
+
+    the Element Biosciences Cloud platform: instrument runs (sequencing and
+
+    multiomics), workflow executions, registered instruments, storage
+
+    connections, and the files those resources produce.
+
+
+    All paths are versioned under `/v1`.
+
+
+    ## Authentication
+
+    Every request must include an API key in the `x-api-key` header. Create and
+
+    manage keys in the Element Biosciences Cloud console. Call `GET /v1/auth` to
+
+    confirm which tenant a key belongs to.
+
+
+    ## Scopes
+
+    Each API key carries one or more scopes of the form
+
+    `resource:action[:resource_id]`, for example `runs:read`,
+
+    `executions:download`, or `storage:download:{connection_id}`. A request that
+
+    is authenticated but lacks the required scope fails with HTTP 403 and the
+
+    `INSUFFICIENT_SCOPE` reason. List endpoints transparently restrict results
+
+    to the resources a key is scoped to.
+
+
+    ## Pagination
+
+    List endpoints are cursor-paginated. Set `page_size` to control the page
+
+    length and pass the `next_page_token` from one response as the `page_token`
+
+    of the next; an empty `next_page_token` indicates the last page.
+
+
+    ## Errors
+
+    Errors return a JSON body with an integer `code`, a human-readable
+
+    `message`, and a `details` array. Each detail carries a machine-readable
+
+    `reason` (for example `RUN_NOT_FOUND` or `INVALID_API_KEY`) and the
+
+    `domain` `cloud-api.elembio.io`. The `request_id` in the detail metadata
+
+    matches the `X-Request-ID` response header; include it when reporting
+
+    problems.
+
+    '
+  version: 1.0.0
+  contact:
+    name: Element Biosciences
+    url: https://www.elembio.io
+servers:
+- url: https://cloud-api.usw2.elembio.io
+security:
+- apiKey: []
+tags:
+- name: RunService
+  description: "RunService provides access to instrument runs, both sequencing and\n multiomics. Listing and reading run metadata requires the \"runs:read\"\n scope; listing run files and obtaining download credentials requires the\n \"runs:download\" scope."
+paths:
+  /v1/runs:
+    get:
+      tags:
+      - RunService
+      summary: ListRuns
+      description: List runs accessible to the authenticated tenant, optionally filtered.
+      operationId: RunService_ListRuns
+      parameters:
+      - name: filter
+        in: query
+        description: "Search and filter expression. Space-separated `keyword:value` terms are\n ANDed together; bare text with no keyword searches all string fields. For\n numeric and date fields, replace the colon with a comparison operator\n (`>=`, `<=`, `>`, `<`, `!=`). List alternatives for one keyword with\n commas, e.g. `status:completed,failed`. Dates accept ISO-8601 or relative\n offsets such as `7d` or `1mo`.\n\n Filterable keywords:\n\n - **String:** `name`, `id`, `description`, `tags`, `instrument.name`, `instrument.serial_number`, `instrument.model`, `storage.connection_id`, `setup.sequencing.kit_name`, `setup.sequencing.library_structure`, `setup.sequencing.prep_type`, `setup.sequencing.polony_density`, `setup.sequencing.filter_mask`, `setup.sequencing.panel.name`, `setup.multiomics.panel.name`, `setup.multiomics.cartridge.name`\n - **Enum:** `type` (`sequencing`, `multiomics`), `status`, `output.kind` (`sequencing_run`, `multiomics_run`; an alias for `type`), `setup.multiomics.kit_type` (`cytoprofiling`, `direct_in_sample_sequencing`, `antibody_screening`, `tissue`, `protein_screening`), `setup.multiomics.well_layout` (`twelve_well_circle`, `twelve_well_square`, `two_well`, `one_well`, `twelve_well_standard`, `forty_eight_well`)\n - **Date:** `time_created`, `time_started`, `time_completed`, `time_updated`\n - **Numeric:** `metrics.sequencing.total_reads`, `metrics.sequencing.total_yield`, `metrics.sequencing.estimated_reads`, `metrics.sequencing.q30`, `metrics.sequencing.q40`, `metrics.sequencing.q50`, `metrics.sequencing.avg_q`, `metrics.sequencing.error_rate`, `metrics.sequencing.phix_alignment_rate`, `metrics.multiomics.total_cell_count`, `metrics.multiomics.total_cell_confluency`, `metrics.multiomics.total_percent_assigned`, `setup.sequencing.pmg_shift`\n - **Boolean:** `setup.sequencing.low_diversity`\n\n Examples:\n\n - `type:sequencing status:completed time_completed>=7d`\n - `instrument.serial_number:AV223501 metrics.sequencing.q30>=90`"
+        schema:
+          type: string
+          title: filter
+          description: "Search and filter expression. Space-separated `keyword:value` terms are\n ANDed together; bare text with no keyword searches all string fields. For\n numeric and date fields, replace the colon with a comparison operator\n (`>=`, `<=`, `>`, `<`, `!=`). List alternatives for one keyword with\n commas, e.g. `status:completed,failed`. Dates accept ISO-8601 or relative\n offsets such as `7d` or `1mo`.\n\n Filterable keywords:\n\n - **String:** `name`, `id`, `description`, `tags`, `instrument.name`, `instrument.serial_number`, `instrument.model`, `storage.connection_id`, `setup.sequencing.kit_name`, `setup.sequencing.library_structure`, `setup.sequencing.prep_type`, `setup.sequencing.polony_density`, `setup.sequencing.filter_mask`, `setup.sequencing.panel.name`, `setup.multiomics.panel.name`, `setup.multiomics.cartridge.name`\n - **Enum:** `type` (`sequencing`, `multiomics`), `status`, `output.kind` (`sequencing_run`, `multiomics_run`; an alias for `type`), `setup.multiomics.kit_type` (`cytoprofiling`, `direct_in_sample_sequencing`, `antibody_screening`, `tissue`, `protein_screening`), `setup.multiomics.well_layout` (`twelve_well_circle`, `twelve_well_square`, `two_well`, `one_well`, `twelve_well_standard`, `forty_eight_well`)\n - **Date:** `time_created`, `time_started`, `time_completed`, `time_updated`\n - **Numeric:** `metrics.sequencing.total_reads`, `metrics.sequencing.total_yield`, `metrics.sequencing.estimated_reads`, `metrics.sequencing.q30`, `metrics.sequencing.q40`, `metrics.sequencing.q50`, `metrics.sequencing.avg_q`, `metrics.sequencing.error_rate`, `metrics.sequencing.phix_alignment_rate`, `metrics.multiomics.total_cell_count`, `metrics.multiomics.total_cell_confluency`, `metrics.multiomics.total_percent_assigned`, `setup.sequencing.pmg_shift`\n - **Boolean:** `setup.sequencing.low_diversity`\n\n Examples:\n\n - `type:sequencing status:completed time_completed>=7d`\n - `instrument.serial_number:AV223501 metrics.sequencing.q30>=90`"
+      - name: pageSize
+        in: query
+        description: 'Maximum number of runs to return (default: 100, max: 1000)'
+        schema:
+          type: integer
+          title: page_size
+          format: int32
+          description: 'Maximum number of runs to return (default: 100, max: 1000)'
+      - name: pageToken
+        in: query
+        description: Token for pagination
+        schema:
+          type: string
+          title: page_token
+          description: Token for pagination
+      - name: includeTotalCount
+        in: query
+        description: If true, include total_count in the response (adds a count query)
+        schema:
+          type: boolean
+          title: include_total_count
+          description: If true, include total_count in the response (adds a count query)
+      responses:
+        '200':
+          description: Success
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/elembio.cloud.v1.ListRunsResponse'
+        '400':
+          description: Bad request — the request was malformed or a parameter was invalid.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '401':
+          description: Unauthorized — the API key is missing or invalid.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '403':
+          description: Forbidden — the API key lacks the required scope.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '404':
+          description: Not found — the requested resource does not exist or is not accessible.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '500':
+          description: Internal server error.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+  /v1/runs/{id}:
+    get:
+      tags:
+      - RunService
+      summary: GetRun
+      description: Get a single run by its ID.
+      operationId: RunService_GetRun
+      parameters:
+      - name: id
+        in: path
+        description: The unique identifier of the run
+        required: true
+        schema:
+          type: string
+          title: id
+          description: The unique identifier of the run
+      responses:
+        '200':
+          description: Success
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/elembio.cloud.v1.GetRunResponse'
+        '400':
+          description: Bad request — the request was malformed or a parameter was invalid.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '401':
+          description: Unauthorized — the API key is missing or invalid.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '403':
+          description: Forbidden — the API key lacks the required scope.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '404':
+          description: Not found — the requested resource does not exist or is not accessible.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '500':
+          description: Internal server error.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+  /v1/runs/{run_id}/credentials:
+    get:
+      tags:
+      - RunService
+      summary: GetRunDownloadCredentials
+      description: "Get temporary, read-only S3 credentials scoped to a run's storage\n location. Use these for bulk or repeated downloads via the AWS CLI or\n SDK instead of per-object presigned URLs."
+      operationId: RunService_GetRunDownloadCredentials
+      parameters:
+      - name: run_id
+        in: path
+        description: The run ID
+        required: true
+        schema:
+          type: string
+          title: run_id
+          description: The run ID
+      - name: prefix
+        in: query
+        description: "Optional path prefix within the run to scope credentials to.\n Run-relative, identical semantics to ListRunFilesRequest.prefix.\n \"..\" segments are rejected. When omitted, credentials are scoped to\n the whole run (the run root)."
+        schema:
+          type: string
+          title: prefix
+          description: "Optional path prefix within the run to scope credentials to.\n Run-relative, identical semantics to ListRunFilesRequest.prefix.\n \"..\" segments are rejected. When omitted, credentials are scoped to\n the whole run (the run root)."
+      - name: expirationSeconds
+        in: query
+        description: "Lifetime of the returned credentials, in seconds. Optional; defaults to\n 1 hour (when 0 or unset). Minimum 900s. Capped by AWS: up to 36h (129600s)\n for federation-token connections, or the role's MaxSessionDuration (12h\n typical) for role-backed connections. Values below the minimum or above the\n cap are rejected."
+        schema:
+          type: integer
+          title: expiration_seconds
+          format: int32
+          description: "Lifetime of the returned credentials, in seconds. Optional; defaults to\n 1 hour (when 0 or unset). Minimum 900s. Capped by AWS: up to 36h (129600s)\n for federation-token connections, or the role's MaxSessionDuration (12h\n typical) for role-backed connections. Values below the minimum or above the\n cap are rejected."
+      responses:
+        '200':
+          description: Success
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/elembio.cloud.v1.GetRunDownloadCredentialsResponse'
+        '400':
+          description: Bad request — the request was malformed or a parameter was invalid.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '401':
+          description: Unauthorized — the API key is missing or invalid.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '403':
+          description: Forbidden — the API key lacks the required scope.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '404':
+          description: Not found — the requested resource does not exist or is not accessible.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '500':
+          description: Internal server error.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+  /v1/runs/{run_id}/files:
+    get:
+      tags:
+      - RunService
+      summary: ListRunFiles
+      description: List the files produced by a run, drawn from the run's storage location.
+      operationId: RunService_ListRunFiles
+      parameters:
+      - name: run_id
+        in: path
+        description: The run ID
+        required: true
+        schema:
+          type: string
+          title: run_id
+          description: The run ID
+      - name: prefix
+        in: query
+        description: "Path prefix within the run, e.g. \"visualization/\" or \"Stats/foo\".\n The run is a self-contained namespace: paths do not include any\n bucket-level or workflow-level layout. Round-trips with File.path\n returned by this RPC. \"..\" segments are rejected.\n Optional: when omitted, lists the whole run (the run root)."
+        schema:
+          type: string
+          title: prefix
+          description: "Path prefix within the run, e.g. \"visualization/\" or \"Stats/foo\".\n The run is a self-contained namespace: paths do not include any\n bucket-level or workflow-level layout. Round-trips with File.path\n returned by this RPC. \"..\" segments are rejected.\n Optional: when omitted, lists the whole run (the run root)."
+      - name: recursive
+        in: query
+        description: "If true, list all files recursively under the prefix (default: true)\n If false, list only files and subdirectories at the current level"
+        schema:
+          type: boolean
+          title: recursive
+          description: "If true, list all files recursively under the prefix (default: true)\n If false, list only files and subdirectories at the current level"
+      - name: pageSize
+        in: query
+        description: 'Maximum number of files to return per page (default: 1000, max: 1000)'
+        schema:
+          type: integer
+          title: page_size
+          format: int32
+          description: 'Maximum number of files to return per page (default: 1000, max: 1000)'
+      - name: pageToken
+        in: query
+        description: Continuation token from previous response (passthrough from storage)
+        schema:
+          type: string
+          title: page_token
+          description: Continuation token from previous response (passthrough from storage)
+      - name: includeDownloadUrl
+        in: query
+        description: "If true, populate File.download_url (a presigned URL) on each returned\n file. Defaults to false. Set to true only when the caller intends to\n fetch file content from the response: generating presigned URLs has a\n per-object cost and the URLs themselves are credentials with a\n multi-hour lifetime. Use GetRunDownloadCredentials when long-lived\n bulk access is required."
+        schema:
+          type: boolean
+          title: include_download_url
+          description: "If true, populate File.download_url (a presigned URL) on each returned\n file. Defaults to false. Set to true only when the caller intends to\n fetch file content from the response: generating presigned URLs has a\n per-object cost and the URLs themselves are credentials with a\n multi-hour lifetime. Use GetRunDownloadCredentials when long-lived\n bulk access is required."
+      - name: downloadUrlExpirationSeconds
+        in: query
+        description: "Lifetime of the presigned download_url, in seconds. Optional; defaults to\n 1 hour. Only applies when include_download_url = true. Max 7 days."
+        schema:
+          type: integer
+          title: download_url_expiration_seconds
+          format: int32
+          description: "Lifetime of the presigned download_url, in seconds. Optional; defaults to\n 1 hour. Only applies when include_download_url = true. Max 7 days."
+      - name: includeDownloadChecksum
+        in: query
+        description: "If true, presign each download_url with S3 ChecksumMode=ENABLED so the\n object's stored checksum is returned on the GET (in the\n x-amz-checksum-<algo> response header) and a client can verify download\n integrity in a single streaming pass. Defaults false; has no effect unless\n include_download_url = true. When enabled the presigned URL signs the\n x-amz-checksum-mode request header, so the fetch MUST send\n x-amz-checksum-mode:ENABLED — a plain GET that omits it fails with HTTP\n 403. Best-effort: objects stored without a checksum return none.\n\n Applies only to AWS S3-backed storage connections; other storage backends\n do not presign S3 GETs and silently ignore this field."
+        schema:
+          type: boolean
+          title: include_download_checksum
+          description: "If true, presign each download_url with S3 ChecksumMode=ENABLED so the\n object's stored checksum is returned on the GET (in the\n x-amz-checksum-<algo> response header) and a client can verify download\n integrity in a single streaming pass. Defaults false; has no effect unless\n include_download_url = true. When enabled the presigned URL signs the\n x-amz-checksum-mode request header, so the fetch MUST send\n x-amz-checksum-mode:ENABLED — a plain GET that omits it fails with HTTP\n 403. Best-effort: objects stored without a checksum return none.\n\n Applies only to AWS S3-backed storage connections; other storage backends\n do not presign S3 GETs and silently ignore this field."
+      responses:
+        '200':
+          description: Success
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/elembio.cloud.v1.ListRunFilesResponse'
+        '400':
+          description: Bad request — the request was malformed or a parameter was invalid.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '401':
+          description: Unauthorized — the API key is missing or invalid.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '403':
+          description: Forbidden — the API key lacks the required scope.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '404':
+          description: Not found — the requested resource does not exist or is not accessible.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '500':
+          description: Internal server error.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+components:
+  schemas:
+    google.protobuf.Timestamp:
+      type: string
+      examples:
+      - '2023-01-15T01:30:15.01Z'
+      - '2024-12-25T12:00:00Z'
+      format: date-time
+      description: "A Timestamp represents a point in time independent of any time zone or local\n calendar, encoded as a count of seconds and fractions of seconds at\n nanosecond resolution. The count is relative to an epoch at UTC midnight on\n January 1, 1970, in the proleptic Gregorian calendar which extends the\n Gregorian calendar backwards to year one.\n\n All minutes are 60 seconds long. Leap seconds are \"smeared\" so that no leap\n second table is needed for interpretation, using a [24-hour linear\n smear](https://developers.google.com/time/smear).\n\n The range is from 0001-01-01T00:00:00Z to 9999-12-31T23:59:59.999999999Z. By\n restricting to that range, we ensure that we can convert to and from [RFC\n 3339](https://www.ietf.org/rfc/rfc3339.txt) date strings.\n\n # Examples\n\n Example 1: Compute Timestamp from POSIX `time()`.\n\n     Timestamp timestamp;\n     timestamp.set_seconds(time(NULL));\n     timestamp.set_nanos(0);\n\n Example 2: Compute Timestamp from POSIX `gettimeofday()`.\n\n     struct timeval tv;\n     gettimeofday(&tv, NULL);\n\n     Timestamp timestamp;\n     timestamp.set_seconds(tv.tv_sec);\n     timestamp.set_nanos(tv.tv_usec * 1000);\n\n Example 3: Compute Timestamp from Win32 `GetSystemTimeAsFileTime()`.\n\n     FILETIME ft;\n     GetSystemTimeAsFileTime(&ft);\n     UINT64 ticks = (((UINT64)ft.dwHighDateTime) << 32) | ft.dwLowDateTime;\n\n     // A Windows tick is 100 nanoseconds. Windows epoch 1601-01-01T00:00:00Z\n     // is 11644473600 seconds before Unix epoch 1970-01-01T00:00:00Z.\n     Timestamp timestamp;\n     timestamp.set_seconds((INT64) ((ticks / 10000000) - 11644473600LL));\n     timestamp.set_nanos((INT32) ((ticks % 10000000) * 100));\n\n Example 4: Compute Timestamp from Java `System.currentTimeMillis()`.\n\n     long millis = System.currentTimeMillis();\n\n     Timestamp timestamp = Timestamp.newBuilder().setSeconds(millis / 1000)\n         .setNanos((int) ((millis % 1000) * 1000000)).build();\n\n Example 5: Compute Timestamp from Java `Instant.now()`.\n\n     Instant now = Instant.now();\n\n     Timestamp timestamp =\n         Timestamp.newBuilder().setSeconds(now.getEpochSecond())\n             .setNanos(now.getNano()).build();\n\n Example 6: Compute Timestamp from current time in Python.\n\n     timestamp = Timestamp()\n     timestamp.GetCurrentTime()\n\n # JSON Mapping\n\n In JSON format, the Timestamp type is encoded as a string in the\n [RFC 3339](https://www.ietf.org/rfc/rfc3339.txt) format. That is, the\n format is \"{year}-{month}-{day}T{hour}:{min}:{sec}[.{frac_sec}]Z\"\n where {year} is always expressed using four digits while {month}, {day},\n {hour}, {min}, and {sec} are zero-padded to two digits each. The fractional\n seconds, which can go up to 9 digits (i.e. up to 1 nanosecond resolution),\n are optional. The \"Z\" suffix indicates the timezone (\"UTC\"); the timezone\n is required. A ProtoJSON serializer should always use UTC (as indicated by\n \"Z\") when printing the Timestamp type and a ProtoJSON parser should be\n able to accept both UTC and other timezones (as indicated by an offset).\n\n For example, \"2017-01-15T01:30:15.01Z\" encodes 15.01 seconds past\n 01:30 UTC on January 15, 2017.\n\n In JavaScript, one can convert a Date object to this format using the\n standard\n [toISOString()](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Date/toISOString)\n method. In Python, a standard `datetime.datetime` object can be converted\n to this format using\n [`strftime`](https://docs.python.org/2/library/time.html#time.strftime) with\n the time format spec '%Y-%m-%dT%H:%M:%S.%fZ'. Likewise, in Java, one can use\n the Joda Time's [`ISODateTimeFormat.dateTime()`](\n http://joda-time.sourceforge.net/apidocs/org/joda/time/format/ISODateTimeFormat.html#dateTime()\n ) to obtain a formatter capable of generating timestamps in this format."
+    elembio.cloud.v1.RunInstrument:
+      type: object
+      properties:
+        id:
+          type: string
+          title: id
+          description: Instrument identifier.
+        name:
+          type: string
+          title: name
+          description: 'Human-readable instrument name. Example: "AV223501".'
+        serialNumber:
+          type: string
+          title: serial_number
+          description: 'Instrument serial number. Example: "AV223501".'
+        model:
+          type: string
+          title: model
+          description: "Instrument model as recorded for the run. Free-form text passed through\n from the run record; example: \"AVITI\"."
+        softwareVersion:
+          type: string
+          title: software_version
+          description: "AOS (instrument operating system) software version at run time.\n Example: \"2.6.1\"."
+      title: RunInstrument
+      additionalProperties: false
+      description: "Instrument that performed a run. These fields are a snapshot captured at\n run time and may differ from the instrument's current state as returned by\n InstrumentService."
+    elembio.cloud.v1.ListRunsResponse:
+      type: object
+      properties:
+        runs:
+          type: array
+          items:
+            $ref: '#/components/schemas/elembio.cloud.v1.Run'
+          title: runs
+          description: List of runs
+        nextPageToken:
+          type: string
+          title: next_page_token
+          description: Token for the next page (empty if no more results)
+        previousPageToken:
+          type: string
+          title: previous_page_token
+          description: Token for the previous page (empty if on first page)
+        totalCount:
+          type:
+          - integer
+          - 'null'
+          title: total_count
+          format: int32
+          description: Total number of runs matching the filter (only if include_total_count was true)
+      title: ListRunsResponse
+      additionalProperties: false
+      description: Response containing a list of runs
+    elembio.cloud.v1.RunDesign:
+      type: object
+      properties:
+        id:
+          type: string
+          title: id
+        name:
+          type: string
+          title: name
+        kind:
+          type: string
+          title: kind
+          description: e.g., "spike_in_panel", "diss_panel", "focus_spike_in_panel"
+      title: RunDesign
+      additionalProperties: false
+      description: Design associated with a run
+    elembio.cloud.v1.RunMetrics:
+      type: object
+      properties:
+        sequencing:
+          oneOf:
+          - $ref: '#/components/schemas/elembio.cloud.v1.SequencingMetrics'
+          - type: 'null'
+          title: sequencing
+        multiomics:
+          oneOf:
+          - $ref: '#/components/schemas/elembio.cloud.v1.MultiomicsMetrics'
+          - type: 'null'
+          title: multiomics
+      title: RunMetrics
+      additionalProperties: false
+      description: "Run metrics/results, grouped by run type.\n Only one of the type-specific sub-messages will be populated per run."
+    elembio.cloud.v1.RunRecipe:
+      type: object
+      properties:
+        id:
+          type: string
+          title: id
+          description: Recipe identifier.
+        name:
+          type: string
+          title: name
+          description: Recipe name.
+      title: RunRecipe
+      additionalProperties: false
+      description: Element recipe selected for a run.
+    ErrorDetail:
+      type: object
+      description: Structured error detail with a machine-readable reason code.
+      properties:
+        '@type':
+          type: string
+          description: Type identifier for this error detail
+        reason:
+          type: string
+          description: 'Machine-readable error code identifying the specific failure
+
+            (e.g. RUN_NOT_FOUND, INVALID_API_KEY, INSUFFICIENT_SCOPE).
+
+            '
+          examples:
+          - RUN_NOT_FOUND
+          - INVALID_API_KEY
+          - MISSING_API_KEY
+          - INSUFFICIENT_SCOPE
+          - INTERNAL_ERROR
+        domain:
+          type: string
+          description: Identifies the system that generated the error
+          const: cloud-api.elembio.io
+        metadata:
+          type: object
+          description: Additional context for the error
+          properties:
+            request_id:
+              type: string
+              description: Request ID matching the X-Request-ID response header
+      required:
+      - reason
+      - domain
+    elembio.cloud.v1.Panel:
+      type: object
+      properties:
+        id:
+          type: string
+          title: id
+        name:
+          type: string
+          title: name
+        version:
+          type: string
+          title: version
+      title: Panel
+      additionalProperties: false
+      description: Panel information for multiomics runs
+    elembio.cloud.v1.SequencingSetup:
+      type: object
+      properties:
+        kitName:
+          type: string
+          title: kit_name
+        kitPartNumber:
+          type: string
+          title: kit_part_number
+        libraryStructure:
+          type: string
+          title: library_structure
+          description: '"circular" or "linear"'
+        prepType:
+          type: string
+          title: prep_type
+          description: e.g., "adept", "elevate"
+        dualLibrary:
+          type: boolean
+          title: dual_library
+        reads:
+          type: array
+          items:
+            $ref: '#/components/schemas/elembio.cloud.v1.ReadConfig'
+          title: reads
+        chemistryVersion:
+          type: string
+          title: chemistry_version
+        pmgShift:
+          type:
+          - integer
+          - 'null'
+          title: pmg_shift
+          format: int32
+          description: Advanced settings (AOS 2.6.0+)
+        filterMask:
+          type:
+          - string
+          - 'null'
+          title: filter_mask
+        polonyDensity:
+          type:
+          - string
+          - 'null'
+          title: polony_density
+          description: '"standard" or "high"'
+        lowDiversity:
+          type: boolean
+          title: low_diversity
+          description: Low Diversity High Multiplex
+        panel:
+          oneOf:
+          - $ref: '#/components/schemas/elembio.cloud.v1.Panel'
+          - type: 'null'
+          title: panel
+          description: Panel information (AOS 2.7.0+; run-level pre-3.5, per-lane 3.5+)
+        flowcell:
+          oneOf:
+          - $ref: '#/components/schemas/elembio.cloud.v1.Consumable'
+          - type: 'null'
+          title: flowcell
+          description: Sequencing consumable details from run setup
+        buffer:
+          oneOf:
+          - $ref: '#/components/schemas/elembio.cloud.v1.Consumable'
+          - type: 'null'
+          title: buffer
+        sequencingCartridge:
+          oneOf:
+          - $ref: '#/components/schemas/elembio.cloud.v1.Consumable'
+          - type: 'null'
+          title: sequencing_cartridge
+      title: SequencingSetup
+      additionalProperties: false
+      description: Sequencing run setup/configuration fields
+    elembio.cloud.v1.Run:
+      type: object
+      properties:
+        id:
+          type: string
+          title: id
+          description: Unique identifier for the run
+        name:
+          type: string
+          title: name
+          description: Human-readable name of the run
+        description:
+          type: string
+          title: description
+          description: Optional description
+        type:
+          type: string
+          title: type
+          description: 'Type of run. Possible values: "sequencing", "multiomics".'
+        status:
+          title: status
+          description: Current status of the run
+          $ref: '#/components/schemas/elembio.cloud.v1.RunStatus'
+        instrument:
+          title: instrument
+          description: Instrument that performed the run
+          $ref: '#/components/schemas/elembio.cloud.v1.RunInstrument'
+        output:
+          title: output
+          description: Output location and content kinds for run data
+          $ref: '#/components/schemas/elembio.cloud.v1.Output'
+        timeCreated:
+          title: time_created
+          description: Timestamps
+          $ref: '#/components/schemas/google.protobuf.Timestamp'
+        timeStarted:
+          oneOf:
+          - $ref: '#/components/schemas/google.protobuf.Timestamp'
+          - type: 'null'
+          title: time_started
+        timeCompleted:
+          oneOf:
+          - $ref: '#/components/schemas/google.protobuf.Timestamp'
+          - type: 'null'
+          title: time_completed
+        timeUpdated:
+          oneOf:
+          - $ref: '#/components/schemas/google.protobuf.Timestamp'
+          - type: 'null'
+          title: time_updated
+        tags:
+          type: array
+          items:
+            type: string
+          title: tags
+          description: User-defined tags
+        recipe:
+          oneOf:
+          - $ref: '#/components/schemas/elembio.cloud.v1.RunRecipe'
+          - type: 'null'
+          title: recipe
+          description: Recipe used for the run (if an Element recipe was selected)
+        manifest:
+          oneOf:
+          - $ref: '#/components/schemas/elembio.cloud.v1.RunManifest'
+          - type: 'null'
+          title: manifest
+          description: "Run manifest metadata.\n On ListRuns only filename is populated; on GetRun the full object\n (including download_url) is populated."
+        design:
+          oneOf:
+          - $ref: '#/components/schemas/elembio.cloud.v1.RunDesign'
+          - type: 'null'
+          title: design
+          description: Design associated with the run (sequencing or multiomics)
+        operator:
+          type: string
+          title: operator
+          description: User who operated (initiated) the run on the instrument
+        setup:
+          title: setup
+          description: Run setup configuration, grouped by run type
+          $ref: '#/components/schemas/elembio.cloud.v1.RunSetup'
+        metrics:
+          title: metrics
+          description: Run metrics/results, grouped by run type
+          $ref: '#/components/schemas/elembio.cloud.v1.RunMetrics'
+      title: Run
+      additionalProperties: false
+      description: A Run represents an instrument run (either sequencing or multiomics)
+    elembio.cloud.v1.Batch:
+      type: object
+      properties:
+        name:
+          type: string
+          title: name
+        cycles:
+          type: integer
+          title: cycles
+          format: int32
+        order:
+          type: integer
+          title: order
+          format: int32
+      title: Batch
+      additionalProperties: false
+      description: Batch information for multiomics runs
+    elembio.cloud.v1.ListRunFilesResponse:
+      type: object
+      properties:
+        files:
+          type: array
+          items:
+            $ref: '#/components/schemas/elembio.cloud.v1.File'
+          title: files
+          description: List of files
+        subdirectories:
+          type: array
+          items:
+            type: string
+          title: subdirectories
+          description: Subdirectories at this level (only populated when recursive=false)
+        nextPageToken:
+          type: string
+          title: next_page_token
+          description: Continuation token for the next page
+        isTruncated:
+          type: boolean
+          title: is_truncated
+          description: Indicates if the results were truncated
+      title: ListRunFilesResponse
+      additionalProperties: false
+      description: Response containing files for a run
+    elembio.cloud.v1.MultiomicsMetrics:
+      type: object
+      properties:
+        totalCellCount:
+          type:
+          - integer
+          - 'null'
+          title: total_cell_count
+          format: int32
+        totalCellConfluency:
+          type:
+          - number
+          - 'null'
+          title: total_cell_confluency
+          format: float
+        totalPercentAssigned:
+          type:
+          - number
+          - 'null'
+          title: total_percent_assigned
+          format: float
+      title: MultiomicsMetrics
+      additionalProperties: false
+      description: Multiomics run metrics
+    elembio.cloud.v1.File:
+      type: object
+      properties:
+        path:
+          type: string
+          title: path
+          description: "Path within the namespace of the RPC that returned this file.\n Namespace is the run / execution / storage connection, depending on\n the RPC. Round-trips with the request prefix: paste any returned\n path back into a subsequent --prefix to drill in.\n Example: \"A24-S2/run-001/manifest.json\"."
+        name:
+          type: string
+          title: name
+          description: "Filename portion of the path (convenience field)\n Example: \"sample1.fastq.gz\""
+        size:
+          type:
+          - integer
+          - string
+          title: size
+          format: int64
+          description: Size in bytes
+        lastModified:
+          title: last_modified
+          description: Last modification timestamp
+          $ref: '#/components/schemas/google.protobuf.Timestamp'
+        uri:
+          type: string
+          title: uri
+          description: "Full URI for the object — always storage-absolute, regardless of the\n RPC. Use this for direct backend access (S3 SDK, etc.).\n Example: \"s3://bucket-name/runs/run-123/outputs/sample1.fastq.gz\""
+        downloadUrl:
+          type: string
+          title: download_url
+          description: "Pre-signed URL for downloading this object over HTTP GET.\n Populated only when the request set include_download_url = true; empty\n otherwise. The URL is a short-lived credential — fetch promptly and do\n not persist it. For bulk or repeated downloads, request download\n credentials instead."
+        storageClass:
+          type:
+          - string
+          - 'null'
+          title: storage_class
+          description: "Storage class of the object. Examples: \"STANDARD\", \"GLACIER\",\n \"DEEP_ARCHIVE\"."
+      title: File
+      additionalProperties: false
+      description: A File represents an object in cloud storage.
+    elembio.cloud.v1.Consumable:
+      type: object
+      properties:
+        serialNumber:
+          type: string
+          title: serial_number
+        partNumber:
+          type: string
+          title: part_number
+        lotNumber:
+          type: string
+          title: lot_number
+        expiration:
+          title: expiration
+          $ref: '#/components/schemas/google.protobuf.Timestamp'
+      title: Consumable
+      additionalProperties: false
+      description: Consumable information (used for both run types)
+    elembio.cloud.v1.RunStatus:
+      type: string
+      title: RunStatus
+      enum:
+      - RUN_STATUS_UNSPECIFIED
+      - RUN_STATUS_CREATED
+      - RUN_STATUS_PRIMING
+      - RUN_STATUS_PRIMED
+      - RUN_STATUS_SEQUENCING
+      - RUN_STATUS_RUNNING
+      - RUN_STATUS_PAUSING
+      - RUN_STATUS_PAUSED
+      - RUN_STATUS_STOPPING
+      - RUN_STATUS_SEQUENCED
+      - RUN_STATUS_COMPLETED
+      - RUN_STATUS_FAILED
+      - RUN_STATUS_STOPPED
+      - RUN_STATUS_DISCARDED
+      description: Status of a run, matching the status shown in the EBC UI.
+    elembio.cloud.v1.GetRunResponse:
+      type: object
+      properties:
+        run:
+          title: run
+          $ref: '#/components/schemas/elembio.cloud.v1.Run'
+      title: GetRunResponse
+      additionalProperties: false
+      description: Response containing a single run with full details
+    elembio.cloud.v1.Well:
+      type: object
+      properties:
+        location:
+          type: string
+          title: location
+          description: e.g., "A1", "B2"
+        label:
+          type: string
+          title: label
+      title: Well
+      additionalProperties: false
+      description: Well information for multiomics runs
+    elembio.cloud.v1.MultiomicsSetup:
+      type: object
+      properties:
+        panel:
+          title: panel
+          $ref: '#/components/schemas/elembio.cloud.v1.Panel'
+        kitType:
+          type: string
+          title: kit_type
+          description: "The multiomics kit used for the run. Possible values: `cytoprofiling`,\n `direct_in_sample_sequencing`, `antibody_screening`, `tissue`,\n `protein_screening`."
+        kitId:
+          type: string
+          title: kit_id
+        cartridge:
+          title: cartridge
+          $ref: '#/components/schemas/elembio.cloud.v1.Cartridge'
+        wellLayout:
+          type: string
+          title: well_layout
+          description: "The well plate layout used for the run. Possible values:\n `twelve_well_circle`, `twelve_well_square`, `two_well`, `one_well`,\n `twelve_well_standard`, `forty_eight_well`."
+        wells:
+          type: array
+          items:
+            $ref: '#/components/schemas/elembio.cloud.v1.Well'
+          title: wells
+        batches:
+          type: array
+          items:
+            $ref: '#/components/schemas/elembio.cloud.v1.Batch'
+          title: batches
+        smallCell:
+          type: boolean
+          title: small_cell
+        tallCell:
+          type: boolean
+          title: tall_cell
+        flowcell:
+          oneOf:
+          - $ref: '#/components/schemas/elembio.cloud.v1.Consumable'
+          - type: 'null'
+          title: flowcell
+          description: Multiomics consumable details from run setup
+        buffer:
+          oneOf:
+          - $ref: '#/components/schemas/elembio.cloud.v1.Consumable'
+          - type: 'null'
+          title: buffer
+        panelCartridge:
+          oneOf:
+          - $ref: '#/components/schemas/elembio.cloud.v1.Consumable'
+          - type: 'null'
+          title: panel_cartridge
+      title: MultiomicsSetup
+      additionalProperties: false
+      description: Multiomics run setup/configuration fields
+    elembio.cloud.v1.SequencingMetrics:
+      type: object
+      properties:
+        phixAlignmentRate:
+          type:
+          - number
+          - 'null'
+          title: phix_alignment_rate
+          format: float
+        totalYield:
+          type:
+          - integer
+          - string
+          - 'null'
+          title: total_yield
+          format: int64
+        totalReads:
+          type:
+          - integer
+          - string
+          - 'null'
+          title: total_reads
+          format: int64
+        estimatedReads:
+          type:
+          - integer
+          - string
+          - 'null'
+          title: estimated_reads
+          format: int64
+        q30:
+          type:
+          - number
+          - 'null'
+          title: q30
+          format: float
+        q40:
+          type:
+          - number
+          - 'null'
+          title: q40
+          format: float
+        avgQ:
+          type:
+          - number
+          - 'null'
+          title: avg_q
+          format: float
+        errorRate:
+          type:
+          - number
+          - 'null'
+          title: error_rate
+          format: float
+        q50:
+          type:
+          - number
+          - 'null'
+          title: q50
+          format: float
+      title: SequencingMetrics
+      additionalProperties: false
+      description: Sequencing run metrics
+    elembio.cloud.v1.Output:
+      type: object
+      properties:
+        storageConnectionId:
+          type: string
+          title: storage_connection_id
+          description: Storage connection ID
+        uri:
+          type: string
+          title: uri
+          description: "Absolute URI of the output directory. May be empty if the\n upstream resource has not yet determined its output location.\n When non-empty, normalized to end in exactly one trailing slash.\n Example: s3://bucket/path/to/dir/"
+        kinds:
+          type: array
+          items:
+            type: string
+          title: kinds
+          description: "Content kinds present under uri. Possible values:\n   \"fastq\", \"bam\", \"vcf\", \"cram\", \"parquet\",\n   \"sequencing_run\", \"multiomics_run\".\n May be empty for in-flight executions: WorkflowRunSummary\n populates output kinds late in the lifecycle, so a running\n execution can briefly surface an Output with empty kinds even\n when the workflow definition declares them."
+      title: Output
+      additionalProperties: false
+      description: "Output describes where a resource's output files live and what\n kinds of content are produced. Used by both Run and Execution."
+    elembio.cloud.v1.RunSetup:
+      type: object
+      properties:
+        sequencing:
+          oneOf:
+          - $ref: '#/components/schemas/elembio.cloud.v1.SequencingSetup'
+          - type: 'null'
+          title: sequencing
+        multiomics:
+          oneOf:
+          - $ref: '#/components/schemas/elembio.cloud.v1.MultiomicsSetup'
+          - type: 'null'
+          title: multiomics
+      title: RunSetup
+      additionalProperties: false
+      description: "Run setup configuration, grouped by run type.\n Only one of the type-specific sub-messages will be populated per run."
+    elembio.cloud.v1.GetRunDownloadCredentialsResponse:
+      type: object
+      oneOf:
+      - type: object
+        properties:
+          s3:
+            title: s3
+            $ref: '#/components/schemas/elembio.cloud.v1.S3Credentials'
+        title: s3
+        required:
+        - s3
+      title: GetRunDownloadCredentialsResponse
+      description: Response containing temporary download credentials for a run
+    elembio.cloud.v1.ReadConfig:
+      type: object
+      properties:
+        name:
+          type: string
+          title: name
+          description: R1, R2, I1, I2
+        cycles:
+          type: integer
+          title: cycles
+          format: int32
+        order:
+          type: integer
+          title: order
+          format: int32
+      title: ReadConfig
+      additionalProperties: false
+      description: Read configuration for sequencing
+    elembio.cloud.v1.Cartridge:
+      type: object
+      properties:
+        id:
+          type: string
+          title: id
+        name:
+          type: string
+          title: name
+        partNumber:
+          type: string
+          title: part_number
+      title: Cartridge
+      additionalProperties: false
+      description: Cartridge information for multiomics runs
+    elembio.cloud.v1.S3Credentials:
+      type: object
+      properties:
+        region:
+          type: string
+          title: region
+          description: 'AWS region. Example: "us-west-2".'
+        bucket:
+          type: string
+          title: bucket
+          description: S3 bucket name.
+        prefix:
+          type:
+          - string
+          - 'null'
+          title: prefix
+          description: "Key prefix the credentials are scoped to — bucket-absolute, since\n this value is consumed directly by the AWS CLI / SDK. Distinct from\n the request-side `prefix`, which is connection-relative."
+        accessKeyId:
+          type: string
+          title: access_key_id
+          description: Temporary AWS access key ID
+        secretAccessKey:
+          type: string
+          title: secret_access_key
+          description: Temporary AWS secret access key
+        sessionToken:
+          type: string
+          title: session_token
+          description: STS session token
+        expiration:
+          title: expiration
+          description: When the credentials expire
+          $ref: '#/components/schemas/google.protobuf.Timestamp'
+      title: S3Credentials
+      additionalProperties: false
+      description: "Temporary read-only AWS S3 credentials scoped to a bucket and prefix.\n Use with the AWS CLI, AWS SDK, or any S3-compatible tool. The credentials\n expire at the time given by expiration; request new credentials when they\n near expiry."
+    elembio.cloud.v1.RunManifest:
+      type: object
+      properties:
+        filename:
+          type: string
+          title: filename
+          description: Manifest filename
+        description:
+          type: string
+          title: description
+          description: Description of the manifest
+        timeUploaded:
+          title: time_uploaded
+          description: When the manifest was uploaded
+          $ref: '#/components/schemas/google.protobuf.Timestamp'
+        downloadUrl:
+          type: string
+          title: download_url
+          description: "Pre-signed URL for downloading the manifest CSV over HTTP GET.\n A short-lived credential; fetch promptly and do not persist it.\n Populated only on GetRun."
+      title: RunManifest
+      additionalProperties: false
+      description: Manifest metadata for a run (only fully populated on GetRun)
+    Error:
+      type: object
+      description: Error response returned by all endpoints when a request fails.
+      properties:
+        code:
+          type: integer
+          description: Numeric status code corresponding to the HTTP response status
+        message:
+          type: string
+          description: Human-readable error message
+        details:
+          type: array
+          description: Structured error details with machine-readable reason codes
+          items:
+            $ref: '#/components/schemas/ErrorDetail'
+      required:
+      - code
+      - message
+      examples:
+      - code: 404
+        message: Run not found.
+        details:
+        - reason: RUN_NOT_FOUND
+          domain: cloud-api.elembio.io
+          metadata:
+            request_id: 550e8400-e29b-41d4-a716-446655440000
+      - code: 401
+        message: Invalid API key.
+        details:
+        - reason: INVALID_API_KEY
+          domain: cloud-api.elembio.io
+          metadata:
+            request_id: 550e8400-e29b-41d4-a716-446655440001
+  securitySchemes:
+    apiKey:
+      type: apiKey
+      in: header
+      name: x-api-key
+      description: API key obtained from the Element Biosciences Cloud console

@@ -1,0 +1,349 @@
+{
+  "item": [
+    {
+      "id": "15ee147b-0c71-45a2-9dee-fe3d7b5c2bcf",
+      "name": "AuthService",
+      "description": {
+        "content": "AuthService reports information about the API key making the request.",
+        "type": "text/plain"
+      },
+      "item": [
+        {
+          "id": "ee5d3281-9449-44c4-9197-3fd7276dfbea",
+          "name": "GetAuth",
+          "request": {
+            "name": "GetAuth",
+            "description": {
+              "content": "Return the tenant the current API key belongs to. This endpoint requires a\n valid API key but no additional scope, so it is a convenient way to verify\n that a key is working.",
+              "type": "text/plain"
+            },
+            "url": {
+              "path": [
+                "v1",
+                "auth"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [],
+              "variable": []
+            },
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "method": "GET",
+            "auth": null
+          },
+          "response": [
+            {
+              "id": "99161f76-5bc8-409a-9393-1c0e7d0dad8b",
+              "name": "Success",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "v1",
+                    "auth"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: apikey",
+                      "type": "text/plain"
+                    },
+                    "key": "x-api-key",
+                    "value": "<API Key>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "OK",
+              "code": 200,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"tenantId\": \"string\",\n  \"scopes\": [\n    \"string\",\n    \"string\"\n  ]\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "637c0ff0-6e5d-4c22-880d-1c173162679f",
+              "name": "Bad request — the request was malformed or a parameter was invalid.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "v1",
+                    "auth"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: apikey",
+                      "type": "text/plain"
+                    },
+                    "key": "x-api-key",
+                    "value": "<API Key>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "Bad Request",
+              "code": 400,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"code\": 8835,\n  \"message\": \"string\",\n  \"details\": [\n    {\n      \"reason\": \"string\",\n      \"domain\": \"string\",\n      \"@type\": \"string\",\n      \"metadata\": {\n        \"request_id\": \"string\"\n      }\n    },\n    {\n      \"reason\": \"string\",\n      \"domain\": \"string\",\n      \"@type\": \"string\",\n      \"metadata\": {\n        \"request_id\": \"string\"\n      }\n    }\n  ]\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "5c832281-606a-4853-9752-0475c64c0eb4",
+              "name": "Unauthorized — the API key is missing or invalid.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "v1",
+                    "auth"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: apikey",
+                      "type": "text/plain"
+                    },
+                    "key": "x-api-key",
+                    "value": "<API Key>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "Unauthorized",
+              "code": 401,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"code\": 3632,\n  \"message\": \"string\",\n  \"details\": [\n    {\n      \"reason\": \"string\",\n      \"domain\": \"string\",\n      \"@type\": \"string\",\n      \"metadata\": {\n        \"request_id\": \"string\"\n      }\n    },\n    {\n      \"reason\": \"string\",\n      \"domain\": \"string\",\n      \"@type\": \"string\",\n      \"metadata\": {\n        \"request_id\": \"string\"\n      }\n    }\n  ]\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "c823b59f-f783-441c-b167-f78ade4fa31f",
+              "name": "Forbidden — the API key lacks the required scope.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "v1",
+                    "auth"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: apikey",
+                      "type": "text/plain"
+                    },
+                    "key": "x-api-key",
+                    "value": "<API Key>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "Forbidden",
+              "code": 403,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"code\": 3632,\n  \"message\": \"string\",\n  \"details\": [\n    {\n      \"reason\": \"string\",\n      \"domain\": \"string\",\n      \"@type\": \"string\",\n      \"metadata\": {\n        \"request_id\": \"string\"\n      }\n    },\n    {\n      \"reason\": \"string\",\n      \"domain\": \"string\",\n      \"@type\": \"string\",\n      \"metadata\": {\n        \"request_id\": \"string\"\n      }\n    }\n  ]\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "53189698-0a49-452c-8232-47c59a8cd5a6",
+              "name": "Not found — the requested resource does not exist or is not accessible.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "v1",
+                    "auth"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: apikey",
+                      "type": "text/plain"
+                    },
+                    "key": "x-api-key",
+                    "value": "<API Key>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "Not Found",
+              "code": 404,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"code\": 3632,\n  \"message\": \"string\",\n  \"details\": [\n    {\n      \"reason\": \"string\",\n      \"domain\": \"string\",\n      \"@type\": \"string\",\n      \"metadata\": {\n        \"request_id\": \"string\"\n      }\n    },\n    {\n      \"reason\": \"string\",\n      \"domain\": \"string\",\n      \"@type\": \"string\",\n      \"metadata\": {\n        \"request_id\": \"string\"\n      }\n    }\n  ]\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "c986ba12-74b3-4e21-aa0b-573a65a23a4e",
+              "name": "Internal server error.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "v1",
+                    "auth"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: apikey",
+                      "type": "text/plain"
+                    },
+                    "key": "x-api-key",
+                    "value": "<API Key>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "Internal Server Error",
+              "code": 500,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"code\": 3632,\n  \"message\": \"string\",\n  \"details\": [\n    {\n      \"reason\": \"string\",\n      \"domain\": \"string\",\n      \"@type\": \"string\",\n      \"metadata\": {\n        \"request_id\": \"string\"\n      }\n    },\n    {\n      \"reason\": \"string\",\n      \"domain\": \"string\",\n      \"@type\": \"string\",\n      \"metadata\": {\n        \"request_id\": \"string\"\n      }\n    }\n  ]\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        }
+      ],
+      "event": []
+    }
+  ],
+  "event": [],
+  "variable": [
+    {
+      "type": "string",
+      "value": "https://cloud-api.usw2.elembio.io",
+      "key": "baseUrl"
+    }
+  ],
+  "auth": {
+    "type": "apikey",
+    "apikey": [
+      {
+        "key": "key",
+        "value": "x-api-key"
+      },
+      {
+        "key": "value",
+        "value": "{{apiKey}}"
+      },
+      {
+        "key": "in",
+        "value": "header"
+      }
+    ]
+  },
+  "info": {
+    "_postman_id": "71e35f3d-804a-45c9-982b-c949de4e4d5c",
+    "name": "Element Biosciences Cloud Auth Service API",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+    "description": {
+      "content": "The Element Biosciences Cloud API provides programmatic access to data in\nthe Element Biosciences Cloud platform: instrument runs (sequencing and\nmultiomics), workflow executions, registered instruments, storage\nconnections, and the files those resources produce.\n\nAll paths are versioned under `/v1`.\n\n## Authentication\nEvery request must include an API key in the `x-api-key` header. Create and\nmanage keys in the Element Biosciences Cloud console. Call `GET /v1/auth` to\nconfirm which tenant a key belongs to.\n\n## Scopes\nEach API key carries one or more scopes of the form\n`resource:action[:resource_id]`, for example `runs:read`,\n`executions:download`, or `storage:download:{connection_id}`. A request that\nis authenticated but lacks the required scope fails with HTTP 403 and the\n`INSUFFICIENT_SCOPE` reason. List endpoints transparently restrict results\nto the resources a key is scoped to.\n\n## Pagination\nList endpoints are cursor-paginated. Set `page_size` to control the page\nlength and pass the `next_page_token` from one response as the `page_token`\nof the next; an empty `next_page_token` indicates the last page.\n\n## Errors\nErrors return a JSON body with an integer `code`, a human-readable\n`message`, and a `details` array. Each detail carries a machine-readable\n`reason` (for example `RUN_NOT_FOUND` or `INVALID_API_KEY`) and the\n`domain` `cloud-api.elembio.io`. The `request_id` in the detail metadata\nmatches the `X-Request-ID` response header; include it when reporting\nproblems.\n\n\nContact Support:\n Name: Element Biosciences",
+      "type": "text/plain"
+    }
+  }
+}

@@ -1,0 +1,779 @@
+{
+  "item": [
+    {
+      "id": "13fd2a0b-46e4-43a4-8cb4-9395c497d095",
+      "name": "InstrumentService",
+      "description": {
+        "content": "InstrumentService provides access to instruments registered to the\n authenticated tenant. Requires the \"instruments:read\" scope.",
+        "type": "text/plain"
+      },
+      "item": [
+        {
+          "id": "2912cb14-d09f-4ec7-8277-543900fe68f3",
+          "name": "ListInstruments",
+          "request": {
+            "name": "ListInstruments",
+            "description": {
+              "content": "List instruments registered to the authenticated tenant.",
+              "type": "text/plain"
+            },
+            "url": {
+              "path": [
+                "v1",
+                "instruments"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [
+                {
+                  "disabled": false,
+                  "key": "pageSize",
+                  "value": "<integer>",
+                  "description": "Maximum number of instruments to return. Defaults to 100; values above\n 1000 are capped at 1000."
+                },
+                {
+                  "disabled": false,
+                  "key": "pageToken",
+                  "value": "<string>",
+                  "description": "Pagination token from a previous response's next_page_token. Omit to\n request the first page."
+                }
+              ],
+              "variable": []
+            },
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "method": "GET",
+            "auth": null
+          },
+          "response": [
+            {
+              "id": "4a90dc33-c554-4af5-96db-5ab428a611e7",
+              "name": "Success",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "v1",
+                    "instruments"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [
+                    {
+                      "key": "pageSize",
+                      "value": "<integer>"
+                    },
+                    {
+                      "key": "pageToken",
+                      "value": "<string>"
+                    }
+                  ],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: apikey",
+                      "type": "text/plain"
+                    },
+                    "key": "x-api-key",
+                    "value": "<API Key>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "OK",
+              "code": 200,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"instruments\": [\n    {\n      \"serialNumber\": \"string\",\n      \"name\": \"string\",\n      \"model\": \"string\",\n      \"status\": \"INSTRUMENT_STATUS_DECOMMISSIONED\",\n      \"timeCreated\": \"1974-11-19T17:33:32.080Z\",\n      \"timeUpdated\": \"1956-03-13T08:35:26.303Z\",\n      \"timeLastConnected\": \"1949-08-10T12:14:07.554Z\",\n      \"softwareVersion\": \"string\"\n    },\n    {\n      \"serialNumber\": \"string\",\n      \"name\": \"string\",\n      \"model\": \"string\",\n      \"status\": \"INSTRUMENT_STATUS_UNSPECIFIED\",\n      \"timeCreated\": \"1988-08-20T06:26:00.781Z\",\n      \"timeUpdated\": \"2007-05-11T05:48:38.026Z\",\n      \"timeLastConnected\": \"1963-06-28T13:57:18.949Z\",\n      \"softwareVersion\": \"string\"\n    }\n  ],\n  \"nextPageToken\": \"string\"\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "a4fd2b64-4676-46fc-8f5a-f6812f57ce36",
+              "name": "Bad request — the request was malformed or a parameter was invalid.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "v1",
+                    "instruments"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [
+                    {
+                      "key": "pageSize",
+                      "value": "<integer>"
+                    },
+                    {
+                      "key": "pageToken",
+                      "value": "<string>"
+                    }
+                  ],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: apikey",
+                      "type": "text/plain"
+                    },
+                    "key": "x-api-key",
+                    "value": "<API Key>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "Bad Request",
+              "code": 400,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"code\": 4356,\n  \"message\": \"string\",\n  \"details\": [\n    {\n      \"reason\": \"string\",\n      \"domain\": \"string\",\n      \"@type\": \"string\",\n      \"metadata\": {\n        \"request_id\": \"string\"\n      }\n    },\n    {\n      \"reason\": \"string\",\n      \"domain\": \"string\",\n      \"@type\": \"string\",\n      \"metadata\": {\n        \"request_id\": \"string\"\n      }\n    }\n  ]\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "c93d3e31-8226-4d61-9745-01f2afa2f928",
+              "name": "Unauthorized — the API key is missing or invalid.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "v1",
+                    "instruments"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [
+                    {
+                      "key": "pageSize",
+                      "value": "<integer>"
+                    },
+                    {
+                      "key": "pageToken",
+                      "value": "<string>"
+                    }
+                  ],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: apikey",
+                      "type": "text/plain"
+                    },
+                    "key": "x-api-key",
+                    "value": "<API Key>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "Unauthorized",
+              "code": 401,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"code\": 4012,\n  \"message\": \"string\",\n  \"details\": [\n    {\n      \"reason\": \"string\",\n      \"domain\": \"string\",\n      \"@type\": \"string\",\n      \"metadata\": {\n        \"request_id\": \"string\"\n      }\n    },\n    {\n      \"reason\": \"string\",\n      \"domain\": \"string\",\n      \"@type\": \"string\",\n      \"metadata\": {\n        \"request_id\": \"string\"\n      }\n    }\n  ]\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "f1ac7d94-597c-49ec-8ec5-f74e54d4e037",
+              "name": "Forbidden — the API key lacks the required scope.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "v1",
+                    "instruments"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [
+                    {
+                      "key": "pageSize",
+                      "value": "<integer>"
+                    },
+                    {
+                      "key": "pageToken",
+                      "value": "<string>"
+                    }
+                  ],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: apikey",
+                      "type": "text/plain"
+                    },
+                    "key": "x-api-key",
+                    "value": "<API Key>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "Forbidden",
+              "code": 403,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"code\": 4012,\n  \"message\": \"string\",\n  \"details\": [\n    {\n      \"reason\": \"string\",\n      \"domain\": \"string\",\n      \"@type\": \"string\",\n      \"metadata\": {\n        \"request_id\": \"string\"\n      }\n    },\n    {\n      \"reason\": \"string\",\n      \"domain\": \"string\",\n      \"@type\": \"string\",\n      \"metadata\": {\n        \"request_id\": \"string\"\n      }\n    }\n  ]\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "ed6241a8-89f2-4a0b-907b-665cbfbe94fb",
+              "name": "Not found — the requested resource does not exist or is not accessible.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "v1",
+                    "instruments"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [
+                    {
+                      "key": "pageSize",
+                      "value": "<integer>"
+                    },
+                    {
+                      "key": "pageToken",
+                      "value": "<string>"
+                    }
+                  ],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: apikey",
+                      "type": "text/plain"
+                    },
+                    "key": "x-api-key",
+                    "value": "<API Key>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "Not Found",
+              "code": 404,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"code\": 4012,\n  \"message\": \"string\",\n  \"details\": [\n    {\n      \"reason\": \"string\",\n      \"domain\": \"string\",\n      \"@type\": \"string\",\n      \"metadata\": {\n        \"request_id\": \"string\"\n      }\n    },\n    {\n      \"reason\": \"string\",\n      \"domain\": \"string\",\n      \"@type\": \"string\",\n      \"metadata\": {\n        \"request_id\": \"string\"\n      }\n    }\n  ]\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "dabc9336-d93e-4ed3-9909-c2e2cfef6114",
+              "name": "Internal server error.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "v1",
+                    "instruments"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [
+                    {
+                      "key": "pageSize",
+                      "value": "<integer>"
+                    },
+                    {
+                      "key": "pageToken",
+                      "value": "<string>"
+                    }
+                  ],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: apikey",
+                      "type": "text/plain"
+                    },
+                    "key": "x-api-key",
+                    "value": "<API Key>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "Internal Server Error",
+              "code": 500,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"code\": 4012,\n  \"message\": \"string\",\n  \"details\": [\n    {\n      \"reason\": \"string\",\n      \"domain\": \"string\",\n      \"@type\": \"string\",\n      \"metadata\": {\n        \"request_id\": \"string\"\n      }\n    },\n    {\n      \"reason\": \"string\",\n      \"domain\": \"string\",\n      \"@type\": \"string\",\n      \"metadata\": {\n        \"request_id\": \"string\"\n      }\n    }\n  ]\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        },
+        {
+          "id": "09221442-9f94-4857-9a44-ef90da2ce557",
+          "name": "GetInstrument",
+          "request": {
+            "name": "GetInstrument",
+            "description": {
+              "content": "Get a single instrument by its serial number.",
+              "type": "text/plain"
+            },
+            "url": {
+              "path": [
+                "v1",
+                "instruments",
+                ":serial_number"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [],
+              "variable": [
+                {
+                  "disabled": false,
+                  "type": "any",
+                  "value": "<string>",
+                  "key": "serial_number",
+                  "description": "(Required) Serial number of the instrument to retrieve. Example: \"AV223501\"."
+                }
+              ]
+            },
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "method": "GET",
+            "auth": null
+          },
+          "response": [
+            {
+              "id": "005f4a52-d274-464b-8322-c150e53be521",
+              "name": "Success",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "v1",
+                    "instruments",
+                    ":serial_number"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "serial_number",
+                      "description": "(Required) Serial number of the instrument to retrieve. Example: \"AV223501\"."
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: apikey",
+                      "type": "text/plain"
+                    },
+                    "key": "x-api-key",
+                    "value": "<API Key>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "OK",
+              "code": 200,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"instrument\": {\n    \"serialNumber\": \"string\",\n    \"name\": \"string\",\n    \"model\": \"string\",\n    \"status\": \"INSTRUMENT_STATUS_ACTIVE\",\n    \"timeCreated\": \"1973-10-03T04:15:53.384Z\",\n    \"timeUpdated\": \"1968-03-02T12:30:26.722Z\",\n    \"timeLastConnected\": \"1950-10-05T12:05:29.145Z\",\n    \"softwareVersion\": null\n  }\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "ed410053-cf2a-4aa2-b864-0a4eb95cb3bd",
+              "name": "Bad request — the request was malformed or a parameter was invalid.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "v1",
+                    "instruments",
+                    ":serial_number"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "serial_number",
+                      "description": "(Required) Serial number of the instrument to retrieve. Example: \"AV223501\"."
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: apikey",
+                      "type": "text/plain"
+                    },
+                    "key": "x-api-key",
+                    "value": "<API Key>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "Bad Request",
+              "code": 400,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"code\": 4012,\n  \"message\": \"string\",\n  \"details\": [\n    {\n      \"reason\": \"string\",\n      \"domain\": \"string\",\n      \"@type\": \"string\",\n      \"metadata\": {\n        \"request_id\": \"string\"\n      }\n    },\n    {\n      \"reason\": \"string\",\n      \"domain\": \"string\",\n      \"@type\": \"string\",\n      \"metadata\": {\n        \"request_id\": \"string\"\n      }\n    }\n  ]\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "d6e01e25-a2c1-4d62-adeb-170c5cd152d4",
+              "name": "Unauthorized — the API key is missing or invalid.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "v1",
+                    "instruments",
+                    ":serial_number"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "serial_number",
+                      "description": "(Required) Serial number of the instrument to retrieve. Example: \"AV223501\"."
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: apikey",
+                      "type": "text/plain"
+                    },
+                    "key": "x-api-key",
+                    "value": "<API Key>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "Unauthorized",
+              "code": 401,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"code\": 4012,\n  \"message\": \"string\",\n  \"details\": [\n    {\n      \"reason\": \"string\",\n      \"domain\": \"string\",\n      \"@type\": \"string\",\n      \"metadata\": {\n        \"request_id\": \"string\"\n      }\n    },\n    {\n      \"reason\": \"string\",\n      \"domain\": \"string\",\n      \"@type\": \"string\",\n      \"metadata\": {\n        \"request_id\": \"string\"\n      }\n    }\n  ]\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "ccddf07b-730e-4adf-bcaf-464b6b5d2200",
+              "name": "Forbidden — the API key lacks the required scope.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "v1",
+                    "instruments",
+                    ":serial_number"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "serial_number",
+                      "description": "(Required) Serial number of the instrument to retrieve. Example: \"AV223501\"."
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: apikey",
+                      "type": "text/plain"
+                    },
+                    "key": "x-api-key",
+                    "value": "<API Key>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "Forbidden",
+              "code": 403,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"code\": 4012,\n  \"message\": \"string\",\n  \"details\": [\n    {\n      \"reason\": \"string\",\n      \"domain\": \"string\",\n      \"@type\": \"string\",\n      \"metadata\": {\n        \"request_id\": \"string\"\n      }\n    },\n    {\n      \"reason\": \"string\",\n      \"domain\": \"string\",\n      \"@type\": \"string\",\n      \"metadata\": {\n        \"request_id\": \"string\"\n      }\n    }\n  ]\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "a540ae25-814c-4e78-98f3-ac9de24a397e",
+              "name": "Not found — the requested resource does not exist or is not accessible.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "v1",
+                    "instruments",
+                    ":serial_number"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "serial_number",
+                      "description": "(Required) Serial number of the instrument to retrieve. Example: \"AV223501\"."
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: apikey",
+                      "type": "text/plain"
+                    },
+                    "key": "x-api-key",
+                    "value": "<API Key>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "Not Found",
+              "code": 404,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"code\": 4012,\n  \"message\": \"string\",\n  \"details\": [\n    {\n      \"reason\": \"string\",\n      \"domain\": \"string\",\n      \"@type\": \"string\",\n      \"metadata\": {\n        \"request_id\": \"string\"\n      }\n    },\n    {\n      \"reason\": \"string\",\n      \"domain\": \"string\",\n      \"@type\": \"string\",\n      \"metadata\": {\n        \"request_id\": \"string\"\n      }\n    }\n  ]\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "68d36367-9554-4426-b48c-1de5518d5cca",
+              "name": "Internal server error.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "v1",
+                    "instruments",
+                    ":serial_number"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "serial_number",
+                      "description": "(Required) Serial number of the instrument to retrieve. Example: \"AV223501\"."
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: apikey",
+                      "type": "text/plain"
+                    },
+                    "key": "x-api-key",
+                    "value": "<API Key>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "Internal Server Error",
+              "code": 500,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"code\": 4012,\n  \"message\": \"string\",\n  \"details\": [\n    {\n      \"reason\": \"string\",\n      \"domain\": \"string\",\n      \"@type\": \"string\",\n      \"metadata\": {\n        \"request_id\": \"string\"\n      }\n    },\n    {\n      \"reason\": \"string\",\n      \"domain\": \"string\",\n      \"@type\": \"string\",\n      \"metadata\": {\n        \"request_id\": \"string\"\n      }\n    }\n  ]\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        }
+      ],
+      "event": []
+    }
+  ],
+  "event": [],
+  "variable": [
+    {
+      "type": "string",
+      "value": "https://cloud-api.usw2.elembio.io",
+      "key": "baseUrl"
+    }
+  ],
+  "auth": {
+    "type": "apikey",
+    "apikey": [
+      {
+        "key": "key",
+        "value": "x-api-key"
+      },
+      {
+        "key": "value",
+        "value": "{{apiKey}}"
+      },
+      {
+        "key": "in",
+        "value": "header"
+      }
+    ]
+  },
+  "info": {
+    "_postman_id": "4ab87d63-2c15-4e8f-9757-0f3316dd5f39",
+    "name": "Element Biosciences Cloud Instrument Service API",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+    "description": {
+      "content": "The Element Biosciences Cloud API provides programmatic access to data in\nthe Element Biosciences Cloud platform: instrument runs (sequencing and\nmultiomics), workflow executions, registered instruments, storage\nconnections, and the files those resources produce.\n\nAll paths are versioned under `/v1`.\n\n## Authentication\nEvery request must include an API key in the `x-api-key` header. Create and\nmanage keys in the Element Biosciences Cloud console. Call `GET /v1/auth` to\nconfirm which tenant a key belongs to.\n\n## Scopes\nEach API key carries one or more scopes of the form\n`resource:action[:resource_id]`, for example `runs:read`,\n`executions:download`, or `storage:download:{connection_id}`. A request that\nis authenticated but lacks the required scope fails with HTTP 403 and the\n`INSUFFICIENT_SCOPE` reason. List endpoints transparently restrict results\nto the resources a key is scoped to.\n\n## Pagination\nList endpoints are cursor-paginated. Set `page_size` to control the page\nlength and pass the `next_page_token` from one response as the `page_token`\nof the next; an empty `next_page_token` indicates the last page.\n\n## Errors\nErrors return a JSON body with an integer `code`, a human-readable\n`message`, and a `details` array. Each detail carries a machine-readable\n`reason` (for example `RUN_NOT_FOUND` or `INVALID_API_KEY`) and the\n`domain` `cloud-api.elembio.io`. The `request_id` in the detail metadata\nmatches the `X-Request-ID` response header; include it when reporting\nproblems.\n\n\nContact Support:\n Name: Element Biosciences",
+      "type": "text/plain"
+    }
+  }
+}

@@ -1,0 +1,1803 @@
+{
+  "item": [
+    {
+      "id": "90c80ade-7248-492e-88b0-58cd2a966d7e",
+      "name": "StorageConnectionService",
+      "description": {
+        "content": "StorageConnectionService provides access to storage connections: their\n metadata (requires the \"storage:read\" scope) and the files within them\n (ListFiles / GetDownloadCredentials, which require the \"storage:download\"\n scope, narrowable to a specific connection or path prefix). Connections that\n are deleted, disabled, or queued for deletion are not returned.",
+        "type": "text/plain"
+      },
+      "item": [
+        {
+          "id": "f62f3d2b-a41b-41fb-969f-8af1b771d13c",
+          "name": "ListStorageConnections",
+          "request": {
+            "name": "ListStorageConnections",
+            "description": {
+              "content": "List storage connections accessible to the authenticated tenant.",
+              "type": "text/plain"
+            },
+            "url": {
+              "path": [
+                "v1",
+                "storage-connections"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [
+                {
+                  "disabled": false,
+                  "key": "pageSize",
+                  "value": "<integer>",
+                  "description": "Maximum number of connections to return. Defaults to 100; values above\n 1000 are capped at 1000."
+                },
+                {
+                  "disabled": false,
+                  "key": "pageToken",
+                  "value": "<string>",
+                  "description": "Pagination token from a previous response's next_page_token. Omit to\n request the first page."
+                }
+              ],
+              "variable": []
+            },
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "method": "GET",
+            "auth": null
+          },
+          "response": [
+            {
+              "id": "175d5eca-3701-448a-9a9f-d527d93dc5c6",
+              "name": "Success",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "v1",
+                    "storage-connections"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [
+                    {
+                      "key": "pageSize",
+                      "value": "<integer>"
+                    },
+                    {
+                      "key": "pageToken",
+                      "value": "<string>"
+                    }
+                  ],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: apikey",
+                      "type": "text/plain"
+                    },
+                    "key": "x-api-key",
+                    "value": "<API Key>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "OK",
+              "code": 200,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"storageConnections\": [\n    {\n      \"id\": \"string\",\n      \"name\": \"string\",\n      \"type\": \"string\",\n      \"status\": \"STORAGE_CONNECTION_STATUS_WARNING\",\n      \"uri\": \"string\",\n      \"timeCreated\": \"1986-03-13T14:12:59.839Z\",\n      \"timeUpdated\": \"2007-11-21T06:05:08.780Z\"\n    },\n    {\n      \"id\": \"string\",\n      \"name\": \"string\",\n      \"type\": \"string\",\n      \"status\": \"STORAGE_CONNECTION_STATUS_UNSPECIFIED\",\n      \"uri\": \"string\",\n      \"timeCreated\": \"2005-12-22T08:39:30.825Z\",\n      \"timeUpdated\": \"1952-04-23T01:45:39.266Z\"\n    }\n  ],\n  \"nextPageToken\": \"string\"\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "3b2c7c9d-9e34-46fe-bff2-a5e373f4e496",
+              "name": "Bad request — the request was malformed or a parameter was invalid.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "v1",
+                    "storage-connections"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [
+                    {
+                      "key": "pageSize",
+                      "value": "<integer>"
+                    },
+                    {
+                      "key": "pageToken",
+                      "value": "<string>"
+                    }
+                  ],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: apikey",
+                      "type": "text/plain"
+                    },
+                    "key": "x-api-key",
+                    "value": "<API Key>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "Bad Request",
+              "code": 400,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"code\": 2890,\n  \"message\": \"string\",\n  \"details\": [\n    {\n      \"reason\": \"string\",\n      \"domain\": \"string\",\n      \"@type\": \"string\",\n      \"metadata\": {\n        \"request_id\": \"string\"\n      }\n    },\n    {\n      \"reason\": \"string\",\n      \"domain\": \"string\",\n      \"@type\": \"string\",\n      \"metadata\": {\n        \"request_id\": \"string\"\n      }\n    }\n  ]\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "d1c25fee-3d13-4790-80dd-f7b644ce7f5f",
+              "name": "Unauthorized — the API key is missing or invalid.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "v1",
+                    "storage-connections"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [
+                    {
+                      "key": "pageSize",
+                      "value": "<integer>"
+                    },
+                    {
+                      "key": "pageToken",
+                      "value": "<string>"
+                    }
+                  ],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: apikey",
+                      "type": "text/plain"
+                    },
+                    "key": "x-api-key",
+                    "value": "<API Key>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "Unauthorized",
+              "code": 401,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"code\": 1398,\n  \"message\": \"string\",\n  \"details\": [\n    {\n      \"reason\": \"string\",\n      \"domain\": \"string\",\n      \"@type\": \"string\",\n      \"metadata\": {\n        \"request_id\": \"string\"\n      }\n    },\n    {\n      \"reason\": \"string\",\n      \"domain\": \"string\",\n      \"@type\": \"string\",\n      \"metadata\": {\n        \"request_id\": \"string\"\n      }\n    }\n  ]\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "97224703-e8e2-4c05-80c4-e8cc5fd610b1",
+              "name": "Forbidden — the API key lacks the required scope.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "v1",
+                    "storage-connections"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [
+                    {
+                      "key": "pageSize",
+                      "value": "<integer>"
+                    },
+                    {
+                      "key": "pageToken",
+                      "value": "<string>"
+                    }
+                  ],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: apikey",
+                      "type": "text/plain"
+                    },
+                    "key": "x-api-key",
+                    "value": "<API Key>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "Forbidden",
+              "code": 403,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"code\": 1398,\n  \"message\": \"string\",\n  \"details\": [\n    {\n      \"reason\": \"string\",\n      \"domain\": \"string\",\n      \"@type\": \"string\",\n      \"metadata\": {\n        \"request_id\": \"string\"\n      }\n    },\n    {\n      \"reason\": \"string\",\n      \"domain\": \"string\",\n      \"@type\": \"string\",\n      \"metadata\": {\n        \"request_id\": \"string\"\n      }\n    }\n  ]\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "5a2ee2b8-2770-4933-b01e-ee94c5d85a7b",
+              "name": "Not found — the requested resource does not exist or is not accessible.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "v1",
+                    "storage-connections"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [
+                    {
+                      "key": "pageSize",
+                      "value": "<integer>"
+                    },
+                    {
+                      "key": "pageToken",
+                      "value": "<string>"
+                    }
+                  ],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: apikey",
+                      "type": "text/plain"
+                    },
+                    "key": "x-api-key",
+                    "value": "<API Key>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "Not Found",
+              "code": 404,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"code\": 1398,\n  \"message\": \"string\",\n  \"details\": [\n    {\n      \"reason\": \"string\",\n      \"domain\": \"string\",\n      \"@type\": \"string\",\n      \"metadata\": {\n        \"request_id\": \"string\"\n      }\n    },\n    {\n      \"reason\": \"string\",\n      \"domain\": \"string\",\n      \"@type\": \"string\",\n      \"metadata\": {\n        \"request_id\": \"string\"\n      }\n    }\n  ]\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "56844e0b-9536-4162-829e-916dad01dcc1",
+              "name": "Internal server error.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "v1",
+                    "storage-connections"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [
+                    {
+                      "key": "pageSize",
+                      "value": "<integer>"
+                    },
+                    {
+                      "key": "pageToken",
+                      "value": "<string>"
+                    }
+                  ],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: apikey",
+                      "type": "text/plain"
+                    },
+                    "key": "x-api-key",
+                    "value": "<API Key>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "Internal Server Error",
+              "code": 500,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"code\": 1398,\n  \"message\": \"string\",\n  \"details\": [\n    {\n      \"reason\": \"string\",\n      \"domain\": \"string\",\n      \"@type\": \"string\",\n      \"metadata\": {\n        \"request_id\": \"string\"\n      }\n    },\n    {\n      \"reason\": \"string\",\n      \"domain\": \"string\",\n      \"@type\": \"string\",\n      \"metadata\": {\n        \"request_id\": \"string\"\n      }\n    }\n  ]\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        },
+        {
+          "id": "bbd7f7b8-de73-491a-b528-aa7a88385676",
+          "name": "GetStorageConnection",
+          "request": {
+            "name": "GetStorageConnection",
+            "description": {
+              "content": "Get a single storage connection by its ID.",
+              "type": "text/plain"
+            },
+            "url": {
+              "path": [
+                "v1",
+                "storage-connections",
+                ":id"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [],
+              "variable": [
+                {
+                  "disabled": false,
+                  "type": "any",
+                  "value": "<string>",
+                  "key": "id",
+                  "description": "(Required) ID of the storage connection to retrieve."
+                }
+              ]
+            },
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "method": "GET",
+            "auth": null
+          },
+          "response": [
+            {
+              "id": "eb5a5545-f803-44bf-ab15-00960af5e3a2",
+              "name": "Success",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "v1",
+                    "storage-connections",
+                    ":id"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "id",
+                      "description": "(Required) ID of the storage connection to retrieve."
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: apikey",
+                      "type": "text/plain"
+                    },
+                    "key": "x-api-key",
+                    "value": "<API Key>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "OK",
+              "code": 200,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"storageConnection\": {\n    \"id\": \"string\",\n    \"name\": \"string\",\n    \"type\": \"string\",\n    \"status\": \"STORAGE_CONNECTION_STATUS_FAILED\",\n    \"uri\": \"string\",\n    \"timeCreated\": \"1972-06-16T19:45:32.938Z\",\n    \"timeUpdated\": \"2010-03-17T05:01:07.874Z\"\n  }\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "d9a555cf-76f9-45ed-a82e-524b694a495a",
+              "name": "Bad request — the request was malformed or a parameter was invalid.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "v1",
+                    "storage-connections",
+                    ":id"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "id",
+                      "description": "(Required) ID of the storage connection to retrieve."
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: apikey",
+                      "type": "text/plain"
+                    },
+                    "key": "x-api-key",
+                    "value": "<API Key>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "Bad Request",
+              "code": 400,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"code\": 1398,\n  \"message\": \"string\",\n  \"details\": [\n    {\n      \"reason\": \"string\",\n      \"domain\": \"string\",\n      \"@type\": \"string\",\n      \"metadata\": {\n        \"request_id\": \"string\"\n      }\n    },\n    {\n      \"reason\": \"string\",\n      \"domain\": \"string\",\n      \"@type\": \"string\",\n      \"metadata\": {\n        \"request_id\": \"string\"\n      }\n    }\n  ]\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "4375815a-de0b-4777-a708-94856c61718a",
+              "name": "Unauthorized — the API key is missing or invalid.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "v1",
+                    "storage-connections",
+                    ":id"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "id",
+                      "description": "(Required) ID of the storage connection to retrieve."
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: apikey",
+                      "type": "text/plain"
+                    },
+                    "key": "x-api-key",
+                    "value": "<API Key>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "Unauthorized",
+              "code": 401,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"code\": 1398,\n  \"message\": \"string\",\n  \"details\": [\n    {\n      \"reason\": \"string\",\n      \"domain\": \"string\",\n      \"@type\": \"string\",\n      \"metadata\": {\n        \"request_id\": \"string\"\n      }\n    },\n    {\n      \"reason\": \"string\",\n      \"domain\": \"string\",\n      \"@type\": \"string\",\n      \"metadata\": {\n        \"request_id\": \"string\"\n      }\n    }\n  ]\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "a6c59878-64ce-4dd4-9681-54e961c6ae4e",
+              "name": "Forbidden — the API key lacks the required scope.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "v1",
+                    "storage-connections",
+                    ":id"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "id",
+                      "description": "(Required) ID of the storage connection to retrieve."
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: apikey",
+                      "type": "text/plain"
+                    },
+                    "key": "x-api-key",
+                    "value": "<API Key>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "Forbidden",
+              "code": 403,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"code\": 1398,\n  \"message\": \"string\",\n  \"details\": [\n    {\n      \"reason\": \"string\",\n      \"domain\": \"string\",\n      \"@type\": \"string\",\n      \"metadata\": {\n        \"request_id\": \"string\"\n      }\n    },\n    {\n      \"reason\": \"string\",\n      \"domain\": \"string\",\n      \"@type\": \"string\",\n      \"metadata\": {\n        \"request_id\": \"string\"\n      }\n    }\n  ]\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "1c231eb4-ea6f-40bc-986d-8b7ebcb38dbd",
+              "name": "Not found — the requested resource does not exist or is not accessible.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "v1",
+                    "storage-connections",
+                    ":id"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "id",
+                      "description": "(Required) ID of the storage connection to retrieve."
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: apikey",
+                      "type": "text/plain"
+                    },
+                    "key": "x-api-key",
+                    "value": "<API Key>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "Not Found",
+              "code": 404,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"code\": 1398,\n  \"message\": \"string\",\n  \"details\": [\n    {\n      \"reason\": \"string\",\n      \"domain\": \"string\",\n      \"@type\": \"string\",\n      \"metadata\": {\n        \"request_id\": \"string\"\n      }\n    },\n    {\n      \"reason\": \"string\",\n      \"domain\": \"string\",\n      \"@type\": \"string\",\n      \"metadata\": {\n        \"request_id\": \"string\"\n      }\n    }\n  ]\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "5f3dd297-019f-4f55-840d-5b037abef7ce",
+              "name": "Internal server error.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "v1",
+                    "storage-connections",
+                    ":id"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "id",
+                      "description": "(Required) ID of the storage connection to retrieve."
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: apikey",
+                      "type": "text/plain"
+                    },
+                    "key": "x-api-key",
+                    "value": "<API Key>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "Internal Server Error",
+              "code": 500,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"code\": 1398,\n  \"message\": \"string\",\n  \"details\": [\n    {\n      \"reason\": \"string\",\n      \"domain\": \"string\",\n      \"@type\": \"string\",\n      \"metadata\": {\n        \"request_id\": \"string\"\n      }\n    },\n    {\n      \"reason\": \"string\",\n      \"domain\": \"string\",\n      \"@type\": \"string\",\n      \"metadata\": {\n        \"request_id\": \"string\"\n      }\n    }\n  ]\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        },
+        {
+          "id": "1c4a6365-e3df-4637-9a83-b91858422355",
+          "name": "GetDownloadCredentials",
+          "request": {
+            "name": "GetDownloadCredentials",
+            "description": {
+              "content": "Get temporary, read-only S3 credentials scoped to a storage connection.\n Use these for bulk or repeated downloads via the AWS CLI or SDK instead\n of per-object presigned URLs.",
+              "type": "text/plain"
+            },
+            "url": {
+              "path": [
+                "v1",
+                "storage-connections",
+                ":storage_connection_id",
+                "credentials"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [
+                {
+                  "disabled": false,
+                  "key": "prefix",
+                  "value": "<string>",
+                  "description": "Prefix to scope credentials to a subdirectory, relative to the storage\n connection's configured root. Matches the --prefix semantics of ListFiles:\n optional for an unrestricted key (omitted ⇒ connection root), but required\n and bounded to scope for a key scoped to a path prefix — omitting it or\n naming one outside the scope returns PermissionDenied with the allowed\n prefix(es) (`allowed_prefixes` metadata)."
+                },
+                {
+                  "disabled": false,
+                  "key": "expirationSeconds",
+                  "value": "<integer>",
+                  "description": "Lifetime of the returned credentials, in seconds. Optional; defaults to\n 1 hour (when 0 or unset). Minimum 900s. Capped by AWS: up to 36h (129600s)\n for federation-token connections, or the role's MaxSessionDuration (12h\n typical) for role-backed connections. Values below the minimum or above the\n cap are rejected."
+                }
+              ],
+              "variable": [
+                {
+                  "disabled": false,
+                  "type": "any",
+                  "value": "<string>",
+                  "key": "storage_connection_id",
+                  "description": "(Required) "
+                }
+              ]
+            },
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "method": "GET",
+            "auth": null
+          },
+          "response": [
+            {
+              "id": "76836098-052b-48e6-9b10-36e320bec66d",
+              "name": "Success",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "v1",
+                    "storage-connections",
+                    ":storage_connection_id",
+                    "credentials"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [
+                    {
+                      "key": "prefix",
+                      "value": "<string>"
+                    },
+                    {
+                      "key": "expirationSeconds",
+                      "value": "<integer>"
+                    }
+                  ],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "storage_connection_id",
+                      "description": "(Required) "
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: apikey",
+                      "type": "text/plain"
+                    },
+                    "key": "x-api-key",
+                    "value": "<API Key>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "OK",
+              "code": 200,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"s3\": {\n    \"region\": \"string\",\n    \"bucket\": \"string\",\n    \"prefix\": null,\n    \"accessKeyId\": \"string\",\n    \"secretAccessKey\": \"string\",\n    \"sessionToken\": \"string\",\n    \"expiration\": \"1952-06-17T18:22:01.585Z\"\n  }\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "e2cdc829-8526-4c7d-bb52-6f9f684a2a41",
+              "name": "Bad request — the request was malformed or a parameter was invalid.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "v1",
+                    "storage-connections",
+                    ":storage_connection_id",
+                    "credentials"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [
+                    {
+                      "key": "prefix",
+                      "value": "<string>"
+                    },
+                    {
+                      "key": "expirationSeconds",
+                      "value": "<integer>"
+                    }
+                  ],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "storage_connection_id",
+                      "description": "(Required) "
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: apikey",
+                      "type": "text/plain"
+                    },
+                    "key": "x-api-key",
+                    "value": "<API Key>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "Bad Request",
+              "code": 400,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"code\": 1398,\n  \"message\": \"string\",\n  \"details\": [\n    {\n      \"reason\": \"string\",\n      \"domain\": \"string\",\n      \"@type\": \"string\",\n      \"metadata\": {\n        \"request_id\": \"string\"\n      }\n    },\n    {\n      \"reason\": \"string\",\n      \"domain\": \"string\",\n      \"@type\": \"string\",\n      \"metadata\": {\n        \"request_id\": \"string\"\n      }\n    }\n  ]\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "f78d71a2-1449-4035-90bd-e47affd55e04",
+              "name": "Unauthorized — the API key is missing or invalid.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "v1",
+                    "storage-connections",
+                    ":storage_connection_id",
+                    "credentials"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [
+                    {
+                      "key": "prefix",
+                      "value": "<string>"
+                    },
+                    {
+                      "key": "expirationSeconds",
+                      "value": "<integer>"
+                    }
+                  ],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "storage_connection_id",
+                      "description": "(Required) "
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: apikey",
+                      "type": "text/plain"
+                    },
+                    "key": "x-api-key",
+                    "value": "<API Key>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "Unauthorized",
+              "code": 401,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"code\": 1398,\n  \"message\": \"string\",\n  \"details\": [\n    {\n      \"reason\": \"string\",\n      \"domain\": \"string\",\n      \"@type\": \"string\",\n      \"metadata\": {\n        \"request_id\": \"string\"\n      }\n    },\n    {\n      \"reason\": \"string\",\n      \"domain\": \"string\",\n      \"@type\": \"string\",\n      \"metadata\": {\n        \"request_id\": \"string\"\n      }\n    }\n  ]\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "dac966c3-d166-4f5e-8fb1-5fd3e618ea4f",
+              "name": "Forbidden — the API key lacks the required scope.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "v1",
+                    "storage-connections",
+                    ":storage_connection_id",
+                    "credentials"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [
+                    {
+                      "key": "prefix",
+                      "value": "<string>"
+                    },
+                    {
+                      "key": "expirationSeconds",
+                      "value": "<integer>"
+                    }
+                  ],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "storage_connection_id",
+                      "description": "(Required) "
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: apikey",
+                      "type": "text/plain"
+                    },
+                    "key": "x-api-key",
+                    "value": "<API Key>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "Forbidden",
+              "code": 403,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"code\": 1398,\n  \"message\": \"string\",\n  \"details\": [\n    {\n      \"reason\": \"string\",\n      \"domain\": \"string\",\n      \"@type\": \"string\",\n      \"metadata\": {\n        \"request_id\": \"string\"\n      }\n    },\n    {\n      \"reason\": \"string\",\n      \"domain\": \"string\",\n      \"@type\": \"string\",\n      \"metadata\": {\n        \"request_id\": \"string\"\n      }\n    }\n  ]\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "a2ab2d84-1eb7-4e42-bf3e-c48e06f4433a",
+              "name": "Not found — the requested resource does not exist or is not accessible.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "v1",
+                    "storage-connections",
+                    ":storage_connection_id",
+                    "credentials"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [
+                    {
+                      "key": "prefix",
+                      "value": "<string>"
+                    },
+                    {
+                      "key": "expirationSeconds",
+                      "value": "<integer>"
+                    }
+                  ],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "storage_connection_id",
+                      "description": "(Required) "
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: apikey",
+                      "type": "text/plain"
+                    },
+                    "key": "x-api-key",
+                    "value": "<API Key>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "Not Found",
+              "code": 404,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"code\": 1398,\n  \"message\": \"string\",\n  \"details\": [\n    {\n      \"reason\": \"string\",\n      \"domain\": \"string\",\n      \"@type\": \"string\",\n      \"metadata\": {\n        \"request_id\": \"string\"\n      }\n    },\n    {\n      \"reason\": \"string\",\n      \"domain\": \"string\",\n      \"@type\": \"string\",\n      \"metadata\": {\n        \"request_id\": \"string\"\n      }\n    }\n  ]\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "f4d0f6ca-78dc-4624-bfa4-05fb22147a3c",
+              "name": "Internal server error.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "v1",
+                    "storage-connections",
+                    ":storage_connection_id",
+                    "credentials"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [
+                    {
+                      "key": "prefix",
+                      "value": "<string>"
+                    },
+                    {
+                      "key": "expirationSeconds",
+                      "value": "<integer>"
+                    }
+                  ],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "storage_connection_id",
+                      "description": "(Required) "
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: apikey",
+                      "type": "text/plain"
+                    },
+                    "key": "x-api-key",
+                    "value": "<API Key>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "Internal Server Error",
+              "code": 500,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"code\": 1398,\n  \"message\": \"string\",\n  \"details\": [\n    {\n      \"reason\": \"string\",\n      \"domain\": \"string\",\n      \"@type\": \"string\",\n      \"metadata\": {\n        \"request_id\": \"string\"\n      }\n    },\n    {\n      \"reason\": \"string\",\n      \"domain\": \"string\",\n      \"@type\": \"string\",\n      \"metadata\": {\n        \"request_id\": \"string\"\n      }\n    }\n  ]\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        },
+        {
+          "id": "34e724a7-0a84-4cf7-a3dc-b207a1f78aa7",
+          "name": "ListFiles",
+          "request": {
+            "name": "ListFiles",
+            "description": {
+              "content": "List files in a storage connection. Supports prefix filtering and, when\n recursive is false, delimiter-based hierarchical listing.",
+              "type": "text/plain"
+            },
+            "url": {
+              "path": [
+                "v1",
+                "storage-connections",
+                ":storage_connection_id",
+                "files"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [
+                {
+                  "disabled": false,
+                  "key": "prefix",
+                  "value": "<string>",
+                  "description": "Path prefix relative to the storage connection's configured root,\n directory-shape with implicit trailing \"/\". The connection's saved\n sub-prefix (if any) is not part of this value — it's an\n implementation detail of the connection.\n Example: \"A24-S2/run-001/\". Round-trips with File.path.\n For an unrestricted key, optional: omitting it lists from the connection\n root. For a key scoped to a path prefix, a prefix WITHIN the scope is\n required: omitting it, or supplying one outside the scope, returns\n PermissionDenied with the allowed prefix(es) in the error\n (`allowed_prefixes` metadata)."
+                },
+                {
+                  "disabled": false,
+                  "key": "recursive",
+                  "value": "<boolean>",
+                  "description": "If true, list all files recursively under the prefix (default: true)\n If false, list only files and subdirectories at the current level"
+                },
+                {
+                  "disabled": false,
+                  "key": "pageSize",
+                  "value": "<integer>",
+                  "description": "Maximum number of files to return per page (default: 1000, max: 1000)\n Note: This is passed through to the underlying storage system"
+                },
+                {
+                  "disabled": false,
+                  "key": "pageToken",
+                  "value": "<string>",
+                  "description": "Continuation token from previous response\n This is an opaque token from the underlying storage system"
+                },
+                {
+                  "disabled": false,
+                  "key": "includeDownloadUrl",
+                  "value": "<boolean>",
+                  "description": "If true, populate File.download_url (a presigned URL) on each returned\n file. Defaults to false. Set to true only when the caller intends to\n fetch file content from the response: generating presigned URLs has a\n per-object cost and the URLs themselves are credentials with a\n multi-hour lifetime. Use GetDownloadCredentials when long-lived bulk\n access is required."
+                },
+                {
+                  "disabled": false,
+                  "key": "downloadUrlExpirationSeconds",
+                  "value": "<integer>",
+                  "description": "Lifetime of the presigned download_url, in seconds. Optional; defaults to\n 1 hour. Only applies when include_download_url = true. Max 7 days."
+                },
+                {
+                  "disabled": false,
+                  "key": "includeDownloadChecksum",
+                  "value": "<boolean>",
+                  "description": "If true, presign each download_url with S3 ChecksumMode=ENABLED so the\n object's stored checksum is returned on the GET (in the\n x-amz-checksum-<algo> response header) and a client can verify download\n integrity in a single streaming pass. Defaults false; has no effect unless\n include_download_url = true. When enabled the presigned URL signs the\n x-amz-checksum-mode request header, so the fetch MUST send\n x-amz-checksum-mode:ENABLED — a plain GET that omits it fails with HTTP\n 403. Best-effort: objects stored without a checksum return none.\n\n Applies only to AWS S3-backed storage connections; other storage backends\n do not presign S3 GETs and silently ignore this field."
+                }
+              ],
+              "variable": [
+                {
+                  "disabled": false,
+                  "type": "any",
+                  "value": "<string>",
+                  "key": "storage_connection_id",
+                  "description": "(Required) "
+                }
+              ]
+            },
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "method": "GET",
+            "auth": null
+          },
+          "response": [
+            {
+              "id": "449c64cd-e9bc-43de-93ab-b7eb7a81195d",
+              "name": "Success",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "v1",
+                    "storage-connections",
+                    ":storage_connection_id",
+                    "files"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [
+                    {
+                      "key": "prefix",
+                      "value": "<string>"
+                    },
+                    {
+                      "key": "recursive",
+                      "value": "<boolean>"
+                    },
+                    {
+                      "key": "pageSize",
+                      "value": "<integer>"
+                    },
+                    {
+                      "key": "pageToken",
+                      "value": "<string>"
+                    },
+                    {
+                      "key": "includeDownloadUrl",
+                      "value": "<boolean>"
+                    },
+                    {
+                      "key": "downloadUrlExpirationSeconds",
+                      "value": "<integer>"
+                    },
+                    {
+                      "key": "includeDownloadChecksum",
+                      "value": "<boolean>"
+                    }
+                  ],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "storage_connection_id",
+                      "description": "(Required) "
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: apikey",
+                      "type": "text/plain"
+                    },
+                    "key": "x-api-key",
+                    "value": "<API Key>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "OK",
+              "code": 200,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"files\": [\n    {\n      \"path\": \"string\",\n      \"name\": \"string\",\n      \"size\": 1920,\n      \"lastModified\": \"1988-01-29T08:22:33.900Z\",\n      \"uri\": \"string\",\n      \"downloadUrl\": \"string\",\n      \"storageClass\": null\n    },\n    {\n      \"path\": \"string\",\n      \"name\": \"string\",\n      \"size\": 7296,\n      \"lastModified\": \"1950-06-16T16:07:17.950Z\",\n      \"uri\": \"string\",\n      \"downloadUrl\": \"string\",\n      \"storageClass\": \"string\"\n    }\n  ],\n  \"subdirectories\": [\n    \"string\",\n    \"string\"\n  ],\n  \"nextPageToken\": \"string\",\n  \"isTruncated\": true\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "80194d91-97ed-41b4-8302-86d9574a5f48",
+              "name": "Bad request — the request was malformed or a parameter was invalid.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "v1",
+                    "storage-connections",
+                    ":storage_connection_id",
+                    "files"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [
+                    {
+                      "key": "prefix",
+                      "value": "<string>"
+                    },
+                    {
+                      "key": "recursive",
+                      "value": "<boolean>"
+                    },
+                    {
+                      "key": "pageSize",
+                      "value": "<integer>"
+                    },
+                    {
+                      "key": "pageToken",
+                      "value": "<string>"
+                    },
+                    {
+                      "key": "includeDownloadUrl",
+                      "value": "<boolean>"
+                    },
+                    {
+                      "key": "downloadUrlExpirationSeconds",
+                      "value": "<integer>"
+                    },
+                    {
+                      "key": "includeDownloadChecksum",
+                      "value": "<boolean>"
+                    }
+                  ],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "storage_connection_id",
+                      "description": "(Required) "
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: apikey",
+                      "type": "text/plain"
+                    },
+                    "key": "x-api-key",
+                    "value": "<API Key>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "Bad Request",
+              "code": 400,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"code\": 1398,\n  \"message\": \"string\",\n  \"details\": [\n    {\n      \"reason\": \"string\",\n      \"domain\": \"string\",\n      \"@type\": \"string\",\n      \"metadata\": {\n        \"request_id\": \"string\"\n      }\n    },\n    {\n      \"reason\": \"string\",\n      \"domain\": \"string\",\n      \"@type\": \"string\",\n      \"metadata\": {\n        \"request_id\": \"string\"\n      }\n    }\n  ]\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "3de70720-2223-4262-8c0f-5de924432ea0",
+              "name": "Unauthorized — the API key is missing or invalid.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "v1",
+                    "storage-connections",
+                    ":storage_connection_id",
+                    "files"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [
+                    {
+                      "key": "prefix",
+                      "value": "<string>"
+                    },
+                    {
+                      "key": "recursive",
+                      "value": "<boolean>"
+                    },
+                    {
+                      "key": "pageSize",
+                      "value": "<integer>"
+                    },
+                    {
+                      "key": "pageToken",
+                      "value": "<string>"
+                    },
+                    {
+                      "key": "includeDownloadUrl",
+                      "value": "<boolean>"
+                    },
+                    {
+                      "key": "downloadUrlExpirationSeconds",
+                      "value": "<integer>"
+                    },
+                    {
+                      "key": "includeDownloadChecksum",
+                      "value": "<boolean>"
+                    }
+                  ],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "storage_connection_id",
+                      "description": "(Required) "
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: apikey",
+                      "type": "text/plain"
+                    },
+                    "key": "x-api-key",
+                    "value": "<API Key>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "Unauthorized",
+              "code": 401,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"code\": 1398,\n  \"message\": \"string\",\n  \"details\": [\n    {\n      \"reason\": \"string\",\n      \"domain\": \"string\",\n      \"@type\": \"string\",\n      \"metadata\": {\n        \"request_id\": \"string\"\n      }\n    },\n    {\n      \"reason\": \"string\",\n      \"domain\": \"string\",\n      \"@type\": \"string\",\n      \"metadata\": {\n        \"request_id\": \"string\"\n      }\n    }\n  ]\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "cb560e8c-322f-47dc-bea6-2525ddcb62b6",
+              "name": "Forbidden — the API key lacks the required scope.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "v1",
+                    "storage-connections",
+                    ":storage_connection_id",
+                    "files"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [
+                    {
+                      "key": "prefix",
+                      "value": "<string>"
+                    },
+                    {
+                      "key": "recursive",
+                      "value": "<boolean>"
+                    },
+                    {
+                      "key": "pageSize",
+                      "value": "<integer>"
+                    },
+                    {
+                      "key": "pageToken",
+                      "value": "<string>"
+                    },
+                    {
+                      "key": "includeDownloadUrl",
+                      "value": "<boolean>"
+                    },
+                    {
+                      "key": "downloadUrlExpirationSeconds",
+                      "value": "<integer>"
+                    },
+                    {
+                      "key": "includeDownloadChecksum",
+                      "value": "<boolean>"
+                    }
+                  ],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "storage_connection_id",
+                      "description": "(Required) "
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: apikey",
+                      "type": "text/plain"
+                    },
+                    "key": "x-api-key",
+                    "value": "<API Key>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "Forbidden",
+              "code": 403,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"code\": 1398,\n  \"message\": \"string\",\n  \"details\": [\n    {\n      \"reason\": \"string\",\n      \"domain\": \"string\",\n      \"@type\": \"string\",\n      \"metadata\": {\n        \"request_id\": \"string\"\n      }\n    },\n    {\n      \"reason\": \"string\",\n      \"domain\": \"string\",\n      \"@type\": \"string\",\n      \"metadata\": {\n        \"request_id\": \"string\"\n      }\n    }\n  ]\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "b641b322-c869-4aed-b1c0-5682c9a02920",
+              "name": "Not found — the requested resource does not exist or is not accessible.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "v1",
+                    "storage-connections",
+                    ":storage_connection_id",
+                    "files"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [
+                    {
+                      "key": "prefix",
+                      "value": "<string>"
+                    },
+                    {
+                      "key": "recursive",
+                      "value": "<boolean>"
+                    },
+                    {
+                      "key": "pageSize",
+                      "value": "<integer>"
+                    },
+                    {
+                      "key": "pageToken",
+                      "value": "<string>"
+                    },
+                    {
+                      "key": "includeDownloadUrl",
+                      "value": "<boolean>"
+                    },
+                    {
+                      "key": "downloadUrlExpirationSeconds",
+                      "value": "<integer>"
+                    },
+                    {
+                      "key": "includeDownloadChecksum",
+                      "value": "<boolean>"
+                    }
+                  ],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "storage_connection_id",
+                      "description": "(Required) "
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: apikey",
+                      "type": "text/plain"
+                    },
+                    "key": "x-api-key",
+                    "value": "<API Key>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "Not Found",
+              "code": 404,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"code\": 1398,\n  \"message\": \"string\",\n  \"details\": [\n    {\n      \"reason\": \"string\",\n      \"domain\": \"string\",\n      \"@type\": \"string\",\n      \"metadata\": {\n        \"request_id\": \"string\"\n      }\n    },\n    {\n      \"reason\": \"string\",\n      \"domain\": \"string\",\n      \"@type\": \"string\",\n      \"metadata\": {\n        \"request_id\": \"string\"\n      }\n    }\n  ]\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "7117a363-e2e6-4343-9b12-25ecfe629b79",
+              "name": "Internal server error.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "v1",
+                    "storage-connections",
+                    ":storage_connection_id",
+                    "files"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [
+                    {
+                      "key": "prefix",
+                      "value": "<string>"
+                    },
+                    {
+                      "key": "recursive",
+                      "value": "<boolean>"
+                    },
+                    {
+                      "key": "pageSize",
+                      "value": "<integer>"
+                    },
+                    {
+                      "key": "pageToken",
+                      "value": "<string>"
+                    },
+                    {
+                      "key": "includeDownloadUrl",
+                      "value": "<boolean>"
+                    },
+                    {
+                      "key": "downloadUrlExpirationSeconds",
+                      "value": "<integer>"
+                    },
+                    {
+                      "key": "includeDownloadChecksum",
+                      "value": "<boolean>"
+                    }
+                  ],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "storage_connection_id",
+                      "description": "(Required) "
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: apikey",
+                      "type": "text/plain"
+                    },
+                    "key": "x-api-key",
+                    "value": "<API Key>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "Internal Server Error",
+              "code": 500,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"code\": 1398,\n  \"message\": \"string\",\n  \"details\": [\n    {\n      \"reason\": \"string\",\n      \"domain\": \"string\",\n      \"@type\": \"string\",\n      \"metadata\": {\n        \"request_id\": \"string\"\n      }\n    },\n    {\n      \"reason\": \"string\",\n      \"domain\": \"string\",\n      \"@type\": \"string\",\n      \"metadata\": {\n        \"request_id\": \"string\"\n      }\n    }\n  ]\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        }
+      ],
+      "event": []
+    }
+  ],
+  "event": [],
+  "variable": [
+    {
+      "type": "string",
+      "value": "https://cloud-api.usw2.elembio.io",
+      "key": "baseUrl"
+    }
+  ],
+  "auth": {
+    "type": "apikey",
+    "apikey": [
+      {
+        "key": "key",
+        "value": "x-api-key"
+      },
+      {
+        "key": "value",
+        "value": "{{apiKey}}"
+      },
+      {
+        "key": "in",
+        "value": "header"
+      }
+    ]
+  },
+  "info": {
+    "_postman_id": "c8f69245-0860-4433-87ff-fab3e151f2d3",
+    "name": "Element Biosciences Cloud Storage Connection Service API",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+    "description": {
+      "content": "The Element Biosciences Cloud API provides programmatic access to data in\nthe Element Biosciences Cloud platform: instrument runs (sequencing and\nmultiomics), workflow executions, registered instruments, storage\nconnections, and the files those resources produce.\n\nAll paths are versioned under `/v1`.\n\n## Authentication\nEvery request must include an API key in the `x-api-key` header. Create and\nmanage keys in the Element Biosciences Cloud console. Call `GET /v1/auth` to\nconfirm which tenant a key belongs to.\n\n## Scopes\nEach API key carries one or more scopes of the form\n`resource:action[:resource_id]`, for example `runs:read`,\n`executions:download`, or `storage:download:{connection_id}`. A request that\nis authenticated but lacks the required scope fails with HTTP 403 and the\n`INSUFFICIENT_SCOPE` reason. List endpoints transparently restrict results\nto the resources a key is scoped to.\n\n## Pagination\nList endpoints are cursor-paginated. Set `page_size` to control the page\nlength and pass the `next_page_token` from one response as the `page_token`\nof the next; an empty `next_page_token` indicates the last page.\n\n## Errors\nErrors return a JSON body with an integer `code`, a human-readable\n`message`, and a `details` array. Each detail carries a machine-readable\n`reason` (for example `RUN_NOT_FOUND` or `INVALID_API_KEY`) and the\n`domain` `cloud-api.elembio.io`. The `request_id` in the detail metadata\nmatches the `X-Request-ID` response header; include it when reporting\nproblems.\n\n\nContact Support:\n Name: Element Biosciences",
+      "type": "text/plain"
+    }
+  }
+}

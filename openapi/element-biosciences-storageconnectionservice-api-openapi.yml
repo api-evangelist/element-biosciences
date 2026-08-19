@@ -1,0 +1,622 @@
+openapi: 3.2.0
+info:
+  title: Element Biosciences Cloud Storage Connection Service API
+  description: 'The Element Biosciences Cloud API provides programmatic access to data in
+
+    the Element Biosciences Cloud platform: instrument runs (sequencing and
+
+    multiomics), workflow executions, registered instruments, storage
+
+    connections, and the files those resources produce.
+
+
+    All paths are versioned under `/v1`.
+
+
+    ## Authentication
+
+    Every request must include an API key in the `x-api-key` header. Create and
+
+    manage keys in the Element Biosciences Cloud console. Call `GET /v1/auth` to
+
+    confirm which tenant a key belongs to.
+
+
+    ## Scopes
+
+    Each API key carries one or more scopes of the form
+
+    `resource:action[:resource_id]`, for example `runs:read`,
+
+    `executions:download`, or `storage:download:{connection_id}`. A request that
+
+    is authenticated but lacks the required scope fails with HTTP 403 and the
+
+    `INSUFFICIENT_SCOPE` reason. List endpoints transparently restrict results
+
+    to the resources a key is scoped to.
+
+
+    ## Pagination
+
+    List endpoints are cursor-paginated. Set `page_size` to control the page
+
+    length and pass the `next_page_token` from one response as the `page_token`
+
+    of the next; an empty `next_page_token` indicates the last page.
+
+
+    ## Errors
+
+    Errors return a JSON body with an integer `code`, a human-readable
+
+    `message`, and a `details` array. Each detail carries a machine-readable
+
+    `reason` (for example `RUN_NOT_FOUND` or `INVALID_API_KEY`) and the
+
+    `domain` `cloud-api.elembio.io`. The `request_id` in the detail metadata
+
+    matches the `X-Request-ID` response header; include it when reporting
+
+    problems.
+
+    '
+  version: 1.0.0
+  contact:
+    name: Element Biosciences
+    url: https://www.elembio.io
+servers:
+- url: https://cloud-api.usw2.elembio.io
+security:
+- apiKey: []
+tags:
+- name: StorageConnectionService
+  description: "StorageConnectionService provides access to storage connections: their\n metadata (requires the \"storage:read\" scope) and the files within them\n (ListFiles / GetDownloadCredentials, which require the \"storage:download\"\n scope, narrowable to a specific connection or path prefix). Connections that\n are deleted, disabled, or queued for deletion are not returned."
+paths:
+  /v1/storage-connections:
+    get:
+      tags:
+      - StorageConnectionService
+      summary: ListStorageConnections
+      description: List storage connections accessible to the authenticated tenant.
+      operationId: StorageConnectionService_ListStorageConnections
+      parameters:
+      - name: pageSize
+        in: query
+        description: "Maximum number of connections to return. Defaults to 100; values above\n 1000 are capped at 1000."
+        schema:
+          type: integer
+          title: page_size
+          format: int32
+          description: "Maximum number of connections to return. Defaults to 100; values above\n 1000 are capped at 1000."
+      - name: pageToken
+        in: query
+        description: "Pagination token from a previous response's next_page_token. Omit to\n request the first page."
+        schema:
+          type: string
+          title: page_token
+          description: "Pagination token from a previous response's next_page_token. Omit to\n request the first page."
+      responses:
+        '200':
+          description: Success
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/elembio.cloud.v1.ListStorageConnectionsResponse'
+        '400':
+          description: Bad request — the request was malformed or a parameter was invalid.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '401':
+          description: Unauthorized — the API key is missing or invalid.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '403':
+          description: Forbidden — the API key lacks the required scope.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '404':
+          description: Not found — the requested resource does not exist or is not accessible.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '500':
+          description: Internal server error.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+  /v1/storage-connections/{id}:
+    get:
+      tags:
+      - StorageConnectionService
+      summary: GetStorageConnection
+      description: Get a single storage connection by its ID.
+      operationId: StorageConnectionService_GetStorageConnection
+      parameters:
+      - name: id
+        in: path
+        description: ID of the storage connection to retrieve.
+        required: true
+        schema:
+          type: string
+          title: id
+          description: ID of the storage connection to retrieve.
+      responses:
+        '200':
+          description: Success
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/elembio.cloud.v1.GetStorageConnectionResponse'
+        '400':
+          description: Bad request — the request was malformed or a parameter was invalid.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '401':
+          description: Unauthorized — the API key is missing or invalid.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '403':
+          description: Forbidden — the API key lacks the required scope.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '404':
+          description: Not found — the requested resource does not exist or is not accessible.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '500':
+          description: Internal server error.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+  /v1/storage-connections/{storage_connection_id}/credentials:
+    get:
+      tags:
+      - StorageConnectionService
+      summary: GetDownloadCredentials
+      description: "Get temporary, read-only S3 credentials scoped to a storage connection.\n Use these for bulk or repeated downloads via the AWS CLI or SDK instead\n of per-object presigned URLs."
+      operationId: StorageConnectionService_GetDownloadCredentials
+      parameters:
+      - name: storage_connection_id
+        in: path
+        required: true
+        schema:
+          type: string
+          title: storage_connection_id
+          description: The storage connection ID
+      - name: prefix
+        in: query
+        description: "Prefix to scope credentials to a subdirectory, relative to the storage\n connection's configured root. Matches the --prefix semantics of ListFiles:\n optional for an unrestricted key (omitted ⇒ connection root), but required\n and bounded to scope for a key scoped to a path prefix — omitting it or\n naming one outside the scope returns PermissionDenied with the allowed\n prefix(es) (`allowed_prefixes` metadata)."
+        schema:
+          type: string
+          title: prefix
+          description: "Prefix to scope credentials to a subdirectory, relative to the storage\n connection's configured root. Matches the --prefix semantics of ListFiles:\n optional for an unrestricted key (omitted ⇒ connection root), but required\n and bounded to scope for a key scoped to a path prefix — omitting it or\n naming one outside the scope returns PermissionDenied with the allowed\n prefix(es) (`allowed_prefixes` metadata)."
+      - name: expirationSeconds
+        in: query
+        description: "Lifetime of the returned credentials, in seconds. Optional; defaults to\n 1 hour (when 0 or unset). Minimum 900s. Capped by AWS: up to 36h (129600s)\n for federation-token connections, or the role's MaxSessionDuration (12h\n typical) for role-backed connections. Values below the minimum or above the\n cap are rejected."
+        schema:
+          type: integer
+          title: expiration_seconds
+          format: int32
+          description: "Lifetime of the returned credentials, in seconds. Optional; defaults to\n 1 hour (when 0 or unset). Minimum 900s. Capped by AWS: up to 36h (129600s)\n for federation-token connections, or the role's MaxSessionDuration (12h\n typical) for role-backed connections. Values below the minimum or above the\n cap are rejected."
+      responses:
+        '200':
+          description: Success
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/elembio.cloud.v1.GetDownloadCredentialsResponse'
+        '400':
+          description: Bad request — the request was malformed or a parameter was invalid.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '401':
+          description: Unauthorized — the API key is missing or invalid.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '403':
+          description: Forbidden — the API key lacks the required scope.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '404':
+          description: Not found — the requested resource does not exist or is not accessible.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '500':
+          description: Internal server error.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+  /v1/storage-connections/{storage_connection_id}/files:
+    get:
+      tags:
+      - StorageConnectionService
+      summary: ListFiles
+      description: "List files in a storage connection. Supports prefix filtering and, when\n recursive is false, delimiter-based hierarchical listing."
+      operationId: StorageConnectionService_ListFiles
+      parameters:
+      - name: storage_connection_id
+        in: path
+        required: true
+        schema:
+          type: string
+          title: storage_connection_id
+          description: The storage connection ID to browse
+      - name: prefix
+        in: query
+        description: "Path prefix relative to the storage connection's configured root,\n directory-shape with implicit trailing \"/\". The connection's saved\n sub-prefix (if any) is not part of this value — it's an\n implementation detail of the connection.\n Example: \"A24-S2/run-001/\". Round-trips with File.path.\n For an unrestricted key, optional: omitting it lists from the connection\n root. For a key scoped to a path prefix, a prefix WITHIN the scope is\n required: omitting it, or supplying one outside the scope, returns\n PermissionDenied with the allowed prefix(es) in the error\n (`allowed_prefixes` metadata)."
+        schema:
+          type: string
+          title: prefix
+          description: "Path prefix relative to the storage connection's configured root,\n directory-shape with implicit trailing \"/\". The connection's saved\n sub-prefix (if any) is not part of this value — it's an\n implementation detail of the connection.\n Example: \"A24-S2/run-001/\". Round-trips with File.path.\n For an unrestricted key, optional: omitting it lists from the connection\n root. For a key scoped to a path prefix, a prefix WITHIN the scope is\n required: omitting it, or supplying one outside the scope, returns\n PermissionDenied with the allowed prefix(es) in the error\n (`allowed_prefixes` metadata)."
+      - name: recursive
+        in: query
+        description: "If true, list all files recursively under the prefix (default: true)\n If false, list only files and subdirectories at the current level"
+        schema:
+          type: boolean
+          title: recursive
+          description: "If true, list all files recursively under the prefix (default: true)\n If false, list only files and subdirectories at the current level"
+      - name: pageSize
+        in: query
+        description: "Maximum number of files to return per page (default: 1000, max: 1000)\n Note: This is passed through to the underlying storage system"
+        schema:
+          type: integer
+          title: page_size
+          format: int32
+          description: "Maximum number of files to return per page (default: 1000, max: 1000)\n Note: This is passed through to the underlying storage system"
+      - name: pageToken
+        in: query
+        description: "Continuation token from previous response\n This is an opaque token from the underlying storage system"
+        schema:
+          type: string
+          title: page_token
+          description: "Continuation token from previous response\n This is an opaque token from the underlying storage system"
+      - name: includeDownloadUrl
+        in: query
+        description: "If true, populate File.download_url (a presigned URL) on each returned\n file. Defaults to false. Set to true only when the caller intends to\n fetch file content from the response: generating presigned URLs has a\n per-object cost and the URLs themselves are credentials with a\n multi-hour lifetime. Use GetDownloadCredentials when long-lived bulk\n access is required."
+        schema:
+          type: boolean
+          title: include_download_url
+          description: "If true, populate File.download_url (a presigned URL) on each returned\n file. Defaults to false. Set to true only when the caller intends to\n fetch file content from the response: generating presigned URLs has a\n per-object cost and the URLs themselves are credentials with a\n multi-hour lifetime. Use GetDownloadCredentials when long-lived bulk\n access is required."
+      - name: downloadUrlExpirationSeconds
+        in: query
+        description: "Lifetime of the presigned download_url, in seconds. Optional; defaults to\n 1 hour. Only applies when include_download_url = true. Max 7 days."
+        schema:
+          type: integer
+          title: download_url_expiration_seconds
+          format: int32
+          description: "Lifetime of the presigned download_url, in seconds. Optional; defaults to\n 1 hour. Only applies when include_download_url = true. Max 7 days."
+      - name: includeDownloadChecksum
+        in: query
+        description: "If true, presign each download_url with S3 ChecksumMode=ENABLED so the\n object's stored checksum is returned on the GET (in the\n x-amz-checksum-<algo> response header) and a client can verify download\n integrity in a single streaming pass. Defaults false; has no effect unless\n include_download_url = true. When enabled the presigned URL signs the\n x-amz-checksum-mode request header, so the fetch MUST send\n x-amz-checksum-mode:ENABLED — a plain GET that omits it fails with HTTP\n 403. Best-effort: objects stored without a checksum return none.\n\n Applies only to AWS S3-backed storage connections; other storage backends\n do not presign S3 GETs and silently ignore this field."
+        schema:
+          type: boolean
+          title: include_download_checksum
+          description: "If true, presign each download_url with S3 ChecksumMode=ENABLED so the\n object's stored checksum is returned on the GET (in the\n x-amz-checksum-<algo> response header) and a client can verify download\n integrity in a single streaming pass. Defaults false; has no effect unless\n include_download_url = true. When enabled the presigned URL signs the\n x-amz-checksum-mode request header, so the fetch MUST send\n x-amz-checksum-mode:ENABLED — a plain GET that omits it fails with HTTP\n 403. Best-effort: objects stored without a checksum return none.\n\n Applies only to AWS S3-backed storage connections; other storage backends\n do not presign S3 GETs and silently ignore this field."
+      responses:
+        '200':
+          description: Success
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/elembio.cloud.v1.ListFilesResponse'
+        '400':
+          description: Bad request — the request was malformed or a parameter was invalid.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '401':
+          description: Unauthorized — the API key is missing or invalid.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '403':
+          description: Forbidden — the API key lacks the required scope.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '404':
+          description: Not found — the requested resource does not exist or is not accessible.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '500':
+          description: Internal server error.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+components:
+  schemas:
+    google.protobuf.Timestamp:
+      type: string
+      examples:
+      - '2023-01-15T01:30:15.01Z'
+      - '2024-12-25T12:00:00Z'
+      format: date-time
+      description: "A Timestamp represents a point in time independent of any time zone or local\n calendar, encoded as a count of seconds and fractions of seconds at\n nanosecond resolution. The count is relative to an epoch at UTC midnight on\n January 1, 1970, in the proleptic Gregorian calendar which extends the\n Gregorian calendar backwards to year one.\n\n All minutes are 60 seconds long. Leap seconds are \"smeared\" so that no leap\n second table is needed for interpretation, using a [24-hour linear\n smear](https://developers.google.com/time/smear).\n\n The range is from 0001-01-01T00:00:00Z to 9999-12-31T23:59:59.999999999Z. By\n restricting to that range, we ensure that we can convert to and from [RFC\n 3339](https://www.ietf.org/rfc/rfc3339.txt) date strings.\n\n # Examples\n\n Example 1: Compute Timestamp from POSIX `time()`.\n\n     Timestamp timestamp;\n     timestamp.set_seconds(time(NULL));\n     timestamp.set_nanos(0);\n\n Example 2: Compute Timestamp from POSIX `gettimeofday()`.\n\n     struct timeval tv;\n     gettimeofday(&tv, NULL);\n\n     Timestamp timestamp;\n     timestamp.set_seconds(tv.tv_sec);\n     timestamp.set_nanos(tv.tv_usec * 1000);\n\n Example 3: Compute Timestamp from Win32 `GetSystemTimeAsFileTime()`.\n\n     FILETIME ft;\n     GetSystemTimeAsFileTime(&ft);\n     UINT64 ticks = (((UINT64)ft.dwHighDateTime) << 32) | ft.dwLowDateTime;\n\n     // A Windows tick is 100 nanoseconds. Windows epoch 1601-01-01T00:00:00Z\n     // is 11644473600 seconds before Unix epoch 1970-01-01T00:00:00Z.\n     Timestamp timestamp;\n     timestamp.set_seconds((INT64) ((ticks / 10000000) - 11644473600LL));\n     timestamp.set_nanos((INT32) ((ticks % 10000000) * 100));\n\n Example 4: Compute Timestamp from Java `System.currentTimeMillis()`.\n\n     long millis = System.currentTimeMillis();\n\n     Timestamp timestamp = Timestamp.newBuilder().setSeconds(millis / 1000)\n         .setNanos((int) ((millis % 1000) * 1000000)).build();\n\n Example 5: Compute Timestamp from Java `Instant.now()`.\n\n     Instant now = Instant.now();\n\n     Timestamp timestamp =\n         Timestamp.newBuilder().setSeconds(now.getEpochSecond())\n             .setNanos(now.getNano()).build();\n\n Example 6: Compute Timestamp from current time in Python.\n\n     timestamp = Timestamp()\n     timestamp.GetCurrentTime()\n\n # JSON Mapping\n\n In JSON format, the Timestamp type is encoded as a string in the\n [RFC 3339](https://www.ietf.org/rfc/rfc3339.txt) format. That is, the\n format is \"{year}-{month}-{day}T{hour}:{min}:{sec}[.{frac_sec}]Z\"\n where {year} is always expressed using four digits while {month}, {day},\n {hour}, {min}, and {sec} are zero-padded to two digits each. The fractional\n seconds, which can go up to 9 digits (i.e. up to 1 nanosecond resolution),\n are optional. The \"Z\" suffix indicates the timezone (\"UTC\"); the timezone\n is required. A ProtoJSON serializer should always use UTC (as indicated by\n \"Z\") when printing the Timestamp type and a ProtoJSON parser should be\n able to accept both UTC and other timezones (as indicated by an offset).\n\n For example, \"2017-01-15T01:30:15.01Z\" encodes 15.01 seconds past\n 01:30 UTC on January 15, 2017.\n\n In JavaScript, one can convert a Date object to this format using the\n standard\n [toISOString()](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Date/toISOString)\n method. In Python, a standard `datetime.datetime` object can be converted\n to this format using\n [`strftime`](https://docs.python.org/2/library/time.html#time.strftime) with\n the time format spec '%Y-%m-%dT%H:%M:%S.%fZ'. Likewise, in Java, one can use\n the Joda Time's [`ISODateTimeFormat.dateTime()`](\n http://joda-time.sourceforge.net/apidocs/org/joda/time/format/ISODateTimeFormat.html#dateTime()\n ) to obtain a formatter capable of generating timestamps in this format."
+    elembio.cloud.v1.StorageConnectionStatus:
+      type: string
+      title: StorageConnectionStatus
+      enum:
+      - STORAGE_CONNECTION_STATUS_UNSPECIFIED
+      - STORAGE_CONNECTION_STATUS_CONNECTED
+      - STORAGE_CONNECTION_STATUS_WARNING
+      - STORAGE_CONNECTION_STATUS_FAILED
+      description: Health status of a storage connection.
+    elembio.cloud.v1.GetStorageConnectionResponse:
+      type: object
+      properties:
+        storageConnection:
+          title: storage_connection
+          $ref: '#/components/schemas/elembio.cloud.v1.StorageConnection'
+      title: GetStorageConnectionResponse
+      additionalProperties: false
+      description: Response containing a single storage connection
+    elembio.cloud.v1.ListFilesResponse:
+      type: object
+      properties:
+        files:
+          type: array
+          items:
+            $ref: '#/components/schemas/elembio.cloud.v1.File'
+          title: files
+          description: List of files matching the request
+        subdirectories:
+          type: array
+          items:
+            type: string
+          title: subdirectories
+          description: "Subdirectories at this level (only populated when recursive=false).\n Namespace-relative, matching the request prefix.\n Example: [\"A24-S2/\", \"A24-S2_other/\"]"
+        nextPageToken:
+          type: string
+          title: next_page_token
+          description: "Continuation token for the next page (empty if no more results)\n This is an opaque token from the underlying storage system"
+        isTruncated:
+          type: boolean
+          title: is_truncated
+          description: Indicates if the results were truncated (more results available)
+      title: ListFilesResponse
+      additionalProperties: false
+      description: Response containing files and pagination info
+    elembio.cloud.v1.ListStorageConnectionsResponse:
+      type: object
+      properties:
+        storageConnections:
+          type: array
+          items:
+            $ref: '#/components/schemas/elembio.cloud.v1.StorageConnection'
+          title: storage_connections
+          description: The storage connections on this page.
+        nextPageToken:
+          type: string
+          title: next_page_token
+          description: Token for the next page, or empty when there are no more results.
+      title: ListStorageConnectionsResponse
+      additionalProperties: false
+      description: Response containing a page of storage connections.
+    Error:
+      type: object
+      description: Error response returned by all endpoints when a request fails.
+      properties:
+        code:
+          type: integer
+          description: Numeric status code corresponding to the HTTP response status
+        message:
+          type: string
+          description: Human-readable error message
+        details:
+          type: array
+          description: Structured error details with machine-readable reason codes
+          items:
+            $ref: '#/components/schemas/ErrorDetail'
+      required:
+      - code
+      - message
+      examples:
+      - code: 404
+        message: Run not found.
+        details:
+        - reason: RUN_NOT_FOUND
+          domain: cloud-api.elembio.io
+          metadata:
+            request_id: 550e8400-e29b-41d4-a716-446655440000
+      - code: 401
+        message: Invalid API key.
+        details:
+        - reason: INVALID_API_KEY
+          domain: cloud-api.elembio.io
+          metadata:
+            request_id: 550e8400-e29b-41d4-a716-446655440001
+    ErrorDetail:
+      type: object
+      description: Structured error detail with a machine-readable reason code.
+      properties:
+        '@type':
+          type: string
+          description: Type identifier for this error detail
+        reason:
+          type: string
+          description: 'Machine-readable error code identifying the specific failure
+
+            (e.g. RUN_NOT_FOUND, INVALID_API_KEY, INSUFFICIENT_SCOPE).
+
+            '
+          examples:
+          - RUN_NOT_FOUND
+          - INVALID_API_KEY
+          - MISSING_API_KEY
+          - INSUFFICIENT_SCOPE
+          - INTERNAL_ERROR
+        domain:
+          type: string
+          description: Identifies the system that generated the error
+          const: cloud-api.elembio.io
+        metadata:
+          type: object
+          description: Additional context for the error
+          properties:
+            request_id:
+              type: string
+              description: Request ID matching the X-Request-ID response header
+      required:
+      - reason
+      - domain
+    elembio.cloud.v1.S3Credentials:
+      type: object
+      properties:
+        region:
+          type: string
+          title: region
+          description: 'AWS region. Example: "us-west-2".'
+        bucket:
+          type: string
+          title: bucket
+          description: S3 bucket name.
+        prefix:
+          type:
+          - string
+          - 'null'
+          title: prefix
+          description: "Key prefix the credentials are scoped to — bucket-absolute, since\n this value is consumed directly by the AWS CLI / SDK. Distinct from\n the request-side `prefix`, which is connection-relative."
+        accessKeyId:
+          type: string
+          title: access_key_id
+          description: Temporary AWS access key ID
+        secretAccessKey:
+          type: string
+          title: secret_access_key
+          description: Temporary AWS secret access key
+        sessionToken:
+          type: string
+          title: session_token
+          description: STS session token
+        expiration:
+          title: expiration
+          description: When the credentials expire
+          $ref: '#/components/schemas/google.protobuf.Timestamp'
+      title: S3Credentials
+      additionalProperties: false
+      description: "Temporary read-only AWS S3 credentials scoped to a bucket and prefix.\n Use with the AWS CLI, AWS SDK, or any S3-compatible tool. The credentials\n expire at the time given by expiration; request new credentials when they\n near expiry."
+    elembio.cloud.v1.StorageConnection:
+      type: object
+      properties:
+        id:
+          type: string
+          title: id
+          description: Unique identifier for the connection.
+        name:
+          type: string
+          title: name
+          description: Human-readable connection name.
+        type:
+          type: string
+          title: type
+          description: 'Storage backend type. Possible values: "s3", "gcs", "dnanexus".'
+        status:
+          title: status
+          description: Current health status of the connection.
+          $ref: '#/components/schemas/elembio.cloud.v1.StorageConnectionStatus'
+        uri:
+          type: string
+          title: uri
+          description: "Storage URI rooted at the connection. Examples: \"s3://bucket/prefix\",\n \"gcs://bucket/prefix\"."
+        timeCreated:
+          title: time_created
+          description: When the connection was created.
+          $ref: '#/components/schemas/google.protobuf.Timestamp'
+        timeUpdated:
+          title: time_updated
+          description: When the connection was last updated.
+          $ref: '#/components/schemas/google.protobuf.Timestamp'
+      title: StorageConnection
+      additionalProperties: false
+      description: A StorageConnection represents a configured cloud storage location.
+    elembio.cloud.v1.GetDownloadCredentialsResponse:
+      type: object
+      oneOf:
+      - type: object
+        properties:
+          s3:
+            title: s3
+            $ref: '#/components/schemas/elembio.cloud.v1.S3Credentials'
+        title: s3
+        required:
+        - s3
+      title: GetDownloadCredentialsResponse
+      description: Response containing temporary download credentials
+    elembio.cloud.v1.File:
+      type: object
+      properties:
+        path:
+          type: string
+          title: path
+          description: "Path within the namespace of the RPC that returned this file.\n Namespace is the run / execution / storage connection, depending on\n the RPC. Round-trips with the request prefix: paste any returned\n path back into a subsequent --prefix to drill in.\n Example: \"A24-S2/run-001/manifest.json\"."
+        name:
+          type: string
+          title: name
+          description: "Filename portion of the path (convenience field)\n Example: \"sample1.fastq.gz\""
+        size:
+          type:
+          - integer
+          - string
+          title: size
+          format: int64
+          description: Size in bytes
+        lastModified:
+          title: last_modified
+          description: Last modification timestamp
+          $ref: '#/components/schemas/google.protobuf.Timestamp'
+        uri:
+          type: string
+          title: uri
+          description: "Full URI for the object — always storage-absolute, regardless of the\n RPC. Use this for direct backend access (S3 SDK, etc.).\n Example: \"s3://bucket-name/runs/run-123/outputs/sample1.fastq.gz\""
+        downloadUrl:
+          type: string
+          title: download_url
+          description: "Pre-signed URL for downloading this object over HTTP GET.\n Populated only when the request set include_download_url = true; empty\n otherwise. The URL is a short-lived credential — fetch promptly and do\n not persist it. For bulk or repeated downloads, request download\n credentials instead."
+        storageClass:
+          type:
+          - string
+          - 'null'
+          title: storage_class
+          description: "Storage class of the object. Examples: \"STANDARD\", \"GLACIER\",\n \"DEEP_ARCHIVE\"."
+      title: File
+      additionalProperties: false
+      description: A File represents an object in cloud storage.
+  securitySchemes:
+    apiKey:
+      type: apiKey
+      in: header
+      name: x-api-key
+      description: API key obtained from the Element Biosciences Cloud console

@@ -1,0 +1,193 @@
+{
+  "opencollection": "1.0.0",
+  "info": {
+    "name": "Element Biosciences Cloud Execution Service API",
+    "version": "1.0.0"
+  },
+  "request": {
+    "auth": {
+      "type": "apikey",
+      "key": "x-api-key",
+      "value": "{{x-api-key}}",
+      "placement": "header"
+    }
+  },
+  "items": [
+    {
+      "info": {
+        "name": "ExecutionService",
+        "type": "folder"
+      },
+      "items": [
+        {
+          "info": {
+            "name": "ListExecutions",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://cloud-api.usw2.elembio.io/v1/executions",
+            "params": [
+              {
+                "name": "filter",
+                "value": "",
+                "type": "query",
+                "description": "Search and filter expression. Space-separated `keyword:value` terms are\n ANDed together; bare text with no keyword searches all string fields. For\n date fields, replace the colon with a comparison operator (`>=`, `<=`,\n `>`, `<`, `!=`). List alternatives for one keyword with commas, e.g.\n `status:running,pending`. Dates accept ISO-8601 or relative offsets such\n as `24h`, `7d`, or `1mo`.\n\n Filterable keywords:\n\n - **String:** `name`, `input.run.id`, `input.run.name`, `input.run.instrument_name`, `input.execution.id`, `input.execution.name`, `flow.name`, `workflow.name`, `started_by`\n - **Enum:** `status`, `platform` (`aws_omics`, `seqera`, `dnanexus`, `catalyst`), `output.kind` (`fastq`, `bam`, `vcf`, `cram`, `parquet`)\n - **Date:** `time_created`, `time_started`, `time_completed`, `time_updated`\n\n Examples:\n\n - `workflow.name:bases2fastq status:running`\n - `platform:seqera output.kind:fastq time_completed>=24h`"
+              },
+              {
+                "name": "pageSize",
+                "value": "",
+                "type": "query",
+                "description": "Maximum number of executions to return (default: 100, max: 1000)"
+              },
+              {
+                "name": "pageToken",
+                "value": "",
+                "type": "query",
+                "description": "Token for pagination"
+              },
+              {
+                "name": "includeTotalCount",
+                "value": "",
+                "type": "query",
+                "description": "If true, include total_count in the response (adds a count query)"
+              }
+            ]
+          },
+          "docs": "List executions accessible to the authenticated tenant, optionally\n filtered."
+        },
+        {
+          "info": {
+            "name": "GetExecutionDownloadCredentials",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://cloud-api.usw2.elembio.io/v1/executions/:execution_id/credentials",
+            "params": [
+              {
+                "name": "execution_id",
+                "value": "",
+                "type": "path",
+                "description": "The execution ID"
+              },
+              {
+                "name": "prefix",
+                "value": "",
+                "type": "query",
+                "description": "Optional path prefix within the execution to scope credentials to.\n Execution-relative, identical semantics to\n ListExecutionFilesRequest.prefix. \"..\" segments are rejected.\n When omitted, credentials are scoped to the whole execution (the\n execution root)."
+              },
+              {
+                "name": "expirationSeconds",
+                "value": "",
+                "type": "query",
+                "description": "Lifetime of the returned credentials, in seconds. Optional; defaults to\n 1 hour (when 0 or unset). Minimum 900s. Capped by AWS: up to 36h (129600s)\n for federation-token connections, or the role's MaxSessionDuration (12h\n typical) for role-backed connections. Values below the minimum or above the\n cap are rejected."
+              }
+            ]
+          },
+          "docs": "Get temporary, read-only S3 credentials scoped to an execution's storage\n location. Use these for bulk or repeated downloads via the AWS CLI or SDK\n instead of per-object presigned URLs."
+        },
+        {
+          "info": {
+            "name": "ListExecutionFiles",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://cloud-api.usw2.elembio.io/v1/executions/:execution_id/files",
+            "params": [
+              {
+                "name": "execution_id",
+                "value": "",
+                "type": "path",
+                "description": "The execution ID"
+              },
+              {
+                "name": "prefix",
+                "value": "",
+                "type": "query",
+                "description": "Path prefix within the execution, e.g. \"visualization/\" or \"Stats/foo\".\n The execution is a self-contained namespace: paths do not include any\n bucket-level or workflow-level layout. Round-trips with File.path\n returned by this RPC. \"..\" segments are rejected.\n Optional: when omitted, lists the whole execution (the execution root)."
+              },
+              {
+                "name": "recursive",
+                "value": "",
+                "type": "query",
+                "description": "If true, list all files recursively under the prefix (default: true)\n If false, list only files and subdirectories at the current level"
+              },
+              {
+                "name": "pageSize",
+                "value": "",
+                "type": "query",
+                "description": "Maximum number of files to return per page (default: 1000, max: 1000)"
+              },
+              {
+                "name": "pageToken",
+                "value": "",
+                "type": "query",
+                "description": "Continuation token from previous response (passthrough from storage)"
+              },
+              {
+                "name": "includeDownloadUrl",
+                "value": "",
+                "type": "query",
+                "description": "If true, populate File.download_url (a presigned URL) on each returned\n file. Defaults to false. Set to true only when the caller intends to\n fetch file content from the response: generating presigned URLs has a\n per-object cost and the URLs themselves are credentials with a\n multi-hour lifetime. Use GetExecutionDownloadCredentials when\n long-lived bulk access is required."
+              },
+              {
+                "name": "downloadUrlExpirationSeconds",
+                "value": "",
+                "type": "query",
+                "description": "Lifetime of the presigned download_url, in seconds. Optional; defaults to\n 1 hour. Only applies when include_download_url = true. Max 7 days."
+              },
+              {
+                "name": "includeDownloadChecksum",
+                "value": "",
+                "type": "query",
+                "description": "If true, presign each download_url with S3 ChecksumMode=ENABLED so the\n object's stored checksum is returned on the GET (in the\n x-amz-checksum-<algo> response header) and a client can verify download\n integrity in a single streaming pass. Defaults false; has no effect unless\n include_download_url = true. When enabled the presigned URL signs the\n x-amz-checksum-mode request header, so the fetch MUST send\n x-amz-checksum-mode:ENABLED — a plain GET that omits it fails with HTTP\n 403. Best-effort: objects stored without a checksum return none.\n\n Applies only to AWS S3-backed storage connections; other storage backends\n do not presign S3 GETs and silently ignore this field."
+              }
+            ]
+          },
+          "docs": "List the files produced by an execution, drawn from the execution's\n storage location."
+        },
+        {
+          "info": {
+            "name": "GetExecutionLogs",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://cloud-api.usw2.elembio.io/v1/executions/:execution_id/logs",
+            "params": [
+              {
+                "name": "execution_id",
+                "value": "",
+                "type": "path",
+                "description": "The execution ID"
+              }
+            ]
+          },
+          "docs": "Get the log and error output from the compute platform for an execution.\n Requires the \"executions:logs\" scope."
+        },
+        {
+          "info": {
+            "name": "GetExecution",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://cloud-api.usw2.elembio.io/v1/executions/:id",
+            "params": [
+              {
+                "name": "id",
+                "value": "",
+                "type": "path",
+                "description": "The unique identifier of the execution"
+              }
+            ]
+          },
+          "docs": "Get a single execution by its ID."
+        }
+      ]
+    }
+  ],
+  "bundled": true
+}

@@ -1,0 +1,29 @@
+{
+  "provider": "element-biosciences",
+  "sources": [
+    "element-biosciences-authservice-api-openapi.yml",
+    "element-biosciences-executionservice-api-openapi.yml",
+    "element-biosciences-instrumentservice-api-openapi.yml",
+    "element-biosciences-runservice-api-openapi.yml",
+    "element-biosciences-storageconnectionservice-api-openapi.yml"
+  ],
+  "outputs": [
+    "element-biosciences-authservice-api-openapi.yml",
+    "element-biosciences-executionservice-api-openapi.yml",
+    "element-biosciences-instrumentservice-api-openapi.yml",
+    "element-biosciences-runservice-api-openapi.yml",
+    "element-biosciences-storageconnectionservice-api-openapi.yml"
+  ],
+  "archived": [],
+  "errors": [],
+  "warnings": [],
+  "notes": [
+    "element-biosciences-authservice-api-openapi.yml: upgraded openapi 3.1.0 -> OpenAPI 3.2.0",
+    "element-biosciences-executionservice-api-openapi.yml: upgraded openapi 3.1.0 -> OpenAPI 3.2.0",
+    "element-biosciences-instrumentservice-api-openapi.yml: upgraded openapi 3.1.0 -> OpenAPI 3.2.0",
+    "element-biosciences-runservice-api-openapi.yml: upgraded openapi 3.1.0 -> OpenAPI 3.2.0",
+    "element-biosciences-storageconnectionservice-api-openapi.yml: upgraded openapi 3.1.0 -> OpenAPI 3.2.0",
+    "apis.yml register: already-registered"
+  ],
+  "skipped": []
+}

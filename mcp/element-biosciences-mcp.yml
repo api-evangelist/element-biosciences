@@ -3,19 +3,37 @@ method: derived
 status: candidate
 source: openapi/element-biosciences-cloud-api-openapi-original.yml
 published: false
-search_notes: |
-  NO official Element Biosciences MCP server exists as of this pass. Searched the
+search_notes: 'NO official Element Biosciences MCP server exists as of this pass. Searched the
+
   developer docs, the Elembio GitHub organization (16 repos), npm, and MCP registries.
+
   mcp.elembio.io answers HTTP 200 to a tools/list POST, but the body is the ElemBio
+
   Cloud Next.js single-page app served by a *.elembio.io wildcard DNS record — an
+
   arbitrary subdomain returns the byte-identical page with the same deployment id.
+
   It is a catch-all false positive, NOT an MCP server. Recorded here so a later pass
+
   does not re-chase it.
+
+  '
 probes:
-- {url: 'https://mcp.elembio.io', method: 'POST tools/list', status: 200, verdict: false-positive, reason: wildcard SPA HTML body, not JSON-RPC}
-- {url: 'https://cloud-api.usw2.elembio.io/mcp', method: 'POST tools/list', status: 404}
-- {url: 'https://cloud.elembio.io/mcp', method: 'POST tools/list', status: 404}
-- {url: 'https://docs.elembio.io/mcp', method: 'POST tools/list', status: 403}
+- url: https://mcp.elembio.io
+  method: POST tools/list
+  status: 200
+  verdict: false-positive
+  reason: wildcard SPA HTML body
+  not JSON-RPC: null
+- url: https://cloud-api.usw2.elembio.io/mcp
+  method: POST tools/list
+  status: 404
+- url: https://cloud.elembio.io/mcp
+  method: POST tools/list
+  status: 404
+- url: https://docs.elembio.io/mcp
+  method: POST tools/list
+  status: 403
 server:
   name: element-biosciences
   transport: http
@@ -23,32 +41,94 @@ server:
   auth:
     type: api-key
     header: x-api-key
-    note: A future server would pass the caller's ElemBio Cloud API key through; scopes are enforced server-side by the Cloud API.
-candidate_note: |
-  The tools below are a DERIVED candidate design, one tool per real OpenAPI operation.
-  Each tool inherits its input contract verbatim from the backing operation's
+    note: A future server would pass the caller's ElemBio Cloud API key through; scopes are enforced server-side
+      by the Cloud API.
+candidate_note: 'The tools below are a DERIVED candidate design, one tool per real OpenAPI operation.
+
+  Each tool inherits its input contract verbatim from the backing operation''s
+
   parameters in openapi/element-biosciences-cloud-api-openapi-original.yml. Nothing
+
   here is served by Element Biosciences today. Because every operation is a GET, a
+
   server built to this shape would be entirely read-only and safe to expose to an
+
   agent without write-side human-in-the-loop controls.
+
+  '
 tools:
-- {name: get_auth, description: Verify the API key and report its tenant and scopes, source_operation: 'openapi/element-biosciences-cloud-api-openapi-original.yml#AuthService_GetAuth', scope: none}
-- {name: list_runs, description: List and filter sequencing and multiomics runs, source_operation: 'openapi/element-biosciences-cloud-api-openapi-original.yml#RunService_ListRuns', scope: 'runs:read'}
-- {name: get_run, description: Get one run by id, source_operation: 'openapi/element-biosciences-cloud-api-openapi-original.yml#RunService_GetRun', scope: 'runs:read'}
-- {name: list_run_files, description: List the files produced by a run, source_operation: 'openapi/element-biosciences-cloud-api-openapi-original.yml#RunService_ListRunFiles', scope: 'runs:download'}
-- {name: get_run_download_credentials, description: Vend short-lived scoped S3 credentials for a run's files, source_operation: 'openapi/element-biosciences-cloud-api-openapi-original.yml#RunService_GetRunDownloadCredentials', scope: 'runs:download'}
-- {name: list_executions, description: List and filter workflow executions, source_operation: 'openapi/element-biosciences-cloud-api-openapi-original.yml#ExecutionService_ListExecutions', scope: 'executions:read'}
-- {name: get_execution, description: Get one workflow execution by id, source_operation: 'openapi/element-biosciences-cloud-api-openapi-original.yml#ExecutionService_GetExecution', scope: 'executions:read'}
-- {name: list_execution_files, description: List the output files of a workflow execution, source_operation: 'openapi/element-biosciences-cloud-api-openapi-original.yml#ExecutionService_ListExecutionFiles', scope: 'executions:download'}
-- {name: get_execution_download_credentials, description: Vend short-lived scoped S3 credentials for an execution's outputs, source_operation: 'openapi/element-biosciences-cloud-api-openapi-original.yml#ExecutionService_GetExecutionDownloadCredentials', scope: 'executions:download'}
-- {name: get_execution_logs, description: Retrieve the logs of a workflow execution, source_operation: 'openapi/element-biosciences-cloud-api-openapi-original.yml#ExecutionService_GetExecutionLogs', scope: 'executions:logs'}
-- {name: list_instruments, description: List the instruments registered to the tenant, source_operation: 'openapi/element-biosciences-cloud-api-openapi-original.yml#InstrumentService_ListInstruments', scope: 'instruments:read'}
-- {name: get_instrument, description: Get one instrument by serial number, source_operation: 'openapi/element-biosciences-cloud-api-openapi-original.yml#InstrumentService_GetInstrument', scope: 'instruments:read'}
-- {name: list_storage_connections, description: List the tenant's cloud storage connections, source_operation: 'openapi/element-biosciences-cloud-api-openapi-original.yml#StorageConnectionService_ListStorageConnections', scope: 'storage:read'}
-- {name: get_storage_connection, description: Get one storage connection by id, source_operation: 'openapi/element-biosciences-cloud-api-openapi-original.yml#StorageConnectionService_GetStorageConnection', scope: 'storage:read'}
-- {name: list_storage_files, description: List files within a storage connection, with prefix filtering, source_operation: 'openapi/element-biosciences-cloud-api-openapi-original.yml#StorageConnectionService_ListFiles', scope: 'storage:download'}
-- {name: get_storage_download_credentials, description: Vend short-lived scoped S3 credentials for a storage connection, source_operation: 'openapi/element-biosciences-cloud-api-openapi-original.yml#StorageConnectionService_GetDownloadCredentials', scope: 'storage:download'}
+- name: get_auth
+  description: Verify the API key and report its tenant and scopes
+  source_operation: openapi/element-biosciences-cloud-api-openapi-original.yml#AuthService_GetAuth
+  scope: none
+- name: list_runs
+  description: List and filter sequencing and multiomics runs
+  source_operation: openapi/element-biosciences-cloud-api-openapi-original.yml#RunService_ListRuns
+  scope: runs:read
+- name: get_run
+  description: Get one run by id
+  source_operation: openapi/element-biosciences-cloud-api-openapi-original.yml#RunService_GetRun
+  scope: runs:read
+- name: list_run_files
+  description: List the files produced by a run
+  source_operation: openapi/element-biosciences-cloud-api-openapi-original.yml#RunService_ListRunFiles
+  scope: runs:download
+- name: get_run_download_credentials
+  description: Vend short-lived scoped S3 credentials for a run's files
+  source_operation: openapi/element-biosciences-cloud-api-openapi-original.yml#RunService_GetRunDownloadCredentials
+  scope: runs:download
+- name: list_executions
+  description: List and filter workflow executions
+  source_operation: openapi/element-biosciences-cloud-api-openapi-original.yml#ExecutionService_ListExecutions
+  scope: executions:read
+- name: get_execution
+  description: Get one workflow execution by id
+  source_operation: openapi/element-biosciences-cloud-api-openapi-original.yml#ExecutionService_GetExecution
+  scope: executions:read
+- name: list_execution_files
+  description: List the output files of a workflow execution
+  source_operation: openapi/element-biosciences-cloud-api-openapi-original.yml#ExecutionService_ListExecutionFiles
+  scope: executions:download
+- name: get_execution_download_credentials
+  description: Vend short-lived scoped S3 credentials for an execution's outputs
+  source_operation: openapi/element-biosciences-cloud-api-openapi-original.yml#ExecutionService_GetExecutionDownloadCredentials
+  scope: executions:download
+- name: get_execution_logs
+  description: Retrieve the logs of a workflow execution
+  source_operation: openapi/element-biosciences-cloud-api-openapi-original.yml#ExecutionService_GetExecutionLogs
+  scope: executions:logs
+- name: list_instruments
+  description: List the instruments registered to the tenant
+  source_operation: openapi/element-biosciences-cloud-api-openapi-original.yml#InstrumentService_ListInstruments
+  scope: instruments:read
+- name: get_instrument
+  description: Get one instrument by serial number
+  source_operation: openapi/element-biosciences-cloud-api-openapi-original.yml#InstrumentService_GetInstrument
+  scope: instruments:read
+- name: list_storage_connections
+  description: List the tenant's cloud storage connections
+  source_operation: openapi/element-biosciences-cloud-api-openapi-original.yml#StorageConnectionService_ListStorageConnections
+  scope: storage:read
+- name: get_storage_connection
+  description: Get one storage connection by id
+  source_operation: openapi/element-biosciences-cloud-api-openapi-original.yml#StorageConnectionService_GetStorageConnection
+  scope: storage:read
+- name: list_storage_files
+  description: List files within a storage connection
+  with prefix filtering: null
+  source_operation: openapi/element-biosciences-cloud-api-openapi-original.yml#StorageConnectionService_ListFiles
+  scope: storage:download
+- name: get_storage_download_credentials
+  description: Vend short-lived scoped S3 credentials for a storage connection
+  source_operation: openapi/element-biosciences-cloud-api-openapi-original.yml#StorageConnectionService_GetDownloadCredentials
+  scope: storage:download
 coverage:
   rest_operations: 16
   tools_proposed: 16
   unmapped_operations: 0
+deployment:
+  mode: none
+  verified: derived
+  tools: 16
+  checked: '2026-08-12'
+  source: catalog MCP census

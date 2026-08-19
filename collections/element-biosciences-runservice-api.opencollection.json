@@ -1,0 +1,174 @@
+{
+  "opencollection": "1.0.0",
+  "info": {
+    "name": "Element Biosciences Cloud Run Service API",
+    "version": "1.0.0"
+  },
+  "request": {
+    "auth": {
+      "type": "apikey",
+      "key": "x-api-key",
+      "value": "{{x-api-key}}",
+      "placement": "header"
+    }
+  },
+  "items": [
+    {
+      "info": {
+        "name": "RunService",
+        "type": "folder"
+      },
+      "items": [
+        {
+          "info": {
+            "name": "ListRuns",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://cloud-api.usw2.elembio.io/v1/runs",
+            "params": [
+              {
+                "name": "filter",
+                "value": "",
+                "type": "query",
+                "description": "Search and filter expression. Space-separated `keyword:value` terms are\n ANDed together; bare text with no keyword searches all string fields. For\n numeric and date fields, replace the colon with a comparison operator\n (`>=`, `<=`, `>`, `<`, `!=`). List alternatives for one keyword with\n commas, e.g. `status:completed,failed`. Dates accept ISO-8601 or relative\n offsets such as `7d` or `1mo`.\n\n Filterable keywords:\n\n - **String:** `name`, `id`, `description`, `tags`, `instrument.name`, `instrument.serial_number`, `instrument.model`, `storage.connection_id`, `setup.sequencing.kit_name`, `setup.sequencing.library_structure`, `setup.sequencing.prep_type`, `setup.sequencing.polony_density`, `setup.sequencing.filter_mask`, `setup.sequencing.panel.name`, `setup.multiomics.panel.name`, `setup.multiomics.cartridge.name`\n - **Enum:** `type` (`sequencing`, `multiomics`), `status`, `output.kind` (`sequencing_run`, `multiomics_run`; an alias for `type`), `setup.multiomics.kit_type` (`cytoprofiling`, `direct_in_sample_sequencing`, `antibody_screening`, `tissue`, `protein_screening`), `setup.multiomics.well_layout` (`twelve_well_circle`, `twelve_well_square`, `two_well`, `one_well`, `twelve_well_standard`, `forty_eight_well`)\n - **Date:** `time_created`, `time_started`, `time_completed`, `time_updated`\n - **Numeric:** `metrics.sequencing.total_reads`, `metrics.sequencing.total_yield`, `metrics.sequencing.estimated_reads`, `metrics.sequencing.q30`, `metrics.sequencing.q40`, `metrics.sequencing.q50`, `metrics.sequencing.avg_q`, `metrics.sequencing.error_rate`, `metrics.sequencing.phix_alignment_rate`, `metrics.multiomics.total_cell_count`, `metrics.multiomics.total_cell_confluency`, `metrics.multiomics.total_percent_assigned`, `setup.sequencing.pmg_shift`\n - **Boolean:** `setup.sequencing.low_diversity`\n\n Examples:\n\n - `type:sequencing status:completed time_completed>=7d`\n - `instrument.serial_number:AV223501 metrics.sequencing.q30>=90`"
+              },
+              {
+                "name": "pageSize",
+                "value": "",
+                "type": "query",
+                "description": "Maximum number of runs to return (default: 100, max: 1000)"
+              },
+              {
+                "name": "pageToken",
+                "value": "",
+                "type": "query",
+                "description": "Token for pagination"
+              },
+              {
+                "name": "includeTotalCount",
+                "value": "",
+                "type": "query",
+                "description": "If true, include total_count in the response (adds a count query)"
+              }
+            ]
+          },
+          "docs": "List runs accessible to the authenticated tenant, optionally filtered."
+        },
+        {
+          "info": {
+            "name": "GetRun",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://cloud-api.usw2.elembio.io/v1/runs/:id",
+            "params": [
+              {
+                "name": "id",
+                "value": "",
+                "type": "path",
+                "description": "The unique identifier of the run"
+              }
+            ]
+          },
+          "docs": "Get a single run by its ID."
+        },
+        {
+          "info": {
+            "name": "GetRunDownloadCredentials",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://cloud-api.usw2.elembio.io/v1/runs/:run_id/credentials",
+            "params": [
+              {
+                "name": "run_id",
+                "value": "",
+                "type": "path",
+                "description": "The run ID"
+              },
+              {
+                "name": "prefix",
+                "value": "",
+                "type": "query",
+                "description": "Optional path prefix within the run to scope credentials to.\n Run-relative, identical semantics to ListRunFilesRequest.prefix.\n \"..\" segments are rejected. When omitted, credentials are scoped to\n the whole run (the run root)."
+              },
+              {
+                "name": "expirationSeconds",
+                "value": "",
+                "type": "query",
+                "description": "Lifetime of the returned credentials, in seconds. Optional; defaults to\n 1 hour (when 0 or unset). Minimum 900s. Capped by AWS: up to 36h (129600s)\n for federation-token connections, or the role's MaxSessionDuration (12h\n typical) for role-backed connections. Values below the minimum or above the\n cap are rejected."
+              }
+            ]
+          },
+          "docs": "Get temporary, read-only S3 credentials scoped to a run's storage\n location. Use these for bulk or repeated downloads via the AWS CLI or\n SDK instead of per-object presigned URLs."
+        },
+        {
+          "info": {
+            "name": "ListRunFiles",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://cloud-api.usw2.elembio.io/v1/runs/:run_id/files",
+            "params": [
+              {
+                "name": "run_id",
+                "value": "",
+                "type": "path",
+                "description": "The run ID"
+              },
+              {
+                "name": "prefix",
+                "value": "",
+                "type": "query",
+                "description": "Path prefix within the run, e.g. \"visualization/\" or \"Stats/foo\".\n The run is a self-contained namespace: paths do not include any\n bucket-level or workflow-level layout. Round-trips with File.path\n returned by this RPC. \"..\" segments are rejected.\n Optional: when omitted, lists the whole run (the run root)."
+              },
+              {
+                "name": "recursive",
+                "value": "",
+                "type": "query",
+                "description": "If true, list all files recursively under the prefix (default: true)\n If false, list only files and subdirectories at the current level"
+              },
+              {
+                "name": "pageSize",
+                "value": "",
+                "type": "query",
+                "description": "Maximum number of files to return per page (default: 1000, max: 1000)"
+              },
+              {
+                "name": "pageToken",
+                "value": "",
+                "type": "query",
+                "description": "Continuation token from previous response (passthrough from storage)"
+              },
+              {
+                "name": "includeDownloadUrl",
+                "value": "",
+                "type": "query",
+                "description": "If true, populate File.download_url (a presigned URL) on each returned\n file. Defaults to false. Set to true only when the caller intends to\n fetch file content from the response: generating presigned URLs has a\n per-object cost and the URLs themselves are credentials with a\n multi-hour lifetime. Use GetRunDownloadCredentials when long-lived\n bulk access is required."
+              },
+              {
+                "name": "downloadUrlExpirationSeconds",
+                "value": "",
+                "type": "query",
+                "description": "Lifetime of the presigned download_url, in seconds. Optional; defaults to\n 1 hour. Only applies when include_download_url = true. Max 7 days."
+              },
+              {
+                "name": "includeDownloadChecksum",
+                "value": "",
+                "type": "query",
+                "description": "If true, presign each download_url with S3 ChecksumMode=ENABLED so the\n object's stored checksum is returned on the GET (in the\n x-amz-checksum-<algo> response header) and a client can verify download\n integrity in a single streaming pass. Defaults false; has no effect unless\n include_download_url = true. When enabled the presigned URL signs the\n x-amz-checksum-mode request header, so the fetch MUST send\n x-amz-checksum-mode:ENABLED — a plain GET that omits it fails with HTTP\n 403. Best-effort: objects stored without a checksum return none.\n\n Applies only to AWS S3-backed storage connections; other storage backends\n do not presign S3 GETs and silently ignore this field."
+              }
+            ]
+          },
+          "docs": "List the files produced by a run, drawn from the run's storage location."
+        }
+      ]
+    }
+  ],
+  "bundled": true
+}
