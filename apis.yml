@@ -14,7 +14,7 @@ image: https://www.elementbiosciences.com/hubfs/Element%20Biosciences%202025/Ima
 url: https://raw.githubusercontent.com/api-evangelist/element-biosciences/refs/heads/main/apis.yml
 x-type: company
 x-source: harvest:secondary-market
-specificationVersion: '0.20'
+specificationVersion: '0.23'
 created: '2026-08-04'
 modified: '2026-08-04'
 x-enrichment:
