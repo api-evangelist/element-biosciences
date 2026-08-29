@@ -10,6 +10,18 @@ description: 'Element Biosciences is a San Diego based life-sciences instrumenta
   Element Biosciences Cloud API — plus a first-party cross-platform CLI, giving labs programmatic access
   to sequencing and multiomics runs, workflow executions, registered instruments, storage connections and
   the files those resources produce, for dashboards, fleet monitoring, LIMS read-back and custom automation.'
+deliveryModel:
+  model: saas
+  open_source: false
+  commercial: true
+  callable_host: true
+  label: Hosted service · you call their endpoint
+  confidence: high
+  source:
+  - openapi
+  - pricing
+  generated: '2026-08-28'
+  method: derived
 image: https://www.elementbiosciences.com/hubfs/Element%20Biosciences%202025/Image/Hero_Home_Logo.svg
 url: https://raw.githubusercontent.com/api-evangelist/element-biosciences/refs/heads/main/apis.yml
 x-type: company
