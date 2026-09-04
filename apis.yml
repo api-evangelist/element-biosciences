@@ -22,6 +22,20 @@ deliveryModel:
   - pricing
   generated: '2026-08-28'
   method: derived
+accessModel:
+  pricing: unknown
+  onboarding: unknown
+  trial: false
+  try_now: false
+  public: false
+  label: Unknown
+  confidence: low
+  source:
+  - authentication
+  - scopes
+  - security
+  generated: '2026-09-03'
+  method: derived
 image: https://www.elementbiosciences.com/hubfs/Element%20Biosciences%202025/Image/Hero_Home_Logo.svg
 url: https://raw.githubusercontent.com/api-evangelist/element-biosciences/refs/heads/main/apis.yml
 x-type: company
@@ -194,8 +208,9 @@ common:
   url: well-known/element-biosciences-well-known.yml
 - type: LLMsTxt
   url: llms/element-biosciences-llms.txt
-- type: MCPServer
+- type: X-MCPServerCandidate
   url: mcp/element-biosciences-mcp.yml
+  note: 'Renamed from MCPServer 2026-09-03 (roadmap#247): the manifest self-describes as status: candidate — a tool list derived from the published API contracts, not an existing server. The scorer already read the manifest and reported mcp_server correctly; the MCPServer type was crediting the artifact-type surfaces with a server that does not exist.'
 - type: ToolCrosswalk
   url: mcp/element-biosciences-tool-crosswalk.yml
 - type: AgentSkill
