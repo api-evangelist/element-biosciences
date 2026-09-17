@@ -60,20 +60,6 @@ tags:
 - Cloud Storage
 - Biotechnology
 apis:
-- aid: element-biosciences:element-biosciences-authservice-api
-  name: Element Biosciences Auth Service API
-  description: AuthService reports information about the API key making the request.
-  humanURL: https://docs.elembio.io/developers/api/
-  baseURL: https://cloud-api.usw2.elembio.io
-  tags:
-  - AuthService
-  properties:
-  - type: OpenAPI
-    url: openapi/element-biosciences-authservice-api-openapi.yml
-  - type: Documentation
-    url: https://docs.elembio.io/developers/api/getting-started/
-  - type: APIReference
-    url: https://docs.elembio.io/developers/api/
 - aid: element-biosciences:element-biosciences-executionservice-api
   name: Element Biosciences Execution Service API
   description: >-
@@ -142,6 +128,20 @@ apis:
   properties:
   - type: OpenAPI
     url: openapi/element-biosciences-storageconnectionservice-api-openapi.yml
+  - type: Documentation
+    url: https://docs.elembio.io/developers/api/getting-started/
+  - type: APIReference
+    url: https://docs.elembio.io/developers/api/
+- aid: element-biosciences:element-biosciences-auth-service-api
+  name: Element Biosciences Auth Service API
+  description: AuthService reports information about the API key making the request.
+  humanURL: https://docs.elembio.io/developers/api/
+  baseURL: https://cloud-api.usw2.elembio.io
+  tags:
+  - Auth Service
+  properties:
+  - type: OpenAPI
+    url: openapi/element-biosciences-auth-service-api-openapi.yml
   - type: Documentation
     url: https://docs.elembio.io/developers/api/getting-started/
   - type: APIReference
