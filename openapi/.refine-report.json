@@ -1,11 +1,7 @@
 {
   "provider": "element-biosciences",
   "sources": [
-    "element-biosciences-authservice-api-openapi.yml",
-    "element-biosciences-executionservice-api-openapi.yml",
-    "element-biosciences-instrumentservice-api-openapi.yml",
-    "element-biosciences-runservice-api-openapi.yml",
-    "element-biosciences-storageconnectionservice-api-openapi.yml"
+    "_original/element-biosciences-cloud-api-openapi-original.yml"
   ],
   "outputs": [
     "element-biosciences-authservice-api-openapi.yml",
@@ -14,16 +10,22 @@
     "element-biosciences-runservice-api-openapi.yml",
     "element-biosciences-storageconnectionservice-api-openapi.yml"
   ],
-  "archived": [],
+  "archived": [
+    "deleted 1 superseded output(s) from the previous generation"
+  ],
   "errors": [],
   "warnings": [],
   "notes": [
-    "element-biosciences-authservice-api-openapi.yml: upgraded openapi 3.1.0 -> OpenAPI 3.2.0",
-    "element-biosciences-executionservice-api-openapi.yml: upgraded openapi 3.1.0 -> OpenAPI 3.2.0",
-    "element-biosciences-instrumentservice-api-openapi.yml: upgraded openapi 3.1.0 -> OpenAPI 3.2.0",
-    "element-biosciences-runservice-api-openapi.yml: upgraded openapi 3.1.0 -> OpenAPI 3.2.0",
-    "element-biosciences-storageconnectionservice-api-openapi.yml: upgraded openapi 3.1.0 -> OpenAPI 3.2.0",
-    "apis.yml register: already-registered"
+    "sourced from openapi/_original/ (1 archived document(s)); previously refined output at the top level was skipped rather than re-split",
+    "element-biosciences-cloud-api-openapi-original.yml: upgraded openapi 3.1.0 -> OpenAPI 3.2.0",
+    "superseded outputs removed: element-biosciences-auth-service-api-openapi.yml",
+    "apis.yml register: written (+1 apis, 5 total)"
   ],
-  "skipped": []
+  "skipped": [
+    "element-biosciences-auth-service-api-openapi.yml: previously refined output, superseded by openapi/_original/",
+    "element-biosciences-executionservice-api-openapi.yml: previously refined output, superseded by openapi/_original/",
+    "element-biosciences-instrumentservice-api-openapi.yml: previously refined output, superseded by openapi/_original/",
+    "element-biosciences-runservice-api-openapi.yml: previously refined output, superseded by openapi/_original/",
+    "element-biosciences-storageconnectionservice-api-openapi.yml: previously refined output, superseded by openapi/_original/"
+  ]
 }

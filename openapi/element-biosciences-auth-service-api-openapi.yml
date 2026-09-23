@@ -7,60 +7,7 @@ info:
 
     multiomics), workflow executions, registered instruments, storage
 
-    connections, and the files those resources produce.
-
-
-    All paths are versioned under `/v1`.
-
-
-    ## Authentication
-
-    Every request must include an API key in the `x-api-key` header. Create and
-
-    manage keys in the Element Biosciences Cloud console. Call `GET /v1/auth` to
-
-    confirm which tenant a key belongs to.
-
-
-    ## Scopes
-
-    Each API key carries one or more scopes of the form
-
-    `resource:action[:resource_id]`, for example `runs:read`,
-
-    `executions:download`, or `storage:download:{connection_id}`. A request that
-
-    is authenticated but lacks the required scope fails with HTTP 403 and the
-
-    `INSUFFICIENT_SCOPE` reason. List endpoints transparently restrict results
-
-    to the resources a key is scoped to.
-
-
-    ## Pagination
-
-    List endpoints are cursor-paginated. Set `page_size` to control the page
-
-    length and pass the `next_page_token` from one response as the `page_token`
-
-    of the next; an empty `next_page_token` indicates the last page.
-
-
-    ## Errors
-
-    Errors return a JSON body with an integer `code`, a human-readable
-
-    `message`, and a `details` array. Each detail carries a machine-readable
-
-    `reason` (for example `RUN_NOT_FOUND` or `INVALID_API_KEY`) and the
-
-    `domain` `cloud-api.elembio.io`. The `request_id` in the detail metadata
-
-    matches the `X-Request-ID` response header; include it when reporting
-
-    problems.
-
-    '
+    connections, and the files those resources produce.'
   version: 1.0.0
   contact:
     name: Element Biosciences
@@ -70,15 +17,19 @@ servers:
 security:
 - apiKey: []
 tags:
-- name: AuthService
+- name: Auth Service
   description: AuthService reports information about the API key making the request.
 paths:
   /v1/auth:
     get:
       tags:
-      - AuthService
+      - Auth Service
       summary: GetAuth
-      description: "Return the tenant the current API key belongs to. This endpoint requires a\n valid API key but no additional scope, so it is a convenient way to verify\n that a key is working."
+      description: 'Return the tenant the current API key belongs to. This endpoint requires a
+
+        valid API key but no additional scope, so it is a convenient way to verify
+
+        that a key is working.'
       operationId: AuthService_GetAuth
       responses:
         '200':
@@ -119,39 +70,6 @@ paths:
                 $ref: '#/components/schemas/Error'
 components:
   schemas:
-    Error:
-      type: object
-      description: Error response returned by all endpoints when a request fails.
-      properties:
-        code:
-          type: integer
-          description: Numeric status code corresponding to the HTTP response status
-        message:
-          type: string
-          description: Human-readable error message
-        details:
-          type: array
-          description: Structured error details with machine-readable reason codes
-          items:
-            $ref: '#/components/schemas/ErrorDetail'
-      required:
-      - code
-      - message
-      examples:
-      - code: 404
-        message: Run not found.
-        details:
-        - reason: RUN_NOT_FOUND
-          domain: cloud-api.elembio.io
-          metadata:
-            request_id: 550e8400-e29b-41d4-a716-446655440000
-      - code: 401
-        message: Invalid API key.
-        details:
-        - reason: INVALID_API_KEY
-          domain: cloud-api.elembio.io
-          metadata:
-            request_id: 550e8400-e29b-41d4-a716-446655440001
     ErrorDetail:
       type: object
       description: Structured error detail with a machine-readable reason code.
@@ -186,6 +104,39 @@ components:
       required:
       - reason
       - domain
+    Error:
+      type: object
+      description: Error response returned by all endpoints when a request fails.
+      properties:
+        code:
+          type: integer
+          description: Numeric status code corresponding to the HTTP response status
+        message:
+          type: string
+          description: Human-readable error message
+        details:
+          type: array
+          description: Structured error details with machine-readable reason codes
+          items:
+            $ref: '#/components/schemas/ErrorDetail'
+      required:
+      - code
+      - message
+      examples:
+      - code: 404
+        message: Run not found.
+        details:
+        - reason: RUN_NOT_FOUND
+          domain: cloud-api.elembio.io
+          metadata:
+            request_id: 550e8400-e29b-41d4-a716-446655440000
+      - code: 401
+        message: Invalid API key.
+        details:
+        - reason: INVALID_API_KEY
+          domain: cloud-api.elembio.io
+          metadata:
+            request_id: 550e8400-e29b-41d4-a716-446655440001
     elembio.cloud.v1.GetAuthResponse:
       type: object
       properties:
