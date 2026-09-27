@@ -70,6 +70,39 @@ paths:
                 $ref: '#/components/schemas/Error'
 components:
   schemas:
+    Error:
+      type: object
+      description: Error response returned by all endpoints when a request fails.
+      properties:
+        code:
+          type: integer
+          description: Numeric status code corresponding to the HTTP response status
+        message:
+          type: string
+          description: Human-readable error message
+        details:
+          type: array
+          description: Structured error details with machine-readable reason codes
+          items:
+            $ref: '#/components/schemas/ErrorDetail'
+      required:
+      - code
+      - message
+      examples:
+      - code: 404
+        message: Run not found.
+        details:
+        - reason: RUN_NOT_FOUND
+          domain: cloud-api.elembio.io
+          metadata:
+            request_id: 550e8400-e29b-41d4-a716-446655440000
+      - code: 401
+        message: Invalid API key.
+        details:
+        - reason: INVALID_API_KEY
+          domain: cloud-api.elembio.io
+          metadata:
+            request_id: 550e8400-e29b-41d4-a716-446655440001
     ErrorDetail:
       type: object
       description: Structured error detail with a machine-readable reason code.
@@ -104,39 +137,6 @@ components:
       required:
       - reason
       - domain
-    Error:
-      type: object
-      description: Error response returned by all endpoints when a request fails.
-      properties:
-        code:
-          type: integer
-          description: Numeric status code corresponding to the HTTP response status
-        message:
-          type: string
-          description: Human-readable error message
-        details:
-          type: array
-          description: Structured error details with machine-readable reason codes
-          items:
-            $ref: '#/components/schemas/ErrorDetail'
-      required:
-      - code
-      - message
-      examples:
-      - code: 404
-        message: Run not found.
-        details:
-        - reason: RUN_NOT_FOUND
-          domain: cloud-api.elembio.io
-          metadata:
-            request_id: 550e8400-e29b-41d4-a716-446655440000
-      - code: 401
-        message: Invalid API key.
-        details:
-        - reason: INVALID_API_KEY
-          domain: cloud-api.elembio.io
-          metadata:
-            request_id: 550e8400-e29b-41d4-a716-446655440001
     elembio.cloud.v1.GetAuthResponse:
       type: object
       properties:

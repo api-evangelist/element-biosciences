@@ -392,173 +392,6 @@ paths:
                 $ref: '#/components/schemas/Error'
 components:
   schemas:
-    elembio.cloud.v1.ExecutionReference:
-      type: object
-      properties:
-        id:
-          type: string
-          title: id
-        name:
-          type: string
-          title: name
-        workflowName:
-          type: string
-          title: workflow_name
-      title: ExecutionReference
-      additionalProperties: false
-      description: Reference to an upstream execution
-    elembio.cloud.v1.GetExecutionLogsResponse:
-      type: object
-      properties:
-        error:
-          type: string
-          title: error
-          description: Error output from the compute platform (if any)
-        log:
-          type: string
-          title: log
-          description: Full execution log from the compute platform (if any)
-      title: GetExecutionLogsResponse
-      additionalProperties: false
-      description: Response containing execution logs
-    ErrorDetail:
-      type: object
-      description: Structured error detail with a machine-readable reason code.
-      properties:
-        '@type':
-          type: string
-          description: Type identifier for this error detail
-        reason:
-          type: string
-          description: 'Machine-readable error code identifying the specific failure
-
-            (e.g. RUN_NOT_FOUND, INVALID_API_KEY, INSUFFICIENT_SCOPE).
-
-            '
-          examples:
-          - RUN_NOT_FOUND
-          - INVALID_API_KEY
-          - MISSING_API_KEY
-          - INSUFFICIENT_SCOPE
-          - INTERNAL_ERROR
-        domain:
-          type: string
-          description: Identifies the system that generated the error
-          const: cloud-api.elembio.io
-        metadata:
-          type: object
-          description: Additional context for the error
-          properties:
-            request_id:
-              type: string
-              description: Request ID matching the X-Request-ID response header
-      required:
-      - reason
-      - domain
-    elembio.cloud.v1.ExecutionInput:
-      type: object
-      oneOf:
-      - type: object
-        properties:
-          execution:
-            title: execution
-            description: Upstream execution reference
-            $ref: '#/components/schemas/elembio.cloud.v1.ExecutionReference'
-        title: execution
-        required:
-        - execution
-      - type: object
-        properties:
-          run:
-            title: run
-            description: Instrument run reference
-            $ref: '#/components/schemas/elembio.cloud.v1.RunReference'
-        title: run
-        required:
-        - run
-      title: ExecutionInput
-      description: Input data source for the execution
-    elembio.cloud.v1.S3Credentials:
-      type: object
-      properties:
-        region:
-          type: string
-          title: region
-          description: 'AWS region. Example: "us-west-2".'
-        bucket:
-          type: string
-          title: bucket
-          description: S3 bucket name.
-        prefix:
-          type:
-          - string
-          - 'null'
-          title: prefix
-          description: "Key prefix the credentials are scoped to — bucket-absolute, since\n this value is consumed directly by the AWS CLI / SDK. Distinct from\n the request-side `prefix`, which is connection-relative."
-        accessKeyId:
-          type: string
-          title: access_key_id
-          description: Temporary AWS access key ID
-        secretAccessKey:
-          type: string
-          title: secret_access_key
-          description: Temporary AWS secret access key
-        sessionToken:
-          type: string
-          title: session_token
-          description: STS session token
-        expiration:
-          title: expiration
-          description: When the credentials expire
-          $ref: '#/components/schemas/google.protobuf.Timestamp'
-      title: S3Credentials
-      additionalProperties: false
-      description: "Temporary read-only AWS S3 credentials scoped to a bucket and prefix.\n Use with the AWS CLI, AWS SDK, or any S3-compatible tool. The credentials\n expire at the time given by expiration; request new credentials when they\n near expiry."
-    elembio.cloud.v1.ListExecutionFilesResponse:
-      type: object
-      properties:
-        files:
-          type: array
-          items:
-            $ref: '#/components/schemas/elembio.cloud.v1.File'
-          title: files
-          description: List of files
-        subdirectories:
-          type: array
-          items:
-            type: string
-          title: subdirectories
-          description: Subdirectories at this level (only populated when recursive=false)
-        nextPageToken:
-          type: string
-          title: next_page_token
-          description: Continuation token for the next page
-        isTruncated:
-          type: boolean
-          title: is_truncated
-          description: Indicates if the results were truncated
-      title: ListExecutionFilesResponse
-      additionalProperties: false
-      description: Response containing files for an execution
-    elembio.cloud.v1.Workflow:
-      type: object
-      properties:
-        name:
-          type: string
-          title: name
-        version:
-          type: string
-          title: version
-      title: Workflow
-      additionalProperties: false
-      description: Workflow information
-    google.protobuf.Timestamp:
-      type: string
-      examples:
-      - '2023-01-15T01:30:15.01Z'
-      - '2024-12-25T12:00:00Z'
-      format: date-time
-      description: "A Timestamp represents a point in time independent of any time zone or local\n calendar, encoded as a count of seconds and fractions of seconds at\n nanosecond resolution. The count is relative to an epoch at UTC midnight on\n January 1, 1970, in the proleptic Gregorian calendar which extends the\n Gregorian calendar backwards to year one.\n\n All minutes are 60 seconds long. Leap seconds are \"smeared\" so that no leap\n second table is needed for interpretation, using a [24-hour linear\n smear](https://developers.google.com/time/smear).\n\n The range is from 0001-01-01T00:00:00Z to 9999-12-31T23:59:59.999999999Z. By\n restricting to that range, we ensure that we can convert to and from [RFC\n 3339](https://www.ietf.org/rfc/rfc3339.txt) date strings.\n\n # Examples\n\n Example 1: Compute Timestamp from POSIX `time()`.\n\n     Timestamp timestamp;\n     timestamp.set_seconds(time(NULL));\n     timestamp.set_nanos(0);\n\n Example 2: Compute Timestamp from POSIX `gettimeofday()`.\n\n     struct timeval tv;\n     gettimeofday(&tv, NULL);\n\n     Timestamp timestamp;\n     timestamp.set_seconds(tv.tv_sec);\n     timestamp.set_nanos(tv.tv_usec * 1000);\n\n Example 3: Compute Timestamp from Win32 `GetSystemTimeAsFileTime()`.\n\n     FILETIME ft;\n     GetSystemTimeAsFileTime(&ft);\n     UINT64 ticks = (((UINT64)ft.dwHighDateTime) << 32) | ft.dwLowDateTime;\n\n     // A Windows tick is 100 nanoseconds. Windows epoch 1601-01-01T00:00:00Z\n     // is 11644473600 seconds before Unix epoch 1970-01-01T00:00:00Z.\n     Timestamp timestamp;\n     timestamp.set_seconds((INT64) ((ticks / 10000000) - 11644473600LL));\n     timestamp.set_nanos((INT32) ((ticks % 10000000) * 100));\n\n Example 4: Compute Timestamp from Java `System.currentTimeMillis()`.\n\n     long millis = System.currentTimeMillis();\n\n     Timestamp timestamp = Timestamp.newBuilder().setSeconds(millis / 1000)\n         .setNanos((int) ((millis % 1000) * 1000000)).build();\n\n Example 5: Compute Timestamp from Java `Instant.now()`.\n\n     Instant now = Instant.now();\n\n     Timestamp timestamp =\n         Timestamp.newBuilder().setSeconds(now.getEpochSecond())\n             .setNanos(now.getNano()).build();\n\n Example 6: Compute Timestamp from current time in Python.\n\n     timestamp = Timestamp()\n     timestamp.GetCurrentTime()\n\n # JSON Mapping\n\n In JSON format, the Timestamp type is encoded as a string in the\n [RFC 3339](https://www.ietf.org/rfc/rfc3339.txt) format. That is, the\n format is \"{year}-{month}-{day}T{hour}:{min}:{sec}[.{frac_sec}]Z\"\n where {year} is always expressed using four digits while {month}, {day},\n {hour}, {min}, and {sec} are zero-padded to two digits each. The fractional\n seconds, which can go up to 9 digits (i.e. up to 1 nanosecond resolution),\n are optional. The \"Z\" suffix indicates the timezone (\"UTC\"); the timezone\n is required. A ProtoJSON serializer should always use UTC (as indicated by\n \"Z\") when printing the Timestamp type and a ProtoJSON parser should be\n able to accept both UTC and other timezones (as indicated by an offset).\n\n For example, \"2017-01-15T01:30:15.01Z\" encodes 15.01 seconds past\n 01:30 UTC on January 15, 2017.\n\n In JavaScript, one can convert a Date object to this format using the\n standard\n [toISOString()](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Date/toISOString)\n method. In Python, a standard `datetime.datetime` object can be converted\n to this format using\n [`strftime`](https://docs.python.org/2/library/time.html#time.strftime) with\n the time format spec '%Y-%m-%dT%H:%M:%S.%fZ'. Likewise, in Java, one can use\n the Joda Time's [`ISODateTimeFormat.dateTime()`](\n http://joda-time.sourceforge.net/apidocs/org/joda/time/format/ISODateTimeFormat.html#dateTime()\n ) to obtain a formatter capable of generating timestamps in this format."
     elembio.cloud.v1.ListExecutionsResponse:
       type: object
       properties:
@@ -586,60 +419,18 @@ components:
       title: ListExecutionsResponse
       additionalProperties: false
       description: Response containing a list of executions
-    elembio.cloud.v1.ExecutionStatus:
-      type: string
-      title: ExecutionStatus
-      enum:
-      - EXECUTION_STATUS_UNSPECIFIED
-      - EXECUTION_STATUS_INITIALIZED
-      - EXECUTION_STATUS_UNTRIGGERED
-      - EXECUTION_STATUS_PENDING
-      - EXECUTION_STATUS_RUNNING
-      - EXECUTION_STATUS_COMPLETED
-      - EXECUTION_STATUS_FAILED
-      - EXECUTION_STATUS_CANCELED
-      description: Execution status
-    elembio.cloud.v1.Output:
+    elembio.cloud.v1.Workflow:
       type: object
       properties:
-        storageConnectionId:
-          type: string
-          title: storage_connection_id
-          description: Storage connection ID
-        uri:
-          type: string
-          title: uri
-          description: "Absolute URI of the output directory. May be empty if the\n upstream resource has not yet determined its output location.\n When non-empty, normalized to end in exactly one trailing slash.\n Example: s3://bucket/path/to/dir/"
-        kinds:
-          type: array
-          items:
-            type: string
-          title: kinds
-          description: "Content kinds present under uri. Possible values:\n   \"fastq\", \"bam\", \"vcf\", \"cram\", \"parquet\",\n   \"sequencing_run\", \"multiomics_run\".\n May be empty for in-flight executions: WorkflowRunSummary\n populates output kinds late in the lifecycle, so a running\n execution can briefly surface an Output with empty kinds even\n when the workflow definition declares them."
-      title: Output
-      additionalProperties: false
-      description: "Output describes where a resource's output files live and what\n kinds of content are produced. Used by both Run and Execution."
-    elembio.cloud.v1.Flow:
-      type: object
-      properties:
-        id:
-          type: string
-          title: id
         name:
           type: string
           title: name
-      title: Flow
+        version:
+          type: string
+          title: version
+      title: Workflow
       additionalProperties: false
-      description: Flow represents a configured workflow
-    elembio.cloud.v1.GetExecutionResponse:
-      type: object
-      properties:
-        execution:
-          title: execution
-          $ref: '#/components/schemas/elembio.cloud.v1.Execution'
-      title: GetExecutionResponse
-      additionalProperties: false
-      description: Response containing a single execution with full details
+      description: Workflow information
     elembio.cloud.v1.File:
       type: object
       properties:
@@ -679,6 +470,51 @@ components:
       title: File
       additionalProperties: false
       description: A File represents an object in cloud storage.
+    elembio.cloud.v1.GetExecutionDownloadCredentialsResponse:
+      type: object
+      oneOf:
+      - type: object
+        properties:
+          s3:
+            title: s3
+            $ref: '#/components/schemas/elembio.cloud.v1.S3Credentials'
+        title: s3
+        required:
+        - s3
+      title: GetExecutionDownloadCredentialsResponse
+      description: Response containing temporary download credentials for an execution
+    elembio.cloud.v1.Output:
+      type: object
+      properties:
+        storageConnectionId:
+          type: string
+          title: storage_connection_id
+          description: Storage connection ID
+        uri:
+          type: string
+          title: uri
+          description: "Absolute URI of the output directory. May be empty if the\n upstream resource has not yet determined its output location.\n When non-empty, normalized to end in exactly one trailing slash.\n Example: s3://bucket/path/to/dir/"
+        kinds:
+          type: array
+          items:
+            type: string
+          title: kinds
+          description: "Content kinds present under uri. Possible values:\n   \"fastq\", \"bam\", \"vcf\", \"cram\", \"parquet\",\n   \"sequencing_run\", \"multiomics_run\".\n May be empty for in-flight executions: WorkflowRunSummary\n populates output kinds late in the lifecycle, so a running\n execution can briefly surface an Output with empty kinds even\n when the workflow definition declares them."
+      title: Output
+      additionalProperties: false
+      description: "Output describes where a resource's output files live and what\n kinds of content are produced. Used by both Run and Execution."
+    elembio.cloud.v1.Flow:
+      type: object
+      properties:
+        id:
+          type: string
+          title: id
+        name:
+          type: string
+          title: name
+      title: Flow
+      additionalProperties: false
+      description: Flow represents a configured workflow
     Error:
       type: object
       description: Error response returned by all endpoints when a request fails.
@@ -712,19 +548,26 @@ components:
           domain: cloud-api.elembio.io
           metadata:
             request_id: 550e8400-e29b-41d4-a716-446655440001
-    elembio.cloud.v1.GetExecutionDownloadCredentialsResponse:
-      type: object
-      oneOf:
-      - type: object
-        properties:
-          s3:
-            title: s3
-            $ref: '#/components/schemas/elembio.cloud.v1.S3Credentials'
-        title: s3
-        required:
-        - s3
-      title: GetExecutionDownloadCredentialsResponse
-      description: Response containing temporary download credentials for an execution
+    google.protobuf.Timestamp:
+      type: string
+      examples:
+      - '2023-01-15T01:30:15.01Z'
+      - '2024-12-25T12:00:00Z'
+      format: date-time
+      description: "A Timestamp represents a point in time independent of any time zone or local\n calendar, encoded as a count of seconds and fractions of seconds at\n nanosecond resolution. The count is relative to an epoch at UTC midnight on\n January 1, 1970, in the proleptic Gregorian calendar which extends the\n Gregorian calendar backwards to year one.\n\n All minutes are 60 seconds long. Leap seconds are \"smeared\" so that no leap\n second table is needed for interpretation, using a [24-hour linear\n smear](https://developers.google.com/time/smear).\n\n The range is from 0001-01-01T00:00:00Z to 9999-12-31T23:59:59.999999999Z. By\n restricting to that range, we ensure that we can convert to and from [RFC\n 3339](https://www.ietf.org/rfc/rfc3339.txt) date strings.\n\n # Examples\n\n Example 1: Compute Timestamp from POSIX `time()`.\n\n     Timestamp timestamp;\n     timestamp.set_seconds(time(NULL));\n     timestamp.set_nanos(0);\n\n Example 2: Compute Timestamp from POSIX `gettimeofday()`.\n\n     struct timeval tv;\n     gettimeofday(&tv, NULL);\n\n     Timestamp timestamp;\n     timestamp.set_seconds(tv.tv_sec);\n     timestamp.set_nanos(tv.tv_usec * 1000);\n\n Example 3: Compute Timestamp from Win32 `GetSystemTimeAsFileTime()`.\n\n     FILETIME ft;\n     GetSystemTimeAsFileTime(&ft);\n     UINT64 ticks = (((UINT64)ft.dwHighDateTime) << 32) | ft.dwLowDateTime;\n\n     // A Windows tick is 100 nanoseconds. Windows epoch 1601-01-01T00:00:00Z\n     // is 11644473600 seconds before Unix epoch 1970-01-01T00:00:00Z.\n     Timestamp timestamp;\n     timestamp.set_seconds((INT64) ((ticks / 10000000) - 11644473600LL));\n     timestamp.set_nanos((INT32) ((ticks % 10000000) * 100));\n\n Example 4: Compute Timestamp from Java `System.currentTimeMillis()`.\n\n     long millis = System.currentTimeMillis();\n\n     Timestamp timestamp = Timestamp.newBuilder().setSeconds(millis / 1000)\n         .setNanos((int) ((millis % 1000) * 1000000)).build();\n\n Example 5: Compute Timestamp from Java `Instant.now()`.\n\n     Instant now = Instant.now();\n\n     Timestamp timestamp =\n         Timestamp.newBuilder().setSeconds(now.getEpochSecond())\n             .setNanos(now.getNano()).build();\n\n Example 6: Compute Timestamp from current time in Python.\n\n     timestamp = Timestamp()\n     timestamp.GetCurrentTime()\n\n # JSON Mapping\n\n In JSON format, the Timestamp type is encoded as a string in the\n [RFC 3339](https://www.ietf.org/rfc/rfc3339.txt) format. That is, the\n format is \"{year}-{month}-{day}T{hour}:{min}:{sec}[.{frac_sec}]Z\"\n where {year} is always expressed using four digits while {month}, {day},\n {hour}, {min}, and {sec} are zero-padded to two digits each. The fractional\n seconds, which can go up to 9 digits (i.e. up to 1 nanosecond resolution),\n are optional. The \"Z\" suffix indicates the timezone (\"UTC\"); the timezone\n is required. A ProtoJSON serializer should always use UTC (as indicated by\n \"Z\") when printing the Timestamp type and a ProtoJSON parser should be\n able to accept both UTC and other timezones (as indicated by an offset).\n\n For example, \"2017-01-15T01:30:15.01Z\" encodes 15.01 seconds past\n 01:30 UTC on January 15, 2017.\n\n In JavaScript, one can convert a Date object to this format using the\n standard\n [toISOString()](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Date/toISOString)\n method. In Python, a standard `datetime.datetime` object can be converted\n to this format using\n [`strftime`](https://docs.python.org/2/library/time.html#time.strftime) with\n the time format spec '%Y-%m-%dT%H:%M:%S.%fZ'. Likewise, in Java, one can use\n the Joda Time's [`ISODateTimeFormat.dateTime()`](\n http://joda-time.sourceforge.net/apidocs/org/joda/time/format/ISODateTimeFormat.html#dateTime()\n ) to obtain a formatter capable of generating timestamps in this format."
+    elembio.cloud.v1.ExecutionStatus:
+      type: string
+      title: ExecutionStatus
+      enum:
+      - EXECUTION_STATUS_UNSPECIFIED
+      - EXECUTION_STATUS_INITIALIZED
+      - EXECUTION_STATUS_UNTRIGGERED
+      - EXECUTION_STATUS_PENDING
+      - EXECUTION_STATUS_RUNNING
+      - EXECUTION_STATUS_COMPLETED
+      - EXECUTION_STATUS_FAILED
+      - EXECUTION_STATUS_CANCELED
+      description: Execution status
     elembio.cloud.v1.Execution:
       type: object
       properties:
@@ -793,24 +636,32 @@ components:
       title: Execution
       additionalProperties: false
       description: An Execution represents a workflow run processing instrument data
-    elembio.cloud.v1.UserSummary:
+    elembio.cloud.v1.ListExecutionFilesResponse:
       type: object
       properties:
-        id:
+        files:
+          type: array
+          items:
+            $ref: '#/components/schemas/elembio.cloud.v1.File'
+          title: files
+          description: List of files
+        subdirectories:
+          type: array
+          items:
+            type: string
+          title: subdirectories
+          description: Subdirectories at this level (only populated when recursive=false)
+        nextPageToken:
           type: string
-          title: id
-          description: User identifier.
-        email:
-          type: string
-          title: email
-          description: User's email address.
-        name:
-          type: string
-          title: name
-          description: User's display name.
-      title: UserSummary
+          title: next_page_token
+          description: Continuation token for the next page
+        isTruncated:
+          type: boolean
+          title: is_truncated
+          description: Indicates if the results were truncated
+      title: ListExecutionFilesResponse
       additionalProperties: false
-      description: UserSummary identifies a user for attribution on a resource.
+      description: Response containing files for an execution
     elembio.cloud.v1.RunReference:
       type: object
       properties:
@@ -834,6 +685,155 @@ components:
       title: RunReference
       additionalProperties: false
       description: Reference to an instrument run
+    elembio.cloud.v1.UserSummary:
+      type: object
+      properties:
+        id:
+          type: string
+          title: id
+          description: User identifier.
+        email:
+          type: string
+          title: email
+          description: User's email address.
+        name:
+          type: string
+          title: name
+          description: User's display name.
+      title: UserSummary
+      additionalProperties: false
+      description: UserSummary identifies a user for attribution on a resource.
+    elembio.cloud.v1.GetExecutionLogsResponse:
+      type: object
+      properties:
+        error:
+          type: string
+          title: error
+          description: Error output from the compute platform (if any)
+        log:
+          type: string
+          title: log
+          description: Full execution log from the compute platform (if any)
+      title: GetExecutionLogsResponse
+      additionalProperties: false
+      description: Response containing execution logs
+    elembio.cloud.v1.GetExecutionResponse:
+      type: object
+      properties:
+        execution:
+          title: execution
+          $ref: '#/components/schemas/elembio.cloud.v1.Execution'
+      title: GetExecutionResponse
+      additionalProperties: false
+      description: Response containing a single execution with full details
+    elembio.cloud.v1.ExecutionInput:
+      type: object
+      oneOf:
+      - type: object
+        properties:
+          execution:
+            title: execution
+            description: Upstream execution reference
+            $ref: '#/components/schemas/elembio.cloud.v1.ExecutionReference'
+        title: execution
+        required:
+        - execution
+      - type: object
+        properties:
+          run:
+            title: run
+            description: Instrument run reference
+            $ref: '#/components/schemas/elembio.cloud.v1.RunReference'
+        title: run
+        required:
+        - run
+      title: ExecutionInput
+      description: Input data source for the execution
+    elembio.cloud.v1.S3Credentials:
+      type: object
+      properties:
+        region:
+          type: string
+          title: region
+          description: 'AWS region. Example: "us-west-2".'
+        bucket:
+          type: string
+          title: bucket
+          description: S3 bucket name.
+        prefix:
+          type:
+          - string
+          - 'null'
+          title: prefix
+          description: "Key prefix the credentials are scoped to — bucket-absolute, since\n this value is consumed directly by the AWS CLI / SDK. Distinct from\n the request-side `prefix`, which is connection-relative."
+        accessKeyId:
+          type: string
+          title: access_key_id
+          description: Temporary AWS access key ID
+        secretAccessKey:
+          type: string
+          title: secret_access_key
+          description: Temporary AWS secret access key
+        sessionToken:
+          type: string
+          title: session_token
+          description: STS session token
+        expiration:
+          title: expiration
+          description: When the credentials expire
+          $ref: '#/components/schemas/google.protobuf.Timestamp'
+      title: S3Credentials
+      additionalProperties: false
+      description: "Temporary read-only AWS S3 credentials scoped to a bucket and prefix.\n Use with the AWS CLI, AWS SDK, or any S3-compatible tool. The credentials\n expire at the time given by expiration; request new credentials when they\n near expiry."
+    ErrorDetail:
+      type: object
+      description: Structured error detail with a machine-readable reason code.
+      properties:
+        '@type':
+          type: string
+          description: Type identifier for this error detail
+        reason:
+          type: string
+          description: 'Machine-readable error code identifying the specific failure
+
+            (e.g. RUN_NOT_FOUND, INVALID_API_KEY, INSUFFICIENT_SCOPE).
+
+            '
+          examples:
+          - RUN_NOT_FOUND
+          - INVALID_API_KEY
+          - MISSING_API_KEY
+          - INSUFFICIENT_SCOPE
+          - INTERNAL_ERROR
+        domain:
+          type: string
+          description: Identifies the system that generated the error
+          const: cloud-api.elembio.io
+        metadata:
+          type: object
+          description: Additional context for the error
+          properties:
+            request_id:
+              type: string
+              description: Request ID matching the X-Request-ID response header
+      required:
+      - reason
+      - domain
+    elembio.cloud.v1.ExecutionReference:
+      type: object
+      properties:
+        id:
+          type: string
+          title: id
+        name:
+          type: string
+          title: name
+        workflowName:
+          type: string
+          title: workflow_name
+      title: ExecutionReference
+      additionalProperties: false
+      description: Reference to an upstream execution
   securitySchemes:
     apiKey:
       type: apiKey
