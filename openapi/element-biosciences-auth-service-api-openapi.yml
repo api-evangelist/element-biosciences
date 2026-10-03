@@ -70,6 +70,22 @@ paths:
                 $ref: '#/components/schemas/Error'
 components:
   schemas:
+    elembio.cloud.v1.GetAuthResponse:
+      type: object
+      properties:
+        tenantId:
+          type: string
+          title: tenant_id
+          description: Identifier of the tenant the API key belongs to.
+        scopes:
+          type: array
+          items:
+            type: string
+          title: scopes
+          description: "Scopes granted to the API key making the request, e.g. \"runs:read\" or\n \"storage:download:stc_abc123/data/\". A resource-scoped key reports its\n resource-qualified scopes; an unrestricted key reports its family-level\n scopes. An empty list means the key has no resource scopes (only the\n auth-level access needed to reach this endpoint)."
+      title: GetAuthResponse
+      additionalProperties: false
+      description: Response describing the authenticated API key.
     Error:
       type: object
       description: Error response returned by all endpoints when a request fails.
@@ -137,22 +153,6 @@ components:
       required:
       - reason
       - domain
-    elembio.cloud.v1.GetAuthResponse:
-      type: object
-      properties:
-        tenantId:
-          type: string
-          title: tenant_id
-          description: Identifier of the tenant the API key belongs to.
-        scopes:
-          type: array
-          items:
-            type: string
-          title: scopes
-          description: "Scopes granted to the API key making the request, e.g. \"runs:read\" or\n \"storage:download:stc_abc123/data/\". A resource-scoped key reports its\n resource-qualified scopes; an unrestricted key reports its family-level\n scopes. An empty list means the key has no resource scopes (only the\n auth-level access needed to reach this endpoint)."
-      title: GetAuthResponse
-      additionalProperties: false
-      description: Response describing the authenticated API key.
   securitySchemes:
     apiKey:
       type: apiKey
