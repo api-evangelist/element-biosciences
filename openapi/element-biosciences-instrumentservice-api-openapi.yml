@@ -137,6 +137,74 @@ paths:
                 $ref: '#/components/schemas/Error'
 components:
   schemas:
+    elembio.cloud.v1.GetInstrumentResponse:
+      type: object
+      properties:
+        instrument:
+          title: instrument
+          $ref: '#/components/schemas/elembio.cloud.v1.Instrument'
+      title: GetInstrumentResponse
+      additionalProperties: false
+      description: Response containing a single instrument.
+    elembio.cloud.v1.InstrumentStatus:
+      type: string
+      title: InstrumentStatus
+      enum:
+      - INSTRUMENT_STATUS_UNSPECIFIED
+      - INSTRUMENT_STATUS_ACTIVE
+      - INSTRUMENT_STATUS_INACTIVE
+      - INSTRUMENT_STATUS_DECOMMISSIONED
+      description: Status of an instrument.
+    elembio.cloud.v1.ListInstrumentsResponse:
+      type: object
+      properties:
+        instruments:
+          type: array
+          items:
+            $ref: '#/components/schemas/elembio.cloud.v1.Instrument'
+          title: instruments
+          description: The instruments on this page.
+        nextPageToken:
+          type: string
+          title: next_page_token
+          description: Token for the next page, or empty when there are no more results.
+      title: ListInstrumentsResponse
+      additionalProperties: false
+      description: Response containing a page of instruments.
+    ErrorDetail:
+      type: object
+      description: Structured error detail with a machine-readable reason code.
+      properties:
+        '@type':
+          type: string
+          description: Type identifier for this error detail
+        reason:
+          type: string
+          description: 'Machine-readable error code identifying the specific failure
+
+            (e.g. RUN_NOT_FOUND, INVALID_API_KEY, INSUFFICIENT_SCOPE).
+
+            '
+          examples:
+          - RUN_NOT_FOUND
+          - INVALID_API_KEY
+          - MISSING_API_KEY
+          - INSUFFICIENT_SCOPE
+          - INTERNAL_ERROR
+        domain:
+          type: string
+          description: Identifies the system that generated the error
+          const: cloud-api.elembio.io
+        metadata:
+          type: object
+          description: Additional context for the error
+          properties:
+            request_id:
+              type: string
+              description: Request ID matching the X-Request-ID response header
+      required:
+      - reason
+      - domain
     google.protobuf.Timestamp:
       type: string
       examples:
@@ -177,65 +245,6 @@ components:
           domain: cloud-api.elembio.io
           metadata:
             request_id: 550e8400-e29b-41d4-a716-446655440001
-    ErrorDetail:
-      type: object
-      description: Structured error detail with a machine-readable reason code.
-      properties:
-        '@type':
-          type: string
-          description: Type identifier for this error detail
-        reason:
-          type: string
-          description: 'Machine-readable error code identifying the specific failure
-
-            (e.g. RUN_NOT_FOUND, INVALID_API_KEY, INSUFFICIENT_SCOPE).
-
-            '
-          examples:
-          - RUN_NOT_FOUND
-          - INVALID_API_KEY
-          - MISSING_API_KEY
-          - INSUFFICIENT_SCOPE
-          - INTERNAL_ERROR
-        domain:
-          type: string
-          description: Identifies the system that generated the error
-          const: cloud-api.elembio.io
-        metadata:
-          type: object
-          description: Additional context for the error
-          properties:
-            request_id:
-              type: string
-              description: Request ID matching the X-Request-ID response header
-      required:
-      - reason
-      - domain
-    elembio.cloud.v1.GetInstrumentResponse:
-      type: object
-      properties:
-        instrument:
-          title: instrument
-          $ref: '#/components/schemas/elembio.cloud.v1.Instrument'
-      title: GetInstrumentResponse
-      additionalProperties: false
-      description: Response containing a single instrument.
-    elembio.cloud.v1.ListInstrumentsResponse:
-      type: object
-      properties:
-        instruments:
-          type: array
-          items:
-            $ref: '#/components/schemas/elembio.cloud.v1.Instrument'
-          title: instruments
-          description: The instruments on this page.
-        nextPageToken:
-          type: string
-          title: next_page_token
-          description: Token for the next page, or empty when there are no more results.
-      title: ListInstrumentsResponse
-      additionalProperties: false
-      description: Response containing a page of instruments.
     elembio.cloud.v1.Instrument:
       type: object
       properties:
@@ -278,15 +287,6 @@ components:
       title: Instrument
       additionalProperties: false
       description: An Instrument represents a registered sequencing or multiomics device.
-    elembio.cloud.v1.InstrumentStatus:
-      type: string
-      title: InstrumentStatus
-      enum:
-      - INSTRUMENT_STATUS_UNSPECIFIED
-      - INSTRUMENT_STATUS_ACTIVE
-      - INSTRUMENT_STATUS_INACTIVE
-      - INSTRUMENT_STATUS_DECOMMISSIONED
-      description: Status of an instrument.
   securitySchemes:
     apiKey:
       type: apiKey
