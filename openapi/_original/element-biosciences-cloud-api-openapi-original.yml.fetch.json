@@ -1,0 +1,12 @@
+{
+ "url": "https://cloud-api.usw2.elembio.io/openapi.yaml",
+ "requested_url": "https://cloud-api.usw2.elembio.io/openapi.yaml",
+ "status": 200,
+ "content_type": "text/yaml; charset=utf-8",
+ "bytes": 168712,
+ "sha256": "76d1233adea36dbf62df2f96bf39ec0acf0d94f6fd9d19badcf26aadf0d88bb4",
+ "fetched_at": "2026-10-04",
+ "fetched_by": "APIEvangelist-Harvest/1.0 (+https://apievangelist.com)",
+ "match": "byte-identical",
+ "note": "Re-fetched from the provider by verify-openapi-sources.py; the archived file is byte-identical to what the provider serves."
+}
