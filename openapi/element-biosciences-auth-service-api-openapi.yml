@@ -70,55 +70,6 @@ paths:
                 $ref: '#/components/schemas/Error'
 components:
   schemas:
-    Error:
-      type: object
-      description: Error response returned by all endpoints when a request fails.
-      properties:
-        code:
-          type: integer
-          description: Numeric status code corresponding to the HTTP response status
-        message:
-          type: string
-          description: Human-readable error message
-        details:
-          type: array
-          description: Structured error details with machine-readable reason codes
-          items:
-            $ref: '#/components/schemas/ErrorDetail'
-      required:
-      - code
-      - message
-      examples:
-      - code: 404
-        message: Run not found.
-        details:
-        - reason: RUN_NOT_FOUND
-          domain: cloud-api.elembio.io
-          metadata:
-            request_id: 550e8400-e29b-41d4-a716-446655440000
-      - code: 401
-        message: Invalid API key.
-        details:
-        - reason: INVALID_API_KEY
-          domain: cloud-api.elembio.io
-          metadata:
-            request_id: 550e8400-e29b-41d4-a716-446655440001
-    elembio.cloud.v1.GetAuthResponse:
-      type: object
-      properties:
-        tenantId:
-          type: string
-          title: tenant_id
-          description: Identifier of the tenant the API key belongs to.
-        scopes:
-          type: array
-          items:
-            type: string
-          title: scopes
-          description: "Scopes granted to the API key making the request, e.g. \"runs:read\" or\n \"storage:download:stc_abc123/data/\". A resource-scoped key reports its\n resource-qualified scopes; an unrestricted key reports its family-level\n scopes. An empty list means the key has no resource scopes (only the\n auth-level access needed to reach this endpoint)."
-      title: GetAuthResponse
-      additionalProperties: false
-      description: Response describing the authenticated API key.
     ErrorDetail:
       type: object
       description: Structured error detail with a machine-readable reason code.
@@ -153,6 +104,55 @@ components:
       required:
       - reason
       - domain
+    elembio.cloud.v1.GetAuthResponse:
+      type: object
+      properties:
+        tenantId:
+          type: string
+          title: tenant_id
+          description: Identifier of the tenant the API key belongs to.
+        scopes:
+          type: array
+          items:
+            type: string
+          title: scopes
+          description: "Scopes granted to the API key making the request, e.g. \"runs:read\" or\n \"storage:download:stc_abc123/data/\". A resource-scoped key reports its\n resource-qualified scopes; an unrestricted key reports its family-level\n scopes. An empty list means the key has no resource scopes (only the\n auth-level access needed to reach this endpoint)."
+      title: GetAuthResponse
+      additionalProperties: false
+      description: Response describing the authenticated API key.
+    Error:
+      type: object
+      description: Error response returned by all endpoints when a request fails.
+      properties:
+        code:
+          type: integer
+          description: Numeric status code corresponding to the HTTP response status
+        message:
+          type: string
+          description: Human-readable error message
+        details:
+          type: array
+          description: Structured error details with machine-readable reason codes
+          items:
+            $ref: '#/components/schemas/ErrorDetail'
+      required:
+      - code
+      - message
+      examples:
+      - code: 404
+        message: Run not found.
+        details:
+        - reason: RUN_NOT_FOUND
+          domain: cloud-api.elembio.io
+          metadata:
+            request_id: 550e8400-e29b-41d4-a716-446655440000
+      - code: 401
+        message: Invalid API key.
+        details:
+        - reason: INVALID_API_KEY
+          domain: cloud-api.elembio.io
+          metadata:
+            request_id: 550e8400-e29b-41d4-a716-446655440001
   securitySchemes:
     apiKey:
       type: apiKey
