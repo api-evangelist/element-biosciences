@@ -1112,3 +1112,9 @@ components:
       in: header
       name: x-api-key
       description: API key obtained from the Element Biosciences Cloud console
+x-provenance:
+  method: harvested
+  publisher: Element Biosciences
+  source: https://cloud-api.usw2.elembio.io/openapi.yaml
+  note: split by refine-openapis from the provider's own published document, verified by fetch (openapi/_original/*.fetch.json);
+    stamped by stamp-openapi-provenance.py (roadmap#793)
