@@ -64,5 +64,134 @@
 > Full detail: **[Where this data comes from](https://apievangelist.com/about/where-our-data-comes-from)**
 <!-- API-EVANGELIST-PROVENANCE:END -->
 
-Element Biosciences is a company surfaced via the API Evangelist harvest backlog (source: secondary-market) and added to the network as a stub for full-pipeline profiling.
-- https://forgeglobal.com/element-biosciences_stock/
+Element Biosciences is a San Diego based life-sciences instrumentation company that builds benchtop DNA sequencing and multiomics systems — the AVITI, AVITI LT, AVITI24 and VITARI platforms — around its proprietary Avidite Base Chemistry (ABC), which decouples signal generation from nucleotide incorporation to deliver high-accuracy base calling at lower cost than conventional sequencing-by-synthesis. Instrument output is managed through ElemBio Cloud, the company's analysis and data-management platform, which runs bioinformatics workflows such as Bases2Fastq and Cells2Stats and streams run data into customer-owned cloud storage connections. ElemBio Cloud exposes a public, versioned REST API — the Element Biosciences Cloud API — plus a first-party cross-platform CLI, giving labs programmatic access to sequencing and multiomics runs, workflow executions, registered instruments, storage connections and the files those resources produce, for dashboards, fleet monitoring, LIMS read-back and custom automation.
+
+**Areas:** Company · Genomics · DNA Sequencing · Life Sciences · Bioinformatics · Multiomics · Laboratory · Scientific Instruments · Cloud Storage · Biotechnology
+
+## Element Biosciences on APIs.io
+
+Everything profiled for Element Biosciences is published on APIs.io rather than in this repository. Start at the provider page — **[apis.io/providers/element-biosciences/](https://apis.io/providers/element-biosciences/)** — or go straight to one of the APIs or properties below.
+
+### APIs (5)
+
+- [Element Biosciences Execution Service API](https://apis.io/apis/element-biosciences/element-biosciences-executionservice-api/) — ExecutionService provides access to workflow executions — runs of a bioinformatics workflow that process instrument data. Listing and reading execution…
+- [Element Biosciences Instrument Service API](https://apis.io/apis/element-biosciences/element-biosciences-instrumentservice-api/) — InstrumentService provides access to instruments registered to the authenticated tenant. Requires the "instruments:read" scope.
+- [Element Biosciences Run Service API](https://apis.io/apis/element-biosciences/element-biosciences-runservice-api/) — RunService provides access to instrument runs, both sequencing and multiomics. Listing and reading run metadata requires the "runs:read" scope; listing run…
+- [Element Biosciences Storage Connection Service API](https://apis.io/apis/element-biosciences/element-biosciences-storageconnectionservice-api/) — StorageConnectionService provides access to storage connections: their metadata (requires the "storage:read" scope) and the files within them (ListFiles /…
+- [Element Biosciences Auth Service API](https://apis.io/apis/element-biosciences/element-biosciences-auth-service-api/) — AuthService reports information about the API key making the request.
+
+### Published properties
+
+Each property below is a page on APIs.io carrying the machine-readable artifact and what it says.
+
+#### MCP servers (1)
+
+Model Context Protocol servers that expose the API to agents.
+
+- [element-biosciences](https://apis.io/servers/element-biosciences/element-biosciences/)
+
+#### Agentic access (1)
+
+Which operations an agent can call, which act, and which need a human in the loop.
+
+- [Element Biosciences Agentic Access](https://apis.io/agentic-access/element-biosciences/element-biosciences-agentic-access/)
+
+#### Collections (5)
+
+Postman and Open Collection request collections.
+
+- [Element Biosciences Cloud Auth Service API](https://apis.io/collections/element-biosciences/open-element-biosciences-authservice-api/)
+- [Element Biosciences Cloud Execution Service API](https://apis.io/collections/element-biosciences/open-element-biosciences-executionservice-api/)
+- [Element Biosciences Cloud Instrument Service API](https://apis.io/collections/element-biosciences/open-element-biosciences-instrumentservice-api/)
+- [Element Biosciences Cloud Run Service API](https://apis.io/collections/element-biosciences/open-element-biosciences-runservice-api/)
+- [Element Biosciences Cloud Storage Connection Service API](https://apis.io/collections/element-biosciences/open-element-biosciences-storageconnectionservice-api/)
+
+#### Overlays (1)
+
+OpenAPI overlays, including conversational phrasing for each operation.
+
+- [Element Biosciences Cloud Api Overlay](https://apis.io/overlays/element-biosciences/element-biosciences-cloud-api-overlay/)
+
+#### Security (2)
+
+Authentication, trust centre, and vulnerability disclosure.
+
+- [Element Biosciences Authentication](https://apis.io/security/element-biosciences/element-biosciences-authentication/)
+- [Element Biosciences Domain Security](https://apis.io/security/element-biosciences/element-biosciences-domain-security/)
+
+#### OAuth scopes (1)
+
+The permissions the API asks for.
+
+- [Element Biosciences Scopes](https://apis.io/scopes/element-biosciences/element-biosciences-scopes/)
+
+## Where to find this API
+
+Links to the company's own pages. This repository publishes no copy of their specifications — the canonical document is theirs and lives at the URLs below.
+
+- [Website](https://www.elementbiosciences.com/)
+- [Documentation](https://docs.elembio.io/developers/)
+- [Getting started](https://docs.elembio.io/developers/api/getting-started/)
+- [API reference](https://docs.elembio.io/developers/api/)
+- [Sign up](https://cloud.elembio.io/)
+- [Support](https://www.elementbiosciences.com/contact)
+- [Changelog](https://docs.elembio.io/developers/api/api-changelog/)
+- [Blog](https://www.elementbiosciences.com/blog)
+- [Terms of service](https://www.elementbiosciences.com/legal/terms)
+- [Privacy policy](https://www.elementbiosciences.com/legal/privacy)
+- [GitHub](https://github.com/Elembio)
+
+## API Evangelist rating
+
+**Kin Score 47.4** — developing · rubric 0.25.0 · scored 2026-10-23
+
+| Facet | Score |
+|---|---|
+| Discoverability | 66.1 |
+| Contract quality | 52.9 |
+| Contract governance | 4.5 |
+| Operational transparency | 18.4 |
+| Developer ergonomics | 73.2 |
+| Access clarity | 34.2 |
+
+**Agent readiness 29.5** — agent-ready
+
+| Agent-readiness dimension | Result |
+|---|---|
+| Spec Presence | yes |
+| Agentic Access | derived (partial credit) |
+| Reversibility Documented | na |
+| MCP Server | — |
+| Auth Clarity | bearer (partial credit) |
+| Idempotency | na |
+| Error Semantics | verified |
+| OpenAPI Examples | — |
+| Rate Limit Signal | — |
+| Event Surface Described | — |
+| Agent Skills | derived (partial credit) |
+| Well Known Catalog | — |
+| Consent Identity | — |
+| Agent Card | — |
+| Dry Run Mode | na |
+| Delegated Identity | — |
+| Protected Resource Metadata | — |
+| Dynamic Client Registration | — |
+| Agentic Commerce | — |
+| Pagination Ratio | na |
+| Operation Distinctiveness | distinct |
+
+**Regulatory alignment 32.8** — Health
+
+The rubric is published at [github.com/api-evangelist/kin-score](https://github.com/api-evangelist/kin-score). The per-check breakdown behind these numbers — which checks were earned, partial or missed — along with score history and how this provider compares to its peers, is available at [apis.io/providers/element-biosciences/](https://apis.io/providers/element-biosciences/).
+
+## How this profile is made
+
+API Evangelist profiles a company's public API surface the way a developer would find it: the website, developer portal and documentation, the specifications it publishes, its public repositories, and its pricing, status and changelog pages. From that it derives the properties above — contracts split per API, workflows, schemas, collections, governance rules, plans and rate limits — and scores them against the published [Kin Score rubric](https://github.com/api-evangelist/kin-score).
+
+The artifacts are published on [APIs.io](https://apis.io), not in this repository. This repository is the public record for Element Biosciences: the place to say something is wrong, missing or out of date, and to ask for a re-score or a removal.
+
+## Open an issue
+
+- **Something about this listing** — a wrong description, a missing API, a stale artifact or a question about the rating: [open an issue on this repository](https://github.com/api-evangelist/element-biosciences/issues/new).
+- **A new API, or one that is not in the catalog yet** — [submit it on APIs.io](https://apis.io/add/).
+- **Anything else** — [the APIs.io inbox](https://github.com/api-search/inbox/issues/new) or [info@apievangelist.com](mailto:info@apievangelist.com).
